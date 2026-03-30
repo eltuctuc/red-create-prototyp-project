@@ -8,8 +8,8 @@ Es ist die einzige Source of Truth für den gesamten Workflow.
 ```
 ./
   prd.md                          ← [/sparring] Product Requirements Document
-  project-config.md               ← [/dev-setup] Tech-Stack, Projektstruktur, Git/GitHub
-  design-system/                  ← Verbindliche Design-Vorgaben – wird von /ux-design, /developer, ux-reviewer gelesen
+  project-config.md               ← [/red:proto-dev-setup] Tech-Stack, Projektstruktur, Git/GitHub
+  design-system/                  ← Verbindliche Design-Vorgaben – wird von /red:proto-ux, /red:proto-dev, ux-reviewer gelesen
     README.md                     ← Ausfüllanleitung
     tokens/
       colors.md                   ← Farb-Tokens (Primär, Sekundär, Semantic, Neutral)
@@ -31,21 +31,21 @@ Es ist die einzige Source of Truth für den gesamten Workflow.
   flows/
     product-flows.md              ← [/flows] Verbindliche Screen-Übersicht + Transition-Tabelle
   research/
-    problem-statement.md          ← [/user-research]
-    personas.md                   ← [/user-research]
-    research-questions.md         ← [/user-research]
+    problem-statement.md          ← [/red:proto-research]
+    personas.md                   ← [/red:proto-research]
+    research-questions.md         ← [/red:proto-research]
   features/
     FEAT-1-feature-name.md        ← [alle Agenten ergänzen dieses File]
     FEAT-2-feature-name.md
     ...
-  bugs/                           ← [/qa-engineer] Ein File pro Bug – nach Fix umbenannt zu BUG-...-fixed.md (Audit-Trail)
+  bugs/                           ← [/red:proto-qa] Ein File pro Bug – nach Fix umbenannt zu BUG-...-fixed.md (Audit-Trail)
     BUG-FEAT1-QA-001.md           ← Technischer Bug (QA Engineer)
     BUG-FEAT1-UX-001.md           ← UX-Bug (UX Reviewer)
     ...
   docs/
-    produktfähigkeiten.md         ← [/qa-engineer] Was kann das Produkt aktuell? (pro Feature ergänzt)
-    releases.md                   ← [/qa-engineer] Release-Historie: was wann integriert, welche Bugs behoben
-  [codeverzeichnis]/              ← [/developer] Projektcode – Pfad steht in project-config.md → "Codeverzeichnis"
+    produktfähigkeiten.md         ← [/red:proto-qa] Was kann das Produkt aktuell? (pro Feature ergänzt)
+    releases.md                   ← [/red:proto-qa] Release-Historie: was wann integriert, welche Bugs behoben
+  [codeverzeichnis]/              ← [/red:proto-dev] Projektcode – Pfad steht in project-config.md → "Codeverzeichnis"
                                     Standard: projekt/ – kann aber src/, . oder ein anderer Pfad sein
 ```
 
@@ -67,7 +67,7 @@ Aktueller Schritt: [Spec | IA/UX | Tech | Dev | QA | Done | REJECTED | ABANDONED
 ---
 
 ## 1. Feature Spec
-*Ausgefüllt von: /requirements*
+*Ausgefüllt von: /red:proto-requirements**
 
 ### User Stories
 - Als [Rolle] möchte ich [Aktion], um [Ziel]
@@ -84,7 +84,7 @@ Aktueller Schritt: [Spec | IA/UX | Tech | Dev | QA | Done | REJECTED | ABANDONED
 ---
 
 ## 2. IA/UX Entscheidungen
-*Ausgefüllt von: /ux-design*
+*Ausgefüllt von: /red:proto-ux**
 
 ### User Flow
 ### Interaktionsmuster
@@ -102,7 +102,7 @@ Aktueller Schritt: [Spec | IA/UX | Tech | Dev | QA | Done | REJECTED | ABANDONED
 ---
 
 ## 3. Technisches Design
-*Ausgefüllt von: /solution-architect*
+*Ausgefüllt von: /red:proto-architect**
 
 ### Component-Struktur
 ### Data Model
@@ -113,7 +113,7 @@ Aktueller Schritt: [Spec | IA/UX | Tech | Dev | QA | Done | REJECTED | ABANDONED
 ---
 
 ## 4. Implementierung
-*Ausgefüllt von: /developer*
+*Ausgefüllt von: /red:proto-dev**
 
 ### Implementierte Dateien
 ### Offene Punkte
@@ -121,7 +121,7 @@ Aktueller Schritt: [Spec | IA/UX | Tech | Dev | QA | Done | REJECTED | ABANDONED
 ---
 
 ## 5. QA Ergebnisse
-*Ausgefüllt von: /qa-engineer*
+*Ausgefüllt von: /red:proto-qa**
 
 ### Test-Ergebnisse
 ### Bugs

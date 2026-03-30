@@ -68,7 +68,7 @@ Das kopiert alle Commands und Agents in `.claude/commands/` und `.claude/agents/
 ### Schritt 3 – Loslegen
 
 ```
-/sparring
+/red:proto-sparring
 ```
 
 ---
@@ -80,7 +80,7 @@ Nach dem Setup hat dein Projekt folgende Struktur:
 ```
 ./
   .claude/
-    commands/          ← Alle Pipeline-Commands (sparring, dev-setup, ...)
+    commands/          ← Alle Pipeline-Commands (red:proto-sparring, red:proto-dev, ...)
     agents/            ← Sub-Agents (frontend-developer, ux-reviewer, ...)
   design-system/       ← Neutrales Design System (Tokens, Komponenten, Patterns)
     tokens/            ← Farben, Typografie, Spacing, Shadows, Motion
@@ -92,7 +92,7 @@ Nach dem Setup hat dein Projekt folgende Struktur:
   research/            ← User Research Ergebnisse
   bugs/                ← Bug-Reports (werden nicht gelöscht, sondern zu -fixed.md)
   docs/                ← Produktfähigkeiten + Release-Historie
-  prd.md               ← Product Requirements Document (erstellt von /sparring)
+  prd.md               ← Product Requirements Document (erstellt von /red:proto-sparring)
   project-config.md    ← Tech-Stack, Pfade, Versionierung
 ```
 
