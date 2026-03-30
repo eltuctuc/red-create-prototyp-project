@@ -10,7 +10,7 @@ Du richtest das Product Development Framework für dieses Projekt ein.
 **Schritt 1 – Prüfe ob das Framework schon installiert ist:**
 
 ```bash
-ls .claude/commands/ 2>/dev/null | grep -E "sparring|dev-setup|requirements|ia-ux|solution-architect|developer|qa-engineer"
+ls .claude/commands/ 2>/dev/null | grep -E "sparring|dev-setup|requirements|ux-design|solution-architect|developer|qa-engineer"
 ls .claude/agents/ 2>/dev/null
 cat project-config.md 2>/dev/null | grep "Codeverzeichnis"
 ```
@@ -52,8 +52,13 @@ mkdir -p .claude/commands
 mkdir -p .claude/agents
 mkdir -p research
 mkdir -p features
+mkdir -p flows
 mkdir -p bugs
 mkdir -p docs
+mkdir -p design-system/tokens
+mkdir -p design-system/components
+mkdir -p design-system/patterns
+mkdir -p design-system/screens
 # Codeverzeichnis NUR anlegen wenn noch kein project-config.md existiert:
 # (sonst ist das Codeverzeichnis bereits konfiguriert und möglicherweise anders als "projekt/")
 [ ! -f project-config.md ] && mkdir -p projekt
@@ -68,7 +73,8 @@ cp -n ~/.claude/templates/red-create-prototyp-project/commands/sparring.md .clau
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/dev-setup.md .claude/commands/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/user-research.md .claude/commands/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/requirements.md .claude/commands/
-cp -n ~/.claude/templates/red-create-prototyp-project/commands/ia-ux.md .claude/commands/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/flows.md .claude/commands/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/ux-design.md .claude/commands/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/solution-architect.md .claude/commands/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/developer.md .claude/commands/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/qa-engineer.md .claude/commands/
@@ -76,6 +82,9 @@ cp -n ~/.claude/templates/red-create-prototyp-project/agents/frontend-developer.
 cp -n ~/.claude/templates/red-create-prototyp-project/agents/backend-developer.md .claude/agents/
 cp -n ~/.claude/templates/red-create-prototyp-project/agents/qa-engineer.md .claude/agents/
 cp -n ~/.claude/templates/red-create-prototyp-project/agents/ux-reviewer.md .claude/agents/
+
+# Design System Templates kopieren (nur wenn noch nicht vorhanden)
+cp -rn ~/.claude/templates/red-create-prototyp-project/design-system/ ./
 ```
 
 Zeige danach welche Dateien bereits existiert haben (übersprungen) und welche neu hinzugefügt wurden:
@@ -96,7 +105,8 @@ cp ~/.claude/templates/red-create-prototyp-project/commands/sparring.md .claude/
 cp ~/.claude/templates/red-create-prototyp-project/commands/dev-setup.md .claude/commands/
 cp ~/.claude/templates/red-create-prototyp-project/commands/user-research.md .claude/commands/
 cp ~/.claude/templates/red-create-prototyp-project/commands/requirements.md .claude/commands/
-cp ~/.claude/templates/red-create-prototyp-project/commands/ia-ux.md .claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/flows.md .claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/ux-design.md .claude/commands/
 cp ~/.claude/templates/red-create-prototyp-project/commands/solution-architect.md .claude/commands/
 cp ~/.claude/templates/red-create-prototyp-project/commands/developer.md .claude/commands/
 cp ~/.claude/templates/red-create-prototyp-project/commands/qa-engineer.md .claude/commands/
@@ -104,6 +114,9 @@ cp ~/.claude/templates/red-create-prototyp-project/agents/frontend-developer.md 
 cp ~/.claude/templates/red-create-prototyp-project/agents/backend-developer.md .claude/agents/
 cp ~/.claude/templates/red-create-prototyp-project/agents/qa-engineer.md .claude/agents/
 cp ~/.claude/templates/red-create-prototyp-project/agents/ux-reviewer.md .claude/agents/
+
+# Design System Templates aktualisieren
+cp -r ~/.claude/templates/red-create-prototyp-project/design-system/ ./
 ```
 
 **Schritt 4 – Empfohlene Skills prüfen:**
@@ -116,7 +129,7 @@ Das Framework ruft folgende Skills auf, wenn sie installiert sind. Teile dem Use
 
 | Skill | Genutzt von | Priorität |
 |-------|-------------|-----------|
-| `ui-ux-pro-max` | `/ia-ux`, `ux-reviewer` | Kern – stark empfohlen |
+| `ui-ux-pro-max` | `/ux-design`, `ux-reviewer` | Kern – stark empfohlen |
 | `frontend-design` | `frontend-developer` | Kern – stark empfohlen |
 | `neon-postgres` | `backend-developer` | Nur bei Neon-Stack |
 | `atlassian:spec-to-backlog` | `/requirements` | Optional – bei Jira-Nutzung |
@@ -140,7 +153,7 @@ Verfügbare Commands:
 /dev-setup          → Projekt scaffolden, Git + GitHub einrichten
 /user-research      → Research-Fragen, Personas, Problem Statement
 /requirements       → Feature Specs (IEEE/IREB)
-/ia-ux              → IA/UX-Entscheidungen (nutzt: ui-ux-pro-max)
+/ux-design          → UX-Design-Entscheidungen, DS-konform (nutzt: ui-ux-pro-max)
 /solution-architect → Tech-Design + Security
 /developer          → Implementierung, orchestriert Agents parallel bei Full-Stack
 /qa-engineer        → Tests + UX-Review parallel, Bug-Reports, Production-Ready

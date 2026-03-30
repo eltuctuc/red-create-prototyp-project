@@ -45,10 +45,11 @@ Zeige dem User eine klare Zusammenfassung:
 [✅/⬜] 2. Dev Setup        → /dev-setup
 [✅/⬜] 3. User Research    → /user-research
 [✅/⬜] 4. Requirements     → /requirements
-[✅/⬜] 5. IA/UX            → /ia-ux
-[✅/⬜] 6. Solution Arch.   → /solution-architect
-[✅/⬜] 7. Developer        → /developer
-[✅/⬜] 8. QA Engineer      → /qa-engineer
+[✅/⬜] 5. Flows            → /flows
+[✅/⬜] 6. UX Design        → /ux-design
+[✅/⬜] 7. Solution Arch.   → /solution-architect
+[✅/⬜] 8. Developer        → /developer
+[✅/⬜] 9. QA Engineer      → /qa-engineer
 
 ### Features im System
 - FEAT-1: [Name] – Status: [Schritt]

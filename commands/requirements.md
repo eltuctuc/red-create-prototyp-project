@@ -153,7 +153,7 @@ AskUserQuestion({
       question: "Ist die Feature Spec vollständig und korrekt?",
       header: "Review",
       options: [
-        { label: "Approved – weiter zu /ia-ux", description: "Spec ist ready" },
+        { label: "Approved – weiter zu /ux-design", description: "Spec ist ready" },
         { label: "Änderungen nötig", description: "Feedback im Chat" }
       ],
       multiSelect: false
@@ -170,7 +170,7 @@ git commit -m "docs: FEAT-[X] spec – [Feature Name]"
 git push
 ```
 
-Sage dem User: "FEAT-X gespeichert. Nächster Schritt: `/ia-ux` für UI/UX-Entscheidungen."
+Sage dem User: "FEAT-X gespeichert. Nächster Schritt: `/ux-design` für UI/UX-Entscheidungen."
 
 ## Feature abbrechen
 
