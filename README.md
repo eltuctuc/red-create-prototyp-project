@@ -2,16 +2,18 @@
 
 Ein KI-gestütztes Product Development Framework für [Claude Code](https://claude.ai/code) – von der vagen Idee bis zum getesteten Prototyp, mit Human-in-the-Loop an jedem Schritt.
 
+---
+
 ## Was ist das?
 
-Eine Sammlung von Claude Code Commands und Agents, die eine vollständige Produktentwicklungs-Pipeline abbilden:
+Eine Sammlung von Claude Code Commands und Agents, die eine vollständige Produktentwicklungs-Pipeline abbilden. Du arbeitest mit natürlicher Sprache – Claude führt die Pipeline aus, du triffst die Entscheidungen.
 
 ```
 /sparring              → Idee schärfen → PRD
 /dev-setup             → Tech-Stack wählen, Projekt scaffolden, Git/GitHub einrichten
 /user-research         → Problem Statement Map + Personas
 /requirements          → Feature Specs (User Stories, Acceptance Criteria, Edge Cases)
-/flows                 → Screen-Inventar + verbindliche Transition-Tabelle (nach allen Feature Specs)
+/flows                 → Screen-Inventar + verbindliche Transition-Tabelle
 /ux-design             → UX-Entscheidungen pro Feature – DS-konform, Transitions aus /flows
 /solution-architect    → Technisches Design + Security + Test-Setup
 /developer             → Implementierung (Frontend + Backend, parallel falls nötig)
@@ -20,68 +22,128 @@ Eine Sammlung von Claude Code Commands und Agents, die eine vollständige Produk
 
 Jeder Command ist eigenständig – du kannst an jedem Punkt einsteigen oder aufhören. Die Commands bauen aber aufeinander auf: jeder liest den Output des vorherigen und ergänzt die gemeinsamen Artefakte.
 
+---
+
 ## Voraussetzungen
 
-- [Claude Code CLI](https://docs.anthropic.com/claude-code) installiert
+- [Claude Code CLI](https://docs.anthropic.com/claude-code) installiert und eingerichtet
 - [`gh` CLI](https://cli.github.com/) (nur für GitHub-Setup in `/dev-setup`)
-- Node.js, Python, Java etc. – je nach gewähltem Tech-Stack
+- Node.js, Python oder ähnliches – je nach gewähltem Tech-Stack
+
+---
 
 ## Installation
 
-### 1. Bootstrap-Command global installieren
+### Schritt 1 – Framework global einrichten
+
+Einmalig auf deinem Rechner ausführen. Klont das Framework-Template nach `~/.claude/templates/` und legt den Bootstrap-Command global an:
 
 ```bash
-git clone https://github.com/eltuctuc/red-create-prototyp-project.git /tmp/red-framework && \
-cp /tmp/red-framework/commands/red-create-prototyp-project.md ~/.claude/commands/ && \
-rm -rf /tmp/red-framework
+git clone https://github.com/eltuctuc/red-create-prototyp-project.git ~/.claude/templates/red-create-prototyp-project && \
+cp ~/.claude/templates/red-create-prototyp-project/commands/red-create-prototyp-project.md ~/.claude/commands/
 ```
 
-### 2. Framework in ein neues Projekt installieren
+> **Update:** Um das Framework später auf den neuesten Stand zu bringen:
+> ```bash
+> cd ~/.claude/templates/red-create-prototyp-project && git pull
+> ```
 
-In deinem Projektverzeichnis:
+### Schritt 2 – Framework in ein Projekt installieren
+
+Navigiere in dein Projektverzeichnis (neues oder bestehendes Projekt) und starte Claude Code:
+
+```bash
+mkdir mein-projekt && cd mein-projekt
+claude
+```
+
+Dann in Claude Code:
 
 ```
 /red-create-prototyp-project
 ```
 
-Das kopiert alle Commands und Agents in `.claude/commands/` und `.claude/agents/` des Projekts. Danach stehen alle Pipeline-Commands lokal zur Verfügung.
+Das kopiert alle Commands und Agents in `.claude/commands/` und `.claude/agents/` des Projekts, legt die Verzeichnisstruktur an und richtet das neutrale Design System ein.
 
-### 3. Loslegen
+### Schritt 3 – Loslegen
 
 ```
 /sparring
 ```
 
-## Wie funktioniert es?
+---
 
-Alle Commands arbeiten mit denselben Artefakten im Projektverzeichnis:
+## Was wird installiert?
+
+Nach dem Setup hat dein Projekt folgende Struktur:
 
 ```
 ./
-  prd.md                     ← Product Requirements Document
-  project-config.md          ← Tech-Stack, Pfade, Versionierung
-  flows/                     ← Verbindliche Screen Transitions (erstellt von /flows)
-  design-system/             ← Design-Vorgaben (Tokens, Komponenten, Patterns, Screens)
-    tokens/                  ← Farben, Typografie, Spacing, Shadows, Motion
-    components/              ← Komponenten-Specs (ein File pro Komponente)
-    patterns/                ← UX-Patterns (Navigation, Formulare, Feedback, Datendarstellung)
-    screens/                 ← Figma-Exports / Referenz-Screenshots
-  research/                  ← User Research Ergebnisse
-  features/FEAT-X.md         ← Akkumulatives Feature-File (alle Agents ergänzen)
-  bugs/                      ← Bug-Reports (BUG-FEAT1-QA-001.md → -fixed.md nach Fix)
-  docs/                      ← Produktfähigkeiten + Release-Historie
-  [codeverzeichnis]/         ← Der eigentliche Code
+  .claude/
+    commands/          ← Alle Pipeline-Commands (sparring, dev-setup, ...)
+    agents/            ← Sub-Agents (frontend-developer, ux-reviewer, ...)
+  design-system/       ← Neutrales Design System (Tokens, Komponenten, Patterns)
+    tokens/            ← Farben, Typografie, Spacing, Shadows, Motion
+    components/        ← Button, Input, Card, ...
+    patterns/          ← Navigation, Formulare, Feedback, Datendarstellung
+    screens/           ← Platzhalter für Figma-Exports
+  features/            ← Akkumulatives Feature-File (alle Agents ergänzen hier)
+  flows/               ← Screen-Inventar + verbindliche Transition-Tabellen
+  research/            ← User Research Ergebnisse
+  bugs/                ← Bug-Reports (werden nicht gelöscht, sondern zu -fixed.md)
+  docs/                ← Produktfähigkeiten + Release-Historie
+  prd.md               ← Product Requirements Document (erstellt von /sparring)
+  project-config.md    ← Tech-Stack, Pfade, Versionierung
 ```
 
 Details zu allen File-Formaten: [ARTIFACT_SCHEMA.md](./ARTIFACT_SCHEMA.md)
 
+---
+
+## Das Design System
+
+Das Framework bringt ein **neutrales Design System** mit – als Ausgangspunkt, keine Pflicht. Du kannst es schrittweise befüllen oder durch ein bestehendes ersetzen.
+
+**Drei Zustände pro Komponente:**
+
+| Status | Bedeutung |
+|--------|-----------|
+| `DS-konform` | Implementiert nach Spec – keine Anpassung nötig |
+| `Tokens-Build` | Nutzt DS-Tokens, aber keine fertige Komponente vorhanden – Agent baut selbst |
+| `Hypothesen-Test` | Bewusstes Abweichen – UX-Entscheidung mit Begründung |
+
+Der `frontend-developer` Agent liest die Design-System-Specs bevor er implementiert und meldet fehlende Komponenten zurück, statt still zu improvisieren.
+
+---
+
+## Empfohlene Skills
+
+Das Framework läuft ohne zusätzliche Skills, nutzt sie aber wenn vorhanden:
+
+| Skill | Genutzt von | Effekt |
+|-------|-------------|--------|
+| `ui-ux-pro-max` | `/ux-design`, `ux-reviewer` Agent | Deutlich bessere UX-Qualität |
+| `frontend-design` | `frontend-developer` Agent | Bessere Component-Implementierung |
+| `neon-postgres` | `backend-developer` Agent | Nur bei Neon-Datenbankstack |
+| `atlassian:spec-to-backlog` | `/requirements` | Direkt in Jira schreiben |
+
+Skills werden in Claude Code unter **Einstellungen → Skills** installiert.
+
+---
+
 ## Framework-Philosophie
 
-- **Human-in-the-Loop:** Kein Agent geht alleine weiter – jeder Schritt braucht eine explizite Bestätigung
-- **Akkumulativ statt überschreibend:** Jeder Agent ergänzt seinen Abschnitt im Feature-File, bestehende Abschnitte bleiben erhalten
-- **Audit-Trail:** Bugs werden nicht gelöscht, sondern zu `-fixed.md` umbenannt
-- **Konfigurierbar:** Tech-Stack, Pfade und Team-Setup werden in `project-config.md` gespeichert und von allen Agents gelesen – kein Hardcoding
-- **SemVer:** Automatisches Versioning – PATCH bei Bug-Fixes, MINOR bei neuen Features, MAJOR bei intentionalem Release
+**Human-in-the-Loop:** Kein Agent geht alleine weiter – jeder Schritt braucht eine explizite Bestätigung.
+
+**Akkumulativ statt überschreibend:** Jeder Agent ergänzt seinen Abschnitt im Feature-File, bestehende Abschnitte bleiben erhalten.
+
+**Flows als Navigationsvertrag:** `/flows` erstellt eine verbindliche Transition-Tabelle, die UX und Developer als gemeinsame Quelle der Wahrheit nutzen. Undokumentierte Transitions werden gemeldet, nicht stillschweigend implementiert.
+
+**Audit-Trail:** Bugs werden nicht gelöscht, sondern zu `-fixed.md` umbenannt.
+
+**SemVer:** Automatisches Versioning – PATCH bei Bug-Fixes, MINOR bei neuen Features, MAJOR bei intentionalem Release.
+
+---
 
 ## Lizenz
 
