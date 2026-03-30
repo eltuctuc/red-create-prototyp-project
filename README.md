@@ -11,7 +11,8 @@ Eine Sammlung von Claude Code Commands und Agents, die eine vollständige Produk
 /dev-setup             → Tech-Stack wählen, Projekt scaffolden, Git/GitHub einrichten
 /user-research         → Problem Statement Map + Personas
 /requirements          → Feature Specs (User Stories, Acceptance Criteria, Edge Cases)
-/ia-ux                 → Informationsarchitektur + UX-Entscheidungen
+/flows                 → Screen-Inventar + verbindliche Transition-Tabelle (nach allen Feature Specs)
+/ux-design             → UX-Entscheidungen pro Feature – DS-konform, Transitions aus /flows
 /solution-architect    → Technisches Design + Security + Test-Setup
 /developer             → Implementierung (Frontend + Backend, parallel falls nötig)
 /qa-engineer           → Tests, Accessibility, Security, Bug-Loop bis Production-Ready
@@ -59,6 +60,12 @@ Alle Commands arbeiten mit denselben Artefakten im Projektverzeichnis:
 ./
   prd.md                     ← Product Requirements Document
   project-config.md          ← Tech-Stack, Pfade, Versionierung
+  flows/                     ← Verbindliche Screen Transitions (erstellt von /flows)
+  design-system/             ← Design-Vorgaben (Tokens, Komponenten, Patterns, Screens)
+    tokens/                  ← Farben, Typografie, Spacing, Shadows, Motion
+    components/              ← Komponenten-Specs (ein File pro Komponente)
+    patterns/                ← UX-Patterns (Navigation, Formulare, Feedback, Datendarstellung)
+    screens/                 ← Figma-Exports / Referenz-Screenshots
   research/                  ← User Research Ergebnisse
   features/FEAT-X.md         ← Akkumulatives Feature-File (alle Agents ergänzen)
   bugs/                      ← Bug-Reports (BUG-FEAT1-QA-001.md → -fixed.md nach Fix)

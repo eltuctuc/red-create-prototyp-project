@@ -9,6 +9,27 @@ Es ist die einzige Source of Truth für den gesamten Workflow.
 ./
   prd.md                          ← [/sparring] Product Requirements Document
   project-config.md               ← [/dev-setup] Tech-Stack, Projektstruktur, Git/GitHub
+  design-system/                  ← Verbindliche Design-Vorgaben – wird von /ux-design, /developer, ux-reviewer gelesen
+    README.md                     ← Ausfüllanleitung
+    tokens/
+      colors.md                   ← Farb-Tokens (Primär, Sekundär, Semantic, Neutral)
+      typography.md               ← Schriften, Größen, Gewichte, Line-Heights
+      spacing.md                  ← Spacing-Scale und Border-Radius
+      shadows.md                  ← Elevation-System
+      motion.md                   ← Transitions, Durations, Easing (optional)
+    components/
+      [name].md                   ← Ein File pro Komponente (Varianten, Zustände, Specs)
+    patterns/
+      navigation.md               ← Header, Sidebar, Breadcrumb, Tabs
+      forms.md                    ← Formular-Aufbau, Validation, Fehlermeldungen
+      feedback.md                 ← Toasts, Modals, Empty States, Skeleton
+      data-display.md             ← Tabellen, Listen, Badges, Avatare
+    screens/
+      README.md                   ← Anleitung für Screen-Exports
+      [flow-name]/                ← Figma-Exports nach Flow gruppiert
+        [screen].png
+  flows/
+    product-flows.md              ← [/flows] Verbindliche Screen-Übersicht + Transition-Tabelle
   research/
     problem-statement.md          ← [/user-research]
     personas.md                   ← [/user-research]
@@ -63,11 +84,20 @@ Aktueller Schritt: [Spec | IA/UX | Tech | Dev | QA | Done | REJECTED | ABANDONED
 ---
 
 ## 2. IA/UX Entscheidungen
-*Ausgefüllt von: /ia-ux*
+*Ausgefüllt von: /ux-design*
 
 ### User Flow
 ### Interaktionsmuster
-### Komponentenstruktur (konzeptuell)
+### Eingesetzte Komponenten
+| Komponente | DS-Status | Quelle |
+|------------|-----------|--------|
+### Screen Transitions (verbindlich)
+| Von | Trigger | Wohin | Bedingung |
+|-----|---------|-------|-----------|
+### DS-Status dieser Implementierung
+- Konforme Komponenten:
+- Neue Komponenten (Tokens-Build, genehmigt):
+- Bewusste Abweichungen (Hypothesentest):
 
 ---
 
@@ -169,6 +199,33 @@ Jeder `/qa-engineer`-Durchlauf ergänzt ein neues Feature-Kapitel, wenn Producti
 ```
 
 Einträge werden chronologisch oben eingefügt (neueste zuerst).
+
+---
+
+## Flows Format (`./flows/product-flows.md`)
+
+```markdown
+# Product Flows
+
+## Screens
+| Screen-ID | Screen-Name | Route | Feature | Typ |
+|-----------|-------------|-------|---------|-----|
+
+## Einstiegspunkte
+| Kontext | Einstiegs-Screen | Bedingung |
+|---------|-----------------|-----------|
+
+## Screen Transitions
+| Von | Trigger | Wohin | Bedingung | Feature |
+|-----|---------|-------|-----------|---------|
+
+## Offene Transitions
+| Gemeldet von | Von Screen | Situation | Status |
+|--------------|------------|-----------|--------|
+```
+
+Einträge werden nur ergänzt, nie ohne Bestätigung geändert.
+`/flows` kann jederzeit erneut aufgerufen werden um neue Features zu integrieren oder Lücken zu schließen.
 
 ---
 
