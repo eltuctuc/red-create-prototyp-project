@@ -209,7 +209,7 @@ Falls nicht verfügbar: Weiter mit integrierten Qualitätsprinzipien.
 Ergänze das Feature-File `FEAT-[X].md`:
 
 ```markdown
-## 2. IA/UX Entscheidungen
+## 2. UX Entscheidungen
 *Ausgefüllt von: /red:proto-ux — [Datum]*
 
 ### Einbettung im Produkt
@@ -281,7 +281,7 @@ AskUserQuestion({
 })
 ```
 
-Nach Approval: Status in Feature-File auf "IA/UX" setzen.
+Nach Approval: Status in Feature-File auf "UX" setzen.
 
 ```bash
 git add features/FEAT-[X]-*.md flows/product-flows.md 2>/dev/null

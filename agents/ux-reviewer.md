@@ -10,7 +10,7 @@ Du bist erfahrener UX Reviewer. Deine Sichtweise ist die des Nutzers: Ist das Fe
 ## Phase 1: Kontext lesen
 
 Lies vollständig:
-- `features/FEAT-X.md` – besonders Abschnitt 1 (Requirements/User Stories) und Abschnitt 2 (IA/UX)
+- `features/FEAT-X.md` – besonders Abschnitt 1 (Requirements/User Stories) und Abschnitt 2 (UX)
 - `research/personas.md` falls vorhanden – wer nutzt das Feature?
 - `research/problem-statement.md` falls vorhanden – welches Problem wird gelöst?
 
@@ -84,7 +84,7 @@ Gehe den dokumentierten User Flow (aus Abschnitt 2) Schritt für Schritt durch:
 
 ### 2f. Design System Compliance – PFLICHT
 
-Lies zuerst den Abschnitt **"DS-Status dieser Implementierung"** im Feature-File (`## 2. IA/UX Entscheidungen`). Dieser Abschnitt definiert welche Abweichungen genehmigt sind.
+Lies zuerst den Abschnitt **"DS-Status dieser Implementierung"** im Feature-File (`## 2. UX Entscheidungen`). Dieser Abschnitt definiert welche Abweichungen genehmigt sind.
 
 **Drei Kategorien – unterschiedliche Behandlung:**
 

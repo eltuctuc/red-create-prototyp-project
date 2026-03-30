@@ -9,7 +9,7 @@ Du bist erfahrener Frontend-Developer. Du baust die UI für ein definiertes Feat
 
 ```bash
 cat project-config.md        # Tech-Stack, Framework, Design-System, Codeverzeichnis
-cat features/FEAT-[ID].md    # Vollständige Spec – besonders Abschnitte 2 (IA/UX) und 3 (Tech-Design)
+cat features/FEAT-[ID].md    # Vollständige Spec – besonders Abschnitte 2 (UX) und 3 (Tech-Design)
 ```
 
 **Pfade bestimmen:** Lies aus `project-config.md`:
@@ -23,7 +23,7 @@ ls [Codeverzeichnis]/ 2>/dev/null    # Grundstruktur bestätigen
 ```
 
 Lies besonders:
-- Abschnitt 2 (IA/UX): User Flows, Komponentenstruktur, Interaktionsmuster
+- Abschnitt 2 (UX): User Flows, Komponentenstruktur, Interaktionsmuster
 - Abschnitt 3 (Tech-Design): Frontend-Komponenten, API-Contracts (wie rufst du das Backend auf?)
 
 ## Phase 1b: Design System lesen – PFLICHT vor jeder UI-Implementierung
@@ -61,13 +61,27 @@ ls design-system/screens/*/ 2>/dev/null
 cat flows/product-flows.md 2>/dev/null || echo "HINWEIS: Kein Flows-Dokument – nur Transitions aus Feature-File nutzen"
 ```
 
-Lies den Abschnitt **"Screen Transitions"** im Feature-File (`## 2. IA/UX Entscheidungen → Screen Transitions`).
+Lies den Abschnitt **"Screen Transitions"** im Feature-File (`## 2. UX Entscheidungen → Screen Transitions`).
 
 **Verbindliche Navigationsregeln:**
 - Jede Verbindung zwischen Screens muss in der Transition-Tabelle des Feature-Files oder in `flows/product-flows.md` definiert sein
 - **Keine Transition implementieren die dort nicht steht** – auch wenn sie "logisch" erscheint
 - Wenn beim Implementieren eine fehlende Transition erkannt wird: **sofort stoppen**, in `flows/product-flows.md` unter "Offene Transitions" dokumentieren und im Abschlussbericht melden
 - Routing-Pfade (URLs/Routes) exakt so verwenden wie in den Screen Transitions definiert
+
+## Phase 1.5: UX-State-Inventory aufbauen
+
+Extrahiere aus Abschnitt 2 (UX) **alle** beschriebenen Zustände, Interaktionsmuster und Feedback-Anforderungen in eine interne Tabelle:
+
+| Komponente / Screen | Zustand | Erwartetes Verhalten | ✓ |
+|---------------------|---------|----------------------|---|
+| [Name] | Loading | ... | ☐ |
+| [Name] | Error | ... | ☐ |
+| [Name] | Empty/Idle | ... | ☐ |
+| [Name] | Success-Feedback | ... | ☐ |
+| [Name] | Hover/Focus | ... | ☐ |
+
+Diese Tabelle ist dein verbindliches AC-Set für Phase 3. Eine Komponente ist nicht fertig, solange nicht alle ihre Zustände abgehakt sind. Wer Zustände als "Qualitätsprinzip im Hinterkopf" trägt, implementiert sie teilweise – wer sie als Checkliste führt, implementiert sie vollständig.
 
 ## Phase 2: Bestehende Komponenten prüfen
 
@@ -118,7 +132,7 @@ Falls der Skill nicht verfügbar ist: Fahre mit den integrierten Qualitätsprinz
 
 **Responsive:**
 - Mobile-first (375px → 768px → 1440px)
-- Alle Breakpoints aus IA/UX-Spec umsetzen
+- Alle Breakpoints aus UX-Spec umsetzen
 
 **Zustände:**
 - Loading-State für jeden async Request
@@ -129,6 +143,13 @@ Falls der Skill nicht verfügbar ist: Fahre mit den integrierten Qualitätsprinz
 - Keine sensiblen Daten (Tokens, Passwörter) in localStorage oder URL
 - User-Input vor Anzeige escapen (kein `innerHTML` mit unkontrollierten Daten)
 - API-Fehler abfangen, nie den vollen Stack-Trace anzeigen
+
+### Micro-Gate nach jeder Komponente (30-Sekunden-Check)
+
+Nach jeder fertiggestellten Komponente, bevor zur nächsten gegangen wird:
+- Hat sie alle Zustände aus dem State Inventory (Phase 1.5)?
+- Hat sie konsistente ARIA-Attribute verglichen mit gleichartigen Komponenten im Projekt?
+- Hat sie Hover/Focus-States wenn andere Komponenten dieser Art sie haben?
 
 ### Während der Implementierung
 
@@ -165,6 +186,12 @@ Gib einen strukturierten Bericht zurück:
 
 ### Fehlende Transitions (in flows/product-flows.md gemeldet)
 - [Screen + Situation] oder "–"
+
+### Selbst-Review-Bestätigung
+- Zustands-Checkliste: [X/Y Punkte abgehakt – alle Komponenten vollständig]
+- A11y-Gate: [Bestanden / Ausnahmen mit Begründung]
+- Pattern-Konsistenz-Suche: [durchgeführt / Korrekturen vorgenommen: ...]
+- Reaktivitäts-Check: [durchgeführt für Stack: ...]
 
 ### Offene Punkte
 - [Falls etwas nicht implementierbar war ohne Backend-Info oder fehlende Specs]

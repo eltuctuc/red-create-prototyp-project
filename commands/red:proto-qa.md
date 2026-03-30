@@ -47,7 +47,7 @@ Agent("qa-engineer", {
 
 Agent("ux-reviewer", {
   prompt: `Führe ein UX-Review für FEAT-[ID] durch.
-  Lies: features/FEAT-[ID].md (besonders Abschnitt 2: IA/UX)
+  Lies: features/FEAT-[ID].md (besonders Abschnitt 2: UX)
   Lies: research/personas.md falls vorhanden
   Befolge die Anweisungen aus .claude/agents/ux-reviewer.md
   Schreibe Bug-Files nach bugs/ (Naming: BUG-FEAT[ID]-UX-001.md, BUG-FEAT[ID]-UX-002.md etc.)`

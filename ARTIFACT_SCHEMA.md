@@ -57,7 +57,7 @@ Jeder Agent ergänzt seinen Abschnitt. Bestehende Abschnitte werden nie übersch
 # FEAT-X: Feature Name
 
 ## Status
-Aktueller Schritt: [Spec | IA/UX | Tech | Dev | QA | Done | REJECTED | ABANDONED]
+Aktueller Schritt: [Spec | UX | Tech | Dev | QA | Done | REJECTED | ABANDONED]
 
 *(REJECTED = Entscheidung gegen Umsetzung; ABANDONED = Arbeit begonnen aber abgebrochen)*
 
@@ -83,7 +83,7 @@ Aktueller Schritt: [Spec | IA/UX | Tech | Dev | QA | Done | REJECTED | ABANDONED
 
 ---
 
-## 2. IA/UX Entscheidungen
+## 2. UX Entscheidungen
 *Ausgefüllt von: /red:proto-ux**
 
 ### User Flow

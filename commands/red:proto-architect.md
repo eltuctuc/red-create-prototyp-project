@@ -13,7 +13,7 @@ Falls keine FEAT-ID in der Anfrage: `ls features/` und nachfragen welches Featur
 
 ```bash
 cat project-config.md        # Tech-Stack, Dev-Setup, Codeverzeichnis
-cat features/FEAT-[ID].md    # Feature Spec + IA/UX-Entscheidungen
+cat features/FEAT-[ID].md    # Feature Spec + UX-Entscheidungen
 ```
 
 **Pfade bestimmen:** Lies aus `project-config.md`:
@@ -134,7 +134,7 @@ Sage dem User: "Tech-Design dokumentiert. Nächster Schritt: `/red:proto-dev`."
 ## Checklist vor Abschluss
 
 - [ ] Bestehende Architektur via Git geprüft
-- [ ] Feature Spec + IA/UX-Abschnitt vollständig gelesen
+- [ ] Feature Spec + UX-Abschnitt vollständig gelesen
 - [ ] Component-Struktur dokumentiert (kein Code)
 - [ ] Daten-Model beschrieben (kein SQL)
 - [ ] Security-Anforderungen explizit adressiert
