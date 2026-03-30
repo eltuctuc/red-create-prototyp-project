@@ -26,6 +26,49 @@ Lies besonders:
 - Abschnitt 2 (IA/UX): User Flows, Komponentenstruktur, Interaktionsmuster
 - Abschnitt 3 (Tech-Design): Frontend-Komponenten, API-Contracts (wie rufst du das Backend auf?)
 
+## Phase 1b: Design System lesen – PFLICHT vor jeder UI-Implementierung
+
+```bash
+# Tokens: alle visuellen Grundwerte laden
+cat design-system/tokens/colors.md 2>/dev/null
+cat design-system/tokens/typography.md 2>/dev/null
+cat design-system/tokens/spacing.md 2>/dev/null
+cat design-system/tokens/shadows.md 2>/dev/null
+cat design-system/tokens/motion.md 2>/dev/null
+
+# Komponenten: was steht zur Verfügung?
+cat design-system/components/*.md 2>/dev/null
+
+# Patterns: wie werden Interaktionen, Formulare, Feedback gebaut?
+cat design-system/patterns/*.md 2>/dev/null
+
+# Referenz-Screens: visuelle Referenz für Layout und Hierarchie
+ls design-system/screens/ 2>/dev/null
+ls design-system/screens/*/ 2>/dev/null
+```
+
+**Verbindliche Regeln für die Implementierung:**
+- Existiert eine Komponente im DS → baue sie exakt gemäß DS-Spec (Varianten, Zustände, Größen). Keine eigene Interpretation.
+- Alle Farben, Abstände, Typografie, Schatten: ausschließlich Token-Werte – kein Hardcoding
+- Patterns aus `design-system/patterns/` haben Vorrang vor eigenen Lösungen
+- Komponenten mit Status `⚠ Tokens-Build` (genehmigt, keine Spec) → bauen mit allen verfügbaren Tokens, gleicher Look & Feel
+- Komponenten mit Status `🧪 Hypothesentest` → exakt so bauen wie in der UX-Entscheidung beschrieben – keine eigene Interpretation
+- Screens sind Referenz für Struktur und Hierarchie – kein Pixel-Perfect-Anspruch
+
+## Phase 1c: Flows-Dokument lesen – PFLICHT für Navigation
+
+```bash
+cat flows/product-flows.md 2>/dev/null || echo "HINWEIS: Kein Flows-Dokument – nur Transitions aus Feature-File nutzen"
+```
+
+Lies den Abschnitt **"Screen Transitions"** im Feature-File (`## 2. IA/UX Entscheidungen → Screen Transitions`).
+
+**Verbindliche Navigationsregeln:**
+- Jede Verbindung zwischen Screens muss in der Transition-Tabelle des Feature-Files oder in `flows/product-flows.md` definiert sein
+- **Keine Transition implementieren die dort nicht steht** – auch wenn sie "logisch" erscheint
+- Wenn beim Implementieren eine fehlende Transition erkannt wird: **sofort stoppen**, in `flows/product-flows.md` unter "Offene Transitions" dokumentieren und im Abschlussbericht melden
+- Routing-Pfade (URLs/Routes) exakt so verwenden wie in den Screen Transitions definiert
+
 ## Phase 2: Bestehende Komponenten prüfen
 
 ```bash
@@ -91,6 +134,14 @@ Falls der Skill nicht verfügbar ist: Fahre mit den integrierten Qualitätsprinz
 
 Wenn ein API-Contract unklar ist oder im Tech-Design fehlt: **stopp und dokumentiere die Frage** im Feature-File unter "Offene Punkte".
 
+Wenn eine benötigte Screen Transition nicht in den definierten Transitions steht:
+1. Transition **nicht** implementieren
+2. Eintrag in `flows/product-flows.md` unter "Offene Transitions" anlegen:
+   ```
+   | frontend-developer | S-[XX] [Screen-Name] | [Beschreibung: Von wo, welcher Trigger, wohin erwartet] | Offen |
+   ```
+3. Im Abschlussbericht unter "Fehlende Transitions" aufführen
+
 ## Phase 4: Abschlussbericht
 
 Gib einen strukturierten Bericht zurück:
@@ -107,6 +158,14 @@ Gib einen strukturierten Bericht zurück:
 - `GET /api/[endpoint]` – [Wofür]
 - `POST /api/[endpoint]` – [Wofür]
 
+### Design System Nutzung
+- Konforme Komponenten: [Liste]
+- Tokens-Build Komponenten (genehmigt): [Liste oder "–"]
+- Hypothesentest-Komponenten: [Liste oder "–"]
+
+### Fehlende Transitions (in flows/product-flows.md gemeldet)
+- [Screen + Situation] oder "–"
+
 ### Offene Punkte
-- [Falls etwas nicht implementierbar war ohne Backend-Info]
+- [Falls etwas nicht implementierbar war ohne Backend-Info oder fehlende Specs]
 ```

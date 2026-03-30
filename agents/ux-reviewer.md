@@ -14,6 +14,19 @@ Lies vollständig:
 - `research/personas.md` falls vorhanden – wer nutzt das Feature?
 - `research/problem-statement.md` falls vorhanden – welches Problem wird gelöst?
 
+```bash
+# Design System als Review-Referenz laden
+cat design-system/components/*.md 2>/dev/null
+cat design-system/tokens/colors.md 2>/dev/null
+cat design-system/tokens/typography.md 2>/dev/null
+cat design-system/tokens/spacing.md 2>/dev/null
+cat design-system/patterns/*.md 2>/dev/null
+
+# Referenz-Screens für visuellen Vergleich
+ls design-system/screens/ 2>/dev/null
+ls design-system/screens/*/ 2>/dev/null
+```
+
 ## Skill: UX Review Guidelines
 
 Vor dem systematischen Review aktuelle UX-Standards und Muster laden:
@@ -69,7 +82,40 @@ Gehe den dokumentierten User Flow (aus Abschnitt 2) Schritt für Schritt durch:
 - Stimmen Bezeichnungen überein? (Gleiche Aktion, gleicher Name überall)
 - Ist das visuelle Gewicht (Farbe, Größe, Abstand) konsistent mit dem Rest des Produkts?
 
-### 2f. Micro-Copy und Texte
+### 2f. Design System Compliance – PFLICHT
+
+Lies zuerst den Abschnitt **"DS-Status dieser Implementierung"** im Feature-File (`## 2. IA/UX Entscheidungen`). Dieser Abschnitt definiert welche Abweichungen genehmigt sind.
+
+**Drei Kategorien – unterschiedliche Behandlung:**
+
+| Kategorie | Erkennbar an | Review-Verhalten |
+|-----------|-------------|------------------|
+| Konforme Komponente | DS-Spec vorhanden, umgesetzt | Prüfe exakte Compliance |
+| Tokens-Build (genehmigt) | `⚠ Tokens-Build` im Feature-File | Prüfe nur ob Tokens korrekt genutzt wurden – kein Bug für fehlende Spec |
+| Hypothesentest (genehmigt) | `🧪 Hypothesentest` im Feature-File | Prüfe ob Abweichung wie dokumentiert umgesetzt – kein Bug für die Abweichung selbst |
+
+**Prüfpunkte für konforme Komponenten:**
+- Werden die richtigen DS-Komponenten eingesetzt? (Varianten, Zustände, Größen)
+- Werden ausschließlich Tokens genutzt – kein Hardcoding?
+- Stimmen Typografie, Spacing, Schatten mit den Token-Files überein?
+- Werden Patterns aus `design-system/patterns/` korrekt angewendet?
+
+**Prüfpunkte für Tokens-Build Komponenten:**
+- Werden alle verfügbaren Tokens genutzt (Farben, Spacing, Typografie, Schatten)?
+- Ist der Look & Feel konsistent mit dem Rest der Anwendung?
+
+**Jede nicht-genehmigte Abweichung vom DS ist ein UX-Bug** (Bereich: `Konsistenz`, Severity mindestens `Medium`).
+
+### 2g. Screen Transitions Compliance – PFLICHT
+
+Lies die **Screen Transitions Tabelle** im Feature-File und `flows/product-flows.md` (falls vorhanden).
+
+Prüfe für jede definierte Transition:
+- Ist sie implementiert? Führt der genannte Trigger tatsächlich zum definierten Ziel?
+- Gibt es Transitions die implementiert wurden aber nicht in der Tabelle stehen? → Bug (nicht autorisierte Navigation)
+- Gibt es definierte Transitions die nicht implementiert wurden? → Bug (fehlende Navigation)
+
+### 2g. Micro-Copy und Texte
 
 - Sind Buttons-Beschriftungen aktiv und präzise? (nicht "OK" sondern "Bestellung abschicken")
 - Sind Platzhalter-Texte hilfreich, nicht ersetzend für Labels?
@@ -126,6 +172,7 @@ Gib zurück:
 - Fehler-/Leer-Zustände: [kurzes Ergebnis]
 - Accessibility: [kurzes Ergebnis]
 - Konsistenz: [kurzes Ergebnis]
+- Design System Compliance: [DS eingehalten / Abweichungen gefunden]
 
 ### Gefundene Bugs
 - BUG-FEAT[X]-[NNN]: [Titel] (Severity)

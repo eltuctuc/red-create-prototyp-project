@@ -20,6 +20,30 @@ git log --oneline -5 2>/dev/null
 
 Lies alles vollständig.
 
+## Phase 1b: Design System lesen – PFLICHT vor Implementierung
+
+```bash
+# Design System vollständig laden
+ls design-system/ 2>/dev/null || echo "Kein design-system/ Verzeichnis – wird ohne DS implementiert"
+
+# Tokens: visuelle Grundwerte
+cat design-system/tokens/colors.md 2>/dev/null
+cat design-system/tokens/typography.md 2>/dev/null
+cat design-system/tokens/spacing.md 2>/dev/null
+cat design-system/tokens/shadows.md 2>/dev/null
+
+# Komponenten: welche stehen zur Verfügung?
+cat design-system/components/*.md 2>/dev/null
+
+# Patterns: wie werden Interaktionen gebaut?
+cat design-system/patterns/*.md 2>/dev/null
+```
+
+**Regel für die Implementierung:**
+- Existiert eine Komponente im DS → nicht neu erfinden, DS-Spec umsetzen
+- Alle visuellen Werte (Farben, Abstände, Radien) aus den Token-Files nutzen – kein Hardcoding
+- Fehlt eine Komponente im DS → bauen und unter "Tech-Debt / Offene Punkte" im Feature-File dokumentieren
+
 **Wichtig – Codeverzeichnis:** Entnimm den konfigurierten Pfad aus `project-config.md` (Feld `Codeverzeichnis:`). Standard ist `projekt/`, kann aber `src/`, `.` oder ein anderer Pfad sein. Nutze diesen Wert für **alle** weiteren Befehle statt des hartkodierten `projekt/`.
 
 **Guard 1 – Tech-Design muss existieren:** Prüfe, ob `## 3. Technisches Design` im Feature-File vorhanden ist. Falls nicht → stopp:
@@ -110,6 +134,7 @@ Agent("frontend-developer", {
   prompt: `Implementiere das Frontend für FEAT-[ID].
   Lies: features/FEAT-[ID].md (Abschnitte IA/UX + Tech-Design)
   Lies: project-config.md
+  Lies: design-system/ vollständig (tokens/, components/, patterns/, screens/)
   Codeverzeichnis: [Wert aus project-config.md → Codeverzeichnis]
   Backend-API-Contracts sind in FEAT-[ID].md unter "Tech-Design → API-Endpoints" definiert.
   Befolge die Anweisungen aus .claude/agents/frontend-developer.md`
