@@ -1,0 +1,13 @@
+# Exclude project-level files from npm package
+.git/
+.gitignore
+ARTIFACT_SCHEMA.md
+features/
+research/
+flows/
+bugs/
+docs/
+projekt/
+prd.md
+project-config.md
+*.log

@@ -1,0 +1,36 @@
+{
+  "name": "red-proto",
+  "version": "0.4.0",
+  "description": "AI-powered product development framework for Claude Code – from idea to tested prototype",
+  "bin": {
+    "red-proto": "./bin/install.js"
+  },
+  "files": [
+    "bin/",
+    "commands/",
+    "agents/",
+    "design-system/"
+  ],
+  "scripts": {
+    "test": "node bin/install.js"
+  },
+  "keywords": [
+    "claude-code",
+    "ai",
+    "product-development",
+    "prototyping",
+    "framework",
+    "claude"
+  ],
+  "author": "Enrico Reinsdorf <eltuctuc@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eltuctuc/red-create-prototyp-project.git"
+  },
+  "homepage": "https://github.com/eltuctuc/red-create-prototyp-project#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "type": "module"
+}

@@ -34,23 +34,28 @@ Jeder Command ist eigenständig – du kannst an jedem Punkt einsteigen oder auf
 
 ## Installation
 
-### Schritt 1 – Framework global einrichten
+### Option A – npx Installer (empfohlen)
 
-Einmalig auf deinem Rechner ausführen. Klont das Framework-Template nach `~/.claude/templates/` und legt den Bootstrap-Command global an:
+Einmalig ausführen. Der Installer fragt interaktiv ob global oder lokal:
+
+```bash
+npx red-proto@latest
+```
+
+> **Update:** Einfach denselben Befehl erneut ausführen – der Installer erkennt bestehende Installationen und fragt was zu tun ist.
+
+### Option B – Manuell via Git
 
 ```bash
 git clone https://github.com/eltuctuc/red-create-prototyp-project.git ~/.claude/templates/red-create-prototyp-project && \
-cp ~/.claude/templates/red-create-prototyp-project/commands/red:proto.md ~/.claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red\:proto.md ~/.claude/commands/
 ```
 
-> **Update:** Um das Framework später auf den neuesten Stand zu bringen:
-> ```bash
-> cd ~/.claude/templates/red-create-prototyp-project && git pull
-> ```
+---
 
-### Schritt 2 – Framework in ein Projekt installieren
+### Framework in ein Projekt einrichten
 
-Navigiere in dein Projektverzeichnis (neues oder bestehendes Projekt) und starte Claude Code:
+Nach der Installation (Option A oder B) in Claude Code:
 
 ```bash
 mkdir mein-projekt && cd mein-projekt
