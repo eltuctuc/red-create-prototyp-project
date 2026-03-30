@@ -178,7 +178,7 @@ Fix now | Fix before release | Nice-to-have
 ...
 ```
 
-Jeder `/qa-engineer`-Durchlauf ergänzt ein neues Feature-Kapitel, wenn Production-Ready: ✅.
+Jeder `/red:proto-qa`-Durchlauf ergänzt ein neues Feature-Kapitel, wenn Production-Ready: ✅.
 
 ---
 
@@ -225,7 +225,7 @@ Einträge werden chronologisch oben eingefügt (neueste zuerst).
 ```
 
 Einträge werden nur ergänzt, nie ohne Bestätigung geändert.
-`/flows` kann jederzeit erneut aufgerufen werden um neue Features zu integrieren oder Lücken zu schließen.
+`/red:proto-flows` kann jederzeit erneut aufgerufen werden um neue Features zu integrieren oder Lücken zu schließen.
 
 ---
 

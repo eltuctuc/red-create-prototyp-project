@@ -68,16 +68,16 @@ mkdir -p design-system/screens
 
 ```bash
 # cp -n = no-clobber: überspringt Dateien die bereits existieren
-cp -n ~/.claude/templates/red-create-prototyp-project/commands/workflow.md .claude/commands/
-cp -n ~/.claude/templates/red-create-prototyp-project/commands/sparring.md .claude/commands/
-cp -n ~/.claude/templates/red-create-prototyp-project/commands/dev-setup.md .claude/commands/
-cp -n ~/.claude/templates/red-create-prototyp-project/commands/user-research.md .claude/commands/
-cp -n ~/.claude/templates/red-create-prototyp-project/commands/requirements.md .claude/commands/
-cp -n ~/.claude/templates/red-create-prototyp-project/commands/flows.md .claude/commands/
-cp -n ~/.claude/templates/red-create-prototyp-project/commands/ux-design.md .claude/commands/
-cp -n ~/.claude/templates/red-create-prototyp-project/commands/solution-architect.md .claude/commands/
-cp -n ~/.claude/templates/red-create-prototyp-project/commands/developer.md .claude/commands/
-cp -n ~/.claude/templates/red-create-prototyp-project/commands/qa-engineer.md .claude/commands/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/red:proto-workflow.md .claude/commands/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/red:proto-sparring.md .claude/commands/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/red:proto-dev-setup.md .claude/commands/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/red:proto-research.md .claude/commands/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/red:proto-requirements.md .claude/commands/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/red:proto-flows.md .claude/commands/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/red:proto-ux.md .claude/commands/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/red:proto-architect.md .claude/commands/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/red:proto-dev.md .claude/commands/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/red:proto-qa.md .claude/commands/
 cp -n ~/.claude/templates/red-create-prototyp-project/agents/frontend-developer.md .claude/agents/
 cp -n ~/.claude/templates/red-create-prototyp-project/agents/backend-developer.md .claude/agents/
 cp -n ~/.claude/templates/red-create-prototyp-project/agents/qa-engineer.md .claude/agents/
@@ -100,16 +100,16 @@ Warnung ausgeben: "Commands und Agents werden mit der Template-Version überschr
 
 ```bash
 # Ohne -n: überschreibt bestehende Dateien
-cp ~/.claude/templates/red-create-prototyp-project/commands/workflow.md .claude/commands/
-cp ~/.claude/templates/red-create-prototyp-project/commands/sparring.md .claude/commands/
-cp ~/.claude/templates/red-create-prototyp-project/commands/dev-setup.md .claude/commands/
-cp ~/.claude/templates/red-create-prototyp-project/commands/user-research.md .claude/commands/
-cp ~/.claude/templates/red-create-prototyp-project/commands/requirements.md .claude/commands/
-cp ~/.claude/templates/red-create-prototyp-project/commands/flows.md .claude/commands/
-cp ~/.claude/templates/red-create-prototyp-project/commands/ux-design.md .claude/commands/
-cp ~/.claude/templates/red-create-prototyp-project/commands/solution-architect.md .claude/commands/
-cp ~/.claude/templates/red-create-prototyp-project/commands/developer.md .claude/commands/
-cp ~/.claude/templates/red-create-prototyp-project/commands/qa-engineer.md .claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red:proto-workflow.md .claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red:proto-sparring.md .claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red:proto-dev-setup.md .claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red:proto-research.md .claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red:proto-requirements.md .claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red:proto-flows.md .claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red:proto-ux.md .claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red:proto-architect.md .claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red:proto-dev.md .claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red:proto-qa.md .claude/commands/
 cp ~/.claude/templates/red-create-prototyp-project/agents/frontend-developer.md .claude/agents/
 cp ~/.claude/templates/red-create-prototyp-project/agents/backend-developer.md .claude/agents/
 cp ~/.claude/templates/red-create-prototyp-project/agents/qa-engineer.md .claude/agents/
@@ -129,11 +129,11 @@ Das Framework ruft folgende Skills auf, wenn sie installiert sind. Teile dem Use
 
 | Skill | Genutzt von | Priorität |
 |-------|-------------|-----------|
-| `ui-ux-pro-max` | `/ux-design`, `ux-reviewer` | Kern – stark empfohlen |
+| `ui-ux-pro-max` | `/red:proto-ux`, `ux-reviewer` | Kern – stark empfohlen |
 | `frontend-design` | `frontend-developer` | Kern – stark empfohlen |
 | `neon-postgres` | `backend-developer` | Nur bei Neon-Stack |
-| `atlassian:spec-to-backlog` | `/requirements` | Optional – bei Jira-Nutzung |
-| `atlassian:triage-issue` | `/qa-engineer` | Optional – bei Jira-Nutzung |
+| `atlassian:spec-to-backlog` | `/red:proto-requirements` | Optional – bei Jira-Nutzung |
+| `atlassian:triage-issue` | `/red:proto-qa` | Optional – bei Jira-Nutzung |
 
 **Fehlende Kern-Skills:** Weise den User explizit darauf hin. Agents laufen ohne Skills, aber mit reduzierter Qualität.
 **Fehlende optionale Skills:** Kurz erwähnen, nicht blockieren.
@@ -148,15 +148,15 @@ Zeige dem User welche Commands installiert wurden und erkläre den nächsten Sch
 ✅ Product Development Framework installiert
 
 Verfügbare Commands:
-/workflow           → Pipeline-Status, offene Bugs, letztes Release
-/sparring           → Idee schärfen + PRD erstellen
-/dev-setup          → Projekt scaffolden, Git + GitHub einrichten
-/user-research      → Research-Fragen, Personas, Problem Statement
-/requirements       → Feature Specs (IEEE/IREB)
-/ux-design          → UX-Design-Entscheidungen, DS-konform (nutzt: ui-ux-pro-max)
-/solution-architect → Tech-Design + Security
-/developer          → Implementierung, orchestriert Agents parallel bei Full-Stack
-/qa-engineer        → Tests + UX-Review parallel, Bug-Reports, Production-Ready
+/red:proto-workflow           → Pipeline-Status, offene Bugs, letztes Release
+/red:proto-sparring           → Idee schärfen + PRD erstellen
+/red:proto-dev-setup          → Projekt scaffolden, Git + GitHub einrichten
+/red:proto-research      → Research-Fragen, Personas, Problem Statement
+/red:proto-requirements       → Feature Specs (IEEE/IREB)
+/red:proto-ux          → UX-Design-Entscheidungen, DS-konform (nutzt: ui-ux-pro-max)
+/red:proto-architect → Tech-Design + Security
+/red:proto-dev          → Implementierung, orchestriert Agents parallel bei Full-Stack
+/red:proto-qa        → Tests + UX-Review parallel, Bug-Reports, Production-Ready
 
 Sub-Agents (.claude/agents/ – automatisch gestartet):
 frontend-developer  → Frontend-Implementierung (nutzt: frontend-design)
@@ -164,7 +164,7 @@ backend-developer   → Backend-Implementierung (nutzt: neon-postgres bei Neon-S
 qa-engineer         → Technisches QA-Review
 ux-reviewer         → UX-Review (nutzt: ui-ux-pro-max)
 
-Starte mit: /sparring
+Starte mit: /red:proto-sparring
 
-Nach einer Pause: /workflow   → zeigt Projektstatus und empfiehlt nächsten Schritt
+Nach einer Pause: /red:proto-workflow   → zeigt Projektstatus und empfiehlt nächsten Schritt
 ```

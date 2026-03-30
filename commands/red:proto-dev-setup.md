@@ -455,7 +455,7 @@ git tag v0.0.0
 gh auth status 2>/dev/null || echo "NICHT EINGELOGGT"
 ```
 
-Falls nicht eingeloggt → stopp: "Bitte `gh auth login` im Terminal ausführen, dann `/dev-setup` erneut aufrufen."
+Falls nicht eingeloggt → stopp: "Bitte `gh auth login` im Terminal ausführen, dann `/red:proto-dev-setup` erneut aufrufen."
 
 ```bash
 gh repo create [repo-name] \
@@ -529,7 +529,7 @@ Code:     [Codeverzeichnis]/
 Git:      Initialisiert ([Codeverzeichnis | Projekt-Root])
 GitHub:   [URL – oder: "Nur lokal"]
 
-Nächster Schritt: /user-research – oder /requirements wenn Research nicht nötig ist.
+Nächster Schritt: /red:proto-research – oder /red:proto-requirements wenn Research nicht nötig ist.
 ```
 
 ## Checklist

@@ -47,7 +47,7 @@ cat design-system/patterns/*.md 2>/dev/null
 **Wichtig – Codeverzeichnis:** Entnimm den konfigurierten Pfad aus `project-config.md` (Feld `Codeverzeichnis:`). Standard ist `projekt/`, kann aber `src/`, `.` oder ein anderer Pfad sein. Nutze diesen Wert für **alle** weiteren Befehle statt des hartkodierten `projekt/`.
 
 **Guard 1 – Tech-Design muss existieren:** Prüfe, ob `## 3. Technisches Design` im Feature-File vorhanden ist. Falls nicht → stopp:
-> "Abschnitt '3. Technisches Design' fehlt in FEAT-[ID].md. Bitte zuerst `/solution-architect` ausführen."
+> "Abschnitt '3. Technisches Design' fehlt in FEAT-[ID].md. Bitte zuerst `/red:proto-architect` ausführen."
 
 **Guard 2 – Abhängigkeiten prüfen:** Lies den Abschnitt `## Abhängigkeiten` im Feature-File.
 
@@ -202,7 +202,7 @@ AskUserQuestion({
       question: "Implementierung ist fertig – bitte kurz prüfen",
       header: "Code Review",
       options: [
-        { label: "Sieht gut aus – weiter zu /qa-engineer", description: "Alles korrekt implementiert" },
+        { label: "Sieht gut aus – weiter zu /red:proto-qa", description: "Alles korrekt implementiert" },
         { label: "Änderungen nötig", description: "Feedback im Chat" }
       ],
       multiSelect: false
@@ -217,7 +217,7 @@ Nach Approval: Ergänze Abschnitt `## 4. Implementierung` in `FEAT-X.md`:
 
 ```markdown
 ## 4. Implementierung
-*Ausgefüllt von: /developer — [Datum]*
+*Ausgefüllt von: /red:proto-dev — [Datum]*
 
 ### Implementierte Dateien
 - `[Codeverzeichnis]/[pfad]` – [Zweck]
@@ -238,4 +238,4 @@ git commit -m "feat: implement FEAT-[X] – [Feature Name]"
 git push
 ```
 
-Sage dem User: "Implementierung abgeschlossen. Nächster Schritt: `/qa-engineer`."
+Sage dem User: "Implementierung abgeschlossen. Nächster Schritt: `/red:proto-qa`."

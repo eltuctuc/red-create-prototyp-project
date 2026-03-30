@@ -3,7 +3,7 @@ name: Flows
 description: Definiert übergreifende Nutzerreisen und exakte Screen Transitions – verbindliche Navigations-Referenz für alle Agents
 ---
 
-Du bist Navigations-Architekt. Deine Aufgabe: aus allen Feature Specs eine vollständige, exakte Karte aller Screens und ihrer Verbindungen erstellen. Das Ergebnis ist die verbindliche Referenz für alle `/ux-design`- und `frontend-developer`-Entscheidungen zur Navigation.
+Du bist Navigations-Architekt. Deine Aufgabe: aus allen Feature Specs eine vollständige, exakte Karte aller Screens und ihrer Verbindungen erstellen. Das Ergebnis ist die verbindliche Referenz für alle `/red:proto-ux`- und `frontend-developer`-Entscheidungen zur Navigation.
 
 **Wichtig:** Kein Screen darf vom `frontend-developer` mit einem anderen verbunden werden, wenn die Transition hier nicht definiert ist. Dieses Dokument ist der einzige autorisierte Navigations-Plan.
 
@@ -25,7 +25,7 @@ Verstehe: Welche Aufgaben haben die Nutzer? Welche Screens werden in den Feature
 ```bash
 if [ ! "$(ls features/*.md 2>/dev/null)" ]; then
   echo "FEHLER: Keine Feature Specs gefunden."
-  echo "Bitte zuerst alle Features mit /requirements definieren, dann /flows ausführen."
+  echo "Bitte zuerst alle Features mit /red:proto-requirements definieren, dann /red:proto-flows ausführen."
   exit 1
 fi
 ```
@@ -112,7 +112,7 @@ Erstelle `flows/product-flows.md`:
 
 ```markdown
 # Product Flows
-*Erstellt von: /flows — [Datum]*
+*Erstellt von: /red:proto-flows — [Datum]*
 *Letzte Aktualisierung: [Datum]*
 
 > Dieses Dokument ist die verbindliche Navigations-Referenz.
@@ -164,7 +164,7 @@ AskUserQuestion({
       question: "Sind alle Screens und Transitions vollständig und korrekt?",
       header: "Flows Review",
       options: [
-        { label: "Approved – Flows sind vollständig", description: "Weiter zu /ux-design für einzelne Features" },
+        { label: "Approved – Flows sind vollständig", description: "Weiter zu /red:proto-ux für einzelne Features" },
         { label: "Änderungen nötig", description: "Feedback im Chat" }
       ],
       multiSelect: false
@@ -181,11 +181,11 @@ git commit -m "docs: product flows – screen inventory + transitions"
 git push
 ```
 
-Sage dem User: "Flows dokumentiert. Nächster Schritt: `/ux-design` für jedes Feature – die Transitions aus `flows/product-flows.md` sind die verbindliche Referenz."
+Sage dem User: "Flows dokumentiert. Nächster Schritt: `/red:proto-ux` für jedes Feature – die Transitions aus `flows/product-flows.md` sind die verbindliche Referenz."
 
 ## Flows aktualisieren (Re-Run)
 
-Wenn `/flows` erneut aufgerufen wird (neue Features, gemeldete Lücken):
+Wenn `/red:proto-flows` erneut aufgerufen wird (neue Features, gemeldete Lücken):
 
 1. Bestehende `flows/product-flows.md` lesen
 2. Neue Feature Specs einlesen

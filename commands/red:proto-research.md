@@ -122,7 +122,7 @@ AskUserQuestion({
       question: "Sind Research-Grundlagen vollständig?",
       header: "Review",
       options: [
-        { label: "Approved – weiter zu /requirements", description: "Alle drei Artefakte sind gut" },
+        { label: "Approved – weiter zu /red:proto-requirements", description: "Alle drei Artefakte sind gut" },
         { label: "Anpassungen nötig", description: "Feedback im Chat" }
       ],
       multiSelect: false
@@ -142,4 +142,4 @@ git commit -m "docs: add user research, personas and problem statement"
 git push
 ```
 
-Dann: "Research gespeichert. Nächster Schritt: `/requirements` – ich empfehle, den Feature-Scope direkt mit dem PRD und den Research-Ergebnissen anzugehen."
+Dann: "Research gespeichert. Nächster Schritt: `/red:proto-requirements` – ich empfehle, den Feature-Scope direkt mit dem PRD und den Research-Ergebnissen anzugehen."

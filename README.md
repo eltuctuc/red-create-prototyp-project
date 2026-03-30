@@ -9,15 +9,15 @@ Ein KI-gestütztes Product Development Framework für [Claude Code](https://clau
 Eine Sammlung von Claude Code Commands und Agents, die eine vollständige Produktentwicklungs-Pipeline abbilden. Du arbeitest mit natürlicher Sprache – Claude führt die Pipeline aus, du triffst die Entscheidungen.
 
 ```
-/sparring              → Idee schärfen → PRD
-/dev-setup             → Tech-Stack wählen, Projekt scaffolden, Git/GitHub einrichten
-/user-research         → Problem Statement Map + Personas
-/requirements          → Feature Specs (User Stories, Acceptance Criteria, Edge Cases)
-/flows                 → Screen-Inventar + verbindliche Transition-Tabelle
-/ux-design             → UX-Entscheidungen pro Feature – DS-konform, Transitions aus /flows
-/solution-architect    → Technisches Design + Security + Test-Setup
-/developer             → Implementierung (Frontend + Backend, parallel falls nötig)
-/qa-engineer           → Tests, Accessibility, Security, Bug-Loop bis Production-Ready
+/red:proto-sparring     → Idee schärfen → PRD
+/red:proto-dev-setup    → Tech-Stack wählen, Projekt scaffolden, Git/GitHub einrichten
+/red:proto-research     → Problem Statement Map + Personas
+/red:proto-requirements → Feature Specs (User Stories, Acceptance Criteria, Edge Cases)
+/red:proto-flows        → Screen-Inventar + verbindliche Transition-Tabelle
+/red:proto-ux           → UX-Entscheidungen pro Feature – DS-konform, Transitions aus /flows
+/red:proto-architect    → Technisches Design + Security + Test-Setup
+/red:proto-dev          → Implementierung (Frontend + Backend, parallel falls nötig)
+/red:proto-qa           → Tests, Accessibility, Security, Bug-Loop bis Production-Ready
 ```
 
 Jeder Command ist eigenständig – du kannst an jedem Punkt einsteigen oder aufhören. Die Commands bauen aber aufeinander auf: jeder liest den Output des vorherigen und ergänzt die gemeinsamen Artefakte.
@@ -27,7 +27,7 @@ Jeder Command ist eigenständig – du kannst an jedem Punkt einsteigen oder auf
 ## Voraussetzungen
 
 - [Claude Code CLI](https://docs.anthropic.com/claude-code) installiert und eingerichtet
-- [`gh` CLI](https://cli.github.com/) (nur für GitHub-Setup in `/dev-setup`)
+- [`gh` CLI](https://cli.github.com/) (nur für GitHub-Setup in `/red:proto-dev-setup`)
 - Node.js, Python oder ähnliches – je nach gewähltem Tech-Stack
 
 ---
@@ -40,7 +40,7 @@ Einmalig auf deinem Rechner ausführen. Klont das Framework-Template nach `~/.cl
 
 ```bash
 git clone https://github.com/eltuctuc/red-create-prototyp-project.git ~/.claude/templates/red-create-prototyp-project && \
-cp ~/.claude/templates/red-create-prototyp-project/commands/red-create-prototyp-project.md ~/.claude/commands/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red:proto.md ~/.claude/commands/
 ```
 
 > **Update:** Um das Framework später auf den neuesten Stand zu bringen:
@@ -60,7 +60,7 @@ claude
 Dann in Claude Code:
 
 ```
-/red-create-prototyp-project
+/red:proto
 ```
 
 Das kopiert alle Commands und Agents in `.claude/commands/` und `.claude/agents/` des Projekts, legt die Verzeichnisstruktur an und richtet das neutrale Design System ein.
@@ -122,10 +122,10 @@ Das Framework läuft ohne zusätzliche Skills, nutzt sie aber wenn vorhanden:
 
 | Skill | Genutzt von | Effekt |
 |-------|-------------|--------|
-| `ui-ux-pro-max` | `/ux-design`, `ux-reviewer` Agent | Deutlich bessere UX-Qualität |
+| `ui-ux-pro-max` | `/red:proto-ux`, `ux-reviewer` Agent | Deutlich bessere UX-Qualität |
 | `frontend-design` | `frontend-developer` Agent | Bessere Component-Implementierung |
 | `neon-postgres` | `backend-developer` Agent | Nur bei Neon-Datenbankstack |
-| `atlassian:spec-to-backlog` | `/requirements` | Direkt in Jira schreiben |
+| `atlassian:spec-to-backlog` | `/red:proto-requirements` | Direkt in Jira schreiben |
 
 Skills werden in Claude Code unter **Einstellungen → Skills** installiert.
 
@@ -137,7 +137,7 @@ Skills werden in Claude Code unter **Einstellungen → Skills** installiert.
 
 **Akkumulativ statt überschreibend:** Jeder Agent ergänzt seinen Abschnitt im Feature-File, bestehende Abschnitte bleiben erhalten.
 
-**Flows als Navigationsvertrag:** `/flows` erstellt eine verbindliche Transition-Tabelle, die UX und Developer als gemeinsame Quelle der Wahrheit nutzen. Undokumentierte Transitions werden gemeldet, nicht stillschweigend implementiert.
+**Flows als Navigationsvertrag:** `/red:proto-flows` erstellt eine verbindliche Transition-Tabelle, die UX und Developer als gemeinsame Quelle der Wahrheit nutzen. Undokumentierte Transitions werden gemeldet, nicht stillschweigend implementiert.
 
 **Audit-Trail:** Bugs werden nicht gelöscht, sondern zu `-fixed.md` umbenannt.
 

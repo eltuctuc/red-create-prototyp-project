@@ -80,7 +80,7 @@ AskUserQuestion({
       question: "Wie ist das PRD?",
       header: "Review",
       options: [
-        { label: "Approved – weiter zu /user-research", description: "PRD ist korrekt und vollständig" },
+        { label: "Approved – weiter zu /red:proto-research", description: "PRD ist korrekt und vollständig" },
         { label: "Kleine Anpassungen nötig", description: "Ich gebe Feedback im Chat" },
         { label: "Nochmal von vorn", description: "Grundlegendes Missverständnis" }
       ],
@@ -107,15 +107,15 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
   git commit -m "docs: add/update PRD"
   git push
 else
-  echo "Kein Git-Repository – prd.md wurde gespeichert. /dev-setup richtet Git ein und macht den ersten Commit."
+  echo "Kein Git-Repository – prd.md wurde gespeichert. /red:proto-dev-setup richtet Git ein und macht den ersten Commit."
 fi
 ```
 
-Sage dem User: "PRD gespeichert. Nächster Schritt: `/dev-setup` – ich analysiere die Anforderungen und empfehle den passenden Tech-Stack."
+Sage dem User: "PRD gespeichert. Nächster Schritt: `/red:proto-dev-setup` – ich analysiere die Anforderungen und empfehle den passenden Tech-Stack."
 
 ## Wichtig
 
 - Kein Tech-Design, keine Lösungsarchitektur – das ist nicht deine Aufgabe
-- Keine Feature-Listen – das macht /requirements
+- Keine Feature-Listen – das macht /red:proto-requirements
 - Fokus: Das Problem wirklich verstehen, bevor eine Lösung definiert wird
 - Wenn die Idee unrealistisch klingt: direkt sagen, begründen, alternative vorschlagen

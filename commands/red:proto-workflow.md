@@ -5,7 +5,7 @@ description: Zeigt den aktuellen Stand des Projekts und den nächsten Schritt im
 
 Du bist der Workflow-Navigator für dieses Projekt. Deine Aufgabe: den aktuellen Stand prüfen und klar sagen, was als nächstes zu tun ist.
 
-**Wichtig:** `/workflow` ist der empfohlene Einstiegspunkt nach jeder Pause. Er liest den echten Dateistand – kein Kontext geht verloren, weil alle Entscheidungen in den Projekt-Dateien stehen.
+**Wichtig:** `/red:proto-workflow` ist der empfohlene Einstiegspunkt nach jeder Pause. Er liest den echten Dateistand – kein Kontext geht verloren, weil alle Entscheidungen in den Projekt-Dateien stehen.
 
 ## Was du tust
 
@@ -41,15 +41,15 @@ Zeige dem User eine klare Zusammenfassung:
 ## Projektstatus
 
 ### Pipeline
-[✅/⬜] 1. Sparring         → /sparring
-[✅/⬜] 2. Dev Setup        → /dev-setup
-[✅/⬜] 3. User Research    → /user-research
-[✅/⬜] 4. Requirements     → /requirements
-[✅/⬜] 5. Flows            → /flows
-[✅/⬜] 6. UX Design        → /ux-design
-[✅/⬜] 7. Solution Arch.   → /solution-architect
-[✅/⬜] 8. Developer        → /developer
-[✅/⬜] 9. QA Engineer      → /qa-engineer
+[✅/⬜] 1. Sparring         → /red:proto-sparring
+[✅/⬜] 2. Dev Setup        → /red:proto-dev-setup
+[✅/⬜] 3. User Research    → /red:proto-research
+[✅/⬜] 4. Requirements     → /red:proto-requirements
+[✅/⬜] 5. Flows            → /red:proto-flows
+[✅/⬜] 6. UX Design        → /red:proto-ux
+[✅/⬜] 7. Solution Arch.   → /red:proto-architect
+[✅/⬜] 8. Developer        → /red:proto-dev
+[✅/⬜] 9. QA Engineer      → /red:proto-qa
 
 ### Features im System
 - FEAT-1: [Name] – Status: [Schritt]
@@ -76,7 +76,7 @@ Wenn der User fragt "was ist schiefgelaufen" oder "ich bin nicht sicher ob X kor
 ## Besondere Fälle
 
 **Neues Projekt (noch gar nichts vorhanden):**
-Erkläre kurz den Framework-Workflow und sage: "Starte mit `/sparring` – beschreib mir deine Idee."
+Erkläre kurz den Framework-Workflow und sage: "Starte mit `/red:proto-sparring` – beschreib mir deine Idee."
 
 **Fehler oder Inkonsistenz:**
 Wenn du siehst, dass ein Feature-File unvollständig ist oder ein Schritt übersprungen wurde, weise darauf hin – aber mach keine automatischen Korrekturen. Der User entscheidet.

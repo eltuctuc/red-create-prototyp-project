@@ -57,7 +57,7 @@ Ergänze das Feature-File `FEAT-X.md` im Abschnitt `## 3. Technisches Design`:
 
 ```markdown
 ## 3. Technisches Design
-*Ausgefüllt von: /solution-architect — [Datum]*
+*Ausgefüllt von: /red:proto-architect — [Datum]*
 
 ### Component-Struktur
 [Visual tree der zu bauenden UI-Komponenten]
@@ -112,7 +112,7 @@ AskUserQuestion({
       question: "Passt das technische Design?",
       header: "Review",
       options: [
-        { label: "Approved – weiter zu /developer", description: "Design ist klar und vollständig" },
+        { label: "Approved – weiter zu /red:proto-dev", description: "Design ist klar und vollständig" },
         { label: "Fragen / Änderungen", description: "Feedback im Chat" }
       ],
       multiSelect: false
@@ -129,7 +129,7 @@ git commit -m "docs: FEAT-[X] tech design – [Feature Name]"
 git push
 ```
 
-Sage dem User: "Tech-Design dokumentiert. Nächster Schritt: `/developer`."
+Sage dem User: "Tech-Design dokumentiert. Nächster Schritt: `/red:proto-dev`."
 
 ## Checklist vor Abschluss
 

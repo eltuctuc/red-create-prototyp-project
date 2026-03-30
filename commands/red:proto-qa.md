@@ -127,7 +127,7 @@ Ergänze Abschnitt `## 5. QA Ergebnisse` in `features/FEAT-X.md`:
 
 ```markdown
 ## 5. QA Ergebnisse
-*Ausgefüllt von: /qa-engineer — [Datum]*
+*Ausgefüllt von: /red:proto-qa — [Datum]*
 
 ### Acceptance Criteria Status
 - [x] AC-1: [Beschreibung] ✅
@@ -155,8 +155,8 @@ Ergänze Abschnitt `## 5. QA Ergebnisse` in `features/FEAT-X.md`:
 
 Nach Bug-Report und User-Priorisierung:
 
-1. User ruft `/developer` auf → Bugs fixen → Bug-Files umbenennen zu `BUG-FEAT[X]-[TYPE]-[NNN]-fixed.md`
-2. User ruft `/qa-engineer` erneut auf → beide Agents prüfen erneut (Regression + Retest der -fixed Bugs)
+1. User ruft `/red:proto-dev` auf → Bugs fixen → Bug-Files umbenennen zu `BUG-FEAT[X]-[TYPE]-[NNN]-fixed.md`
+2. User ruft `/red:proto-qa` erneut auf → beide Agents prüfen erneut (Regression + Retest der -fixed Bugs)
 3. Loop bis keine Critical/High Bugs mehr offen (nur Dateien ohne `-fixed` im Namen zählen als offen)
 
 **Production-Ready Entscheidung:**

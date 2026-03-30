@@ -18,7 +18,7 @@ cat prd.md 2>/dev/null
 cat research/personas.md 2>/dev/null
 cat research/problem-statement.md 2>/dev/null
 cat features/FEAT-[X].md
-cat flows/product-flows.md 2>/dev/null || echo "HINWEIS: Kein Flows-Dokument gefunden. /flows ausführen bevor Screen Transitions definiert werden."
+cat flows/product-flows.md 2>/dev/null || echo "HINWEIS: Kein Flows-Dokument gefunden. /red:proto-flows ausführen bevor Screen Transitions definiert werden."
 ```
 
 ## Phase 2: Design System laden – PFLICHT
@@ -120,7 +120,7 @@ AskUserQuestion({
       options: [
         {
           label: "Abbrechen – Specs zuerst ergänzen",
-          description: "Ich füge die fehlenden Specs in design-system/components/ ein und rufe /ux-design danach erneut auf"
+          description: "Ich füge die fehlenden Specs in design-system/components/ ein und rufe /red:proto-ux danach erneut auf"
         },
         {
           label: "Fortfahren – mit Design Tokens bauen",
@@ -159,7 +159,7 @@ AskUserQuestion({
       header: "Flows fehlen",
       options: [
         {
-          label: "Jetzt /flows ausführen",
+          label: "Jetzt /red:proto-flows ausführen",
           description: "Empfohlen – definiert alle Screen Transitions übergreifend bevor wir weitermachen"
         },
         {
@@ -210,7 +210,7 @@ Ergänze das Feature-File `FEAT-[X].md`:
 
 ```markdown
 ## 2. IA/UX Entscheidungen
-*Ausgefüllt von: /ux-design — [Datum]*
+*Ausgefüllt von: /red:proto-ux — [Datum]*
 
 ### Einbettung im Produkt
 [Wo lebt das Feature?]
@@ -272,7 +272,7 @@ AskUserQuestion({
       question: "Sind die UX-Entscheidungen vollständig und korrekt?",
       header: "Review",
       options: [
-        { label: "Approved – weiter zu /solution-architect", description: "UX ist definiert" },
+        { label: "Approved – weiter zu /red:proto-architect", description: "UX ist definiert" },
         { label: "Änderungen nötig", description: "Feedback im Chat" }
       ],
       multiSelect: false
@@ -289,4 +289,4 @@ git commit -m "docs: FEAT-[X] ux design + screen transitions – [Feature Name]"
 git push
 ```
 
-Sage dem User: "UX-Entscheidungen dokumentiert. Nächster Schritt: `/solution-architect` für das technische Design."
+Sage dem User: "UX-Entscheidungen dokumentiert. Nächster Schritt: `/red:proto-architect` für das technische Design."

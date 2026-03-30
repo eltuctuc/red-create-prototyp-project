@@ -19,14 +19,14 @@ Zeige vorhandene Features. Ist es ein neues Feature → vergib die nächste frei
 ```bash
 # Guard: prd.md muss existieren
 if [ ! -f prd.md ]; then
-  echo "FEHLER: prd.md nicht gefunden. Bitte zuerst /sparring ausführen."
+  echo "FEHLER: prd.md nicht gefunden. Bitte zuerst /red:proto-sparring ausführen."
   exit 1
 fi
 
-# Guard: project-config.md muss existieren (wird von /dev-setup erstellt)
+# Guard: project-config.md muss existieren (wird von /red:proto-dev-setup erstellt)
 if [ ! -f project-config.md ]; then
   echo "FEHLER: project-config.md nicht gefunden."
-  echo "Bitte zuerst /dev-setup ausführen, um Tech-Stack und Grundgerüst einzurichten."
+  echo "Bitte zuerst /red:proto-dev-setup ausführen, um Tech-Stack und Grundgerüst einzurichten."
   exit 1
 fi
 
@@ -117,7 +117,7 @@ Aktueller Schritt: Spec
 ---
 
 ## 1. Feature Spec
-*Ausgefüllt von: /requirements — [Datum]*
+*Ausgefüllt von: /red:proto-requirements — [Datum]*
 
 ### Beschreibung
 [IEEE/IREB: Kurze, präzise Beschreibung der Funktion aus Nutzersicht]
@@ -153,7 +153,7 @@ AskUserQuestion({
       question: "Ist die Feature Spec vollständig und korrekt?",
       header: "Review",
       options: [
-        { label: "Approved – weiter zu /ux-design", description: "Spec ist ready" },
+        { label: "Approved – weiter zu /red:proto-ux", description: "Spec ist ready" },
         { label: "Änderungen nötig", description: "Feedback im Chat" }
       ],
       multiSelect: false
@@ -170,7 +170,7 @@ git commit -m "docs: FEAT-[X] spec – [Feature Name]"
 git push
 ```
 
-Sage dem User: "FEAT-X gespeichert. Nächster Schritt: `/ux-design` für UI/UX-Entscheidungen."
+Sage dem User: "FEAT-X gespeichert. Nächster Schritt: `/red:proto-ux` für UI/UX-Entscheidungen."
 
 ## Feature abbrechen
 
