@@ -14,11 +14,38 @@ Falls keine FEAT-ID in der Anfrage: `ls features/` und nachfragen welches Featur
 ## Phase 1: Kontext lesen
 
 ```bash
+RESEARCH_DONE=$(ls research/personas.md 2>/dev/null && echo "ja" || echo "nein")
+echo "Research: $RESEARCH_DONE"
+
 cat prd.md 2>/dev/null
 cat research/personas.md 2>/dev/null
 cat research/problem-statement.md 2>/dev/null
 cat features/FEAT-[X].md
 cat flows/product-flows.md 2>/dev/null || echo "HINWEIS: Kein Flows-Dokument gefunden. /red:proto-flows ausführen bevor Screen Transitions definiert werden."
+```
+
+Wenn Research noch nicht gemacht:
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "User Research fehlt noch. Personas helfen beim Treffen von UX-Entscheidungen die zur Zielgruppe passen.",
+      header: "Research nachholen?",
+      options: [
+        {
+          label: "Jetzt /red:proto-research nachholen",
+          description: "Danach zurück zu /red:proto-ux für dieses Feature. Hinweis: Tech-Stack ist gesetzt, Research fokussiert sich auf Nutzerverhalten und Personas"
+        },
+        {
+          label: "Ohne Research weitermachen",
+          description: "UX-Entscheidungen direkt aus Feature Spec und PRD ableiten"
+        }
+      ],
+      multiSelect: false
+    }
+  ]
+})
 ```
 
 ## Phase 2: Design System laden – PFLICHT

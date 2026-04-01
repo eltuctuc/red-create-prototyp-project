@@ -19,6 +19,35 @@ ls features/ 2>/dev/null
 cat features/*.md 2>/dev/null
 ```
 
+```bash
+RESEARCH_DONE=$(ls research/personas.md 2>/dev/null && echo "ja" || echo "nein")
+echo "Research: $RESEARCH_DONE"
+```
+
+Wenn Research noch nicht gemacht:
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "User Research fehlt noch. Personas helfen beim Definieren sinnvoller Nutzerreisen.",
+      header: "Research nachholen?",
+      options: [
+        {
+          label: "Jetzt /red:proto-research nachholen",
+          description: "Danach zurück zu /red:proto-flows. Hinweis: Tech-Stack ist gesetzt, Research fokussiert sich auf Nutzerverhalten"
+        },
+        {
+          label: "Ohne Research weitermachen",
+          description: "Flows direkt aus den Feature Specs ableiten"
+        }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
 Verstehe: Welche Aufgaben haben die Nutzer? Welche Screens werden in den Feature Specs erwähnt oder impliziert?
 
 **Guard – Feature Specs müssen existieren und vollständig sein:**

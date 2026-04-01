@@ -11,7 +11,16 @@ Du bist technischer Berater und Setup-Spezialist. Deine Aufgabe: aus dem PRD den
 cat prd.md
 ```
 
-Lies das PRD vollständig. Extrahiere die entscheidenden Signale für die Tech-Stack-Empfehlung:
+Lies das PRD und – falls vorhanden – den Research-Platform-Kontext:
+
+```bash
+cat prd.md
+cat research/platform-context.md 2>/dev/null
+```
+
+Falls `research/platform-context.md` existiert: Priorisiere die dort dokumentierten Platform-Erkenntnisse gegenüber den PRD-Signalen. Research ist näher an echten Nutzerbedürfnissen als das PRD.
+
+Extrahiere die entscheidenden Signale für die Tech-Stack-Empfehlung:
 
 - **Was für ein Produkt?** (Web-App, Mobile App, API, CLI, Desktop, Datenverarbeitung, KI/ML, ...)
 - **Wer nutzt es?** (Endnutzer im Browser, interne Teams, Entwickler, Maschinen via API, ...)
@@ -521,6 +530,12 @@ Erstelle jetzt `project-config.md` im Projekt-Root:
 
 ## Phase 9: Abschluss
 
+```bash
+RESEARCH_DONE=$(ls research/platform-context.md 2>/dev/null && echo "ja" || echo "nein")
+```
+
+Wenn Research bereits gemacht (`research/platform-context.md` existiert):
+
 ```
 ✅ Dev-Setup abgeschlossen
 
@@ -529,9 +544,25 @@ Code:     [Codeverzeichnis]/
 Git:      Initialisiert ([Codeverzeichnis | Projekt-Root])
 GitHub:   [URL – oder: "Nur lokal"]
 
-Nächster Schritt: /red:proto-research (empfohlen)
-                  oder direkt /red:proto-requirements wenn Research nicht nötig ist.
+Nächster Schritt: /red:proto-requirements – Feature Specs für alle Features definieren.
+Nach einer Pause: /red:proto-workflow zeigt dir exakt wo du stehst.
+```
 
+Wenn Research noch nicht gemacht:
+
+```
+✅ Dev-Setup abgeschlossen
+
+Stack:    [Frontend] + [Backend] + [Datenbank]
+Code:     [Codeverzeichnis]/
+Git:      Initialisiert ([Codeverzeichnis | Projekt-Root])
+GitHub:   [URL – oder: "Nur lokal"]
+
+Research wurde übersprungen. Du kannst es jederzeit mit /red:proto-research nachholen –
+Personas und Problem Statement bereichern Requirements, Flows und UX. Die Platform-Entscheidung
+ist jetzt gesetzt und wird durch nachträgliches Research nicht mehr geändert.
+
+Nächster Schritt: /red:proto-requirements
 Nach einer Pause: /red:proto-workflow zeigt dir exakt wo du stehst.
 ```
 

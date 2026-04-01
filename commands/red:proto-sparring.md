@@ -111,16 +111,14 @@ else
 fi
 ```
 
-Sage dem User:
+Zeige dem User die vollständige Pipeline als Orientierung:
 
 ```
-PRD gespeichert. Dein Weg von hier:
+PRD gespeichert. Die empfohlene Reihenfolge:
 
-  JETZT:
+  → /red:proto-research      Für wen bauen wir? Personas, Nutzungskontext, Plattform-Entscheidungen
+                              ↓ informiert den Tech-Stack
   → /red:proto-dev-setup     Tech-Stack wählen, Projekt scaffolden, Git einrichten
-
-  DANACH (Reihenfolge wichtig):
-  → /red:proto-research      Personas + Problem Statement (optional, aber empfohlen)
   → /red:proto-requirements  Feature Specs – einmal pro Feature, für ALLE Features
                               ↓ wenn ALLE Features Specs haben:
   → /red:proto-flows         Screen-Inventar + Transitions (einmalig, vor UX)
@@ -131,6 +129,30 @@ PRD gespeichert. Dein Weg von hier:
      └── Bugs? → /red:proto-dev → /red:proto-qa (wiederholen)
 
 Nach einer Pause: /red:proto-workflow zeigt dir exakt wo du stehst.
+```
+
+Dann frage:
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Wie möchtest du weitermachen?",
+      header: "Nächster Schritt",
+      options: [
+        {
+          label: "Weiter zu /red:proto-research",
+          description: "Empfohlen – Research klärt Zielgruppe und Nutzungskontext, bevor der Tech-Stack gewählt wird"
+        },
+        {
+          label: "Direkt zu /red:proto-dev-setup",
+          description: "Research überspringen – Tech-Stack jetzt wählen. Research kann später noch nachgeholt werden (ohne Einfluss auf Stack-Entscheidungen)"
+        }
+      ],
+      multiSelect: false
+    }
+  ]
+})
 ```
 
 ## Wichtig

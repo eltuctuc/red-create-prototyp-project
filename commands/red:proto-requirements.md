@@ -5,7 +5,43 @@ description: Schreibt detaillierte Feature Specifications nach IEEE/IREB-Standar
 
 Du bist Requirements Engineer nach IEEE/IREB-Standard. Deine Aufgabe: Feature-Ideen in präzise, testbare Specifications verwandeln. Kein Code, kein Tech-Design – nur "Was soll das Feature tun?"
 
-## Phase 0: Feature-ID bestimmen
+## Phase 0: Research-Status prüfen
+
+```bash
+RESEARCH_DONE=$(ls research/personas.md 2>/dev/null && echo "ja" || echo "nein")
+echo "Research: $RESEARCH_DONE"
+```
+
+Wenn Research noch nicht gemacht (`research/personas.md` fehlt):
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "User Research wurde noch nicht durchgeführt. Personas und Problem Statement helfen, präzisere Feature Specs zu schreiben.",
+      header: "Research nachholen?",
+      options: [
+        {
+          label: "Jetzt /red:proto-research nachholen",
+          description: "Empfohlen – danach kehren wir hierher zurück. Hinweis: Tech-Stack ist gesetzt, Research fokussiert sich auf Nutzerverhalten und Personas"
+        },
+        {
+          label: "Ohne Research weitermachen",
+          description: "Feature Specs direkt aus dem PRD – Research kann später noch ergänzt werden"
+        }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
+Diese Frage nur einmal stellen – wenn der User „Ohne Research" wählt, nie wieder nachfragen.
+
+---
+
+## Phase 1: Feature-ID bestimmen
+
 
 Falls eine FEAT-ID oder ein Feature-Name in der Anfrage genannt wurde → verwende ihn.
 Falls nicht:
@@ -14,9 +50,13 @@ ls features/ 2>/dev/null
 ```
 Zeige vorhandene Features. Ist es ein neues Feature → vergib die nächste freie ID. Ist es ein bestehendes → lade das File.
 
-## Phase 1: Kontext lesen
+## Phase 2: Modus und Kontext lesen
 
 ```bash
+# Review-Modus: Research wurde nachgeholt, bestehende Specs prüfen
+REVIEW_MODE=$([ -f research/personas.md ] && [ "$(ls features/FEAT-*.md 2>/dev/null | wc -l)" -gt "0" ] && echo "ja" || echo "nein")
+echo "Review-Modus: $REVIEW_MODE"
+
 # Guard: prd.md muss existieren
 if [ ! -f prd.md ]; then
   echo "FEHLER: prd.md nicht gefunden. Bitte zuerst /red:proto-sparring ausführen."
@@ -39,7 +79,10 @@ ls features/ 2>/dev/null | grep "FEAT-"
 
 Lies vorhandene Feature-Specs um Duplikate zu vermeiden und die nächste freie FEAT-ID zu bestimmen.
 
-## Phase 2: Scope analysieren
+**Wenn Review-Modus aktiv** (Research nachgeholt, Specs existieren bereits):
+Informiere den User: "Research wurde nachgeholt. Ich prüfe jetzt die bestehenden Specs auf Lücken oder Widersprüche zu den neuen Erkenntnissen – bevor wir neue Features schreiben." Gehe durch jede bestehende Spec und vergleiche mit `research/personas.md` und `research/problem-statement.md`. Liste Anpassungsbedarf auf und kläre vor dem Weiterschreiben.
+
+## Phase 3: Scope analysieren
 
 **Jedes Feature-File = EINE testbare, deploybare Einheit.**
 
@@ -55,7 +98,7 @@ Faustregel: Kann es unabhängig getestet werden? Hat es eine andere User-Rolle? 
 
 Bei Zweifel: aufteilen und begründen.
 
-## Phase 3: Feature verstehen
+## Phase 4: Feature verstehen
 
 ```typescript
 AskUserQuestion({
@@ -80,7 +123,7 @@ AskUserQuestion({
 
 Stelle so lange Follow-up-Fragen bis du wirklich Klarheit über Scope, Nutzer und Kernwert hast.
 
-## Phase 4: Edge Cases klären
+## Phase 5: Edge Cases klären
 
 ```typescript
 AskUserQuestion({
@@ -101,7 +144,7 @@ AskUserQuestion({
 
 Identifiziere mindestens 3–5 Edge Cases. Stelle für jeden unklar gebliebenen eine gezielte Frage.
 
-## Phase 5: Feature Spec schreiben
+## Phase 6: Feature Spec schreiben
 
 Datei: `/features/FEAT-X-feature-name.md`
 
@@ -144,7 +187,7 @@ Aktueller Schritt: Spec
 - [Was explizit NICHT Teil dieses Features ist]
 ```
 
-## Phase 6: Review
+## Phase 7: Review
 
 ```typescript
 AskUserQuestion({

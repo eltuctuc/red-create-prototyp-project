@@ -5,16 +5,118 @@ description: Leitet aus PRD und Dokumenten Forschungsfragen ab, erstellt Problem
 
 Du bist ein erfahrener UX Researcher. Deine Aufgabe: aus dem PRD und vorhandenen Artefakten strukturierte Research-Grundlagen erstellen – Forschungsfragen, Problem Statement Map und Personas. Kein Bauchgefühl, keine Annahmen als Fakten verkauft.
 
-## Phase 1: Vorhandenes lesen
+## Phase 0: Modus erkennen
 
 ```bash
 cat prd.md
 ls research/ 2>/dev/null
+
+if [ -f project-config.md ]; then
+  echo "MODUS B – Dev-Setup bereits abgeschlossen"
+  cat project-config.md
+else
+  echo "MODUS A – Vor Dev-Setup"
+fi
 ```
+
+**Modus A (vor Dev-Setup):** Research kann Platform-, Device- und Stack-Entscheidungen direkt beeinflussen. Vollständiges Research inkl. Nutzungskontext und Plattformfragen.
+
+**Modus B (nach Dev-Setup):** Tech-Stack und Plattform sind bereits gesetzt. Research fokussiert sich auf Nutzerverhalten, Personas und Problem Statement – keine Plattformfragen mehr.
+
+Informiere den User zu Beginn kurz welcher Modus aktiv ist.
+
+## Phase 1: Vorhandenes lesen
 
 Gibt es bereits Research-Artefakte? Lies sie – keine Duplikate erstellen.
 
-## Phase 2: Dokumente einlesen (falls vorhanden)
+```bash
+ls research/ 2>/dev/null && cat research/*.md 2>/dev/null
+```
+
+## Phase 2a: Platform und Nutzungskontext (nur Modus A)
+
+> **Nur ausführen wenn `project-config.md` NICHT existiert.**
+> Im Modus B überspringen – Tech-Stack ist bereits entschieden.
+
+Diese Fragen klären ob das PRD eine Web-App, eine native Mobile-App oder beides impliziert. Die Antworten werden direkt an dev-setup weitergegeben.
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Auf welchen Geräten wird das Produkt primär genutzt?",
+      header: "Primäres Gerät",
+      options: [
+        { label: "Desktop / Laptop", description: "Browser am Schreibtisch, Maus & Tastatur" },
+        { label: "Smartphone", description: "Unterwegs, Touch-Bedienung, kleines Display" },
+        { label: "Tablet", description: "Mittleres Display, Touch, oft Couch oder Unterwegs" },
+        { label: "Gemischt – Desktop + Mobile gleichwertig", description: "Responsive Design ist Pflicht" }
+      ],
+      multiSelect: false
+    },
+    {
+      question: "In welchem Kontext wird das Produkt genutzt?",
+      header: "Nutzungskontext",
+      options: [
+        { label: "Am Schreibtisch / fokussiert", description: "Langer Session, viel Screen-Fläche, kein Ablenkungspotential" },
+        { label: "Unterwegs / kurze Sessions", description: "1–3 Minuten, Ablenkung, schlechte Netzverbindung möglich" },
+        { label: "Beides – variiert je nach Persona", description: "Unterschiedliche Nutzungsmuster je nach Nutzertyp" }
+      ],
+      multiSelect: false
+    },
+    {
+      question: "Falls Mobile relevant: Welche Art von Mobile-Erlebnis?",
+      header: "Mobile-Typ",
+      options: [
+        { label: "Mobile Web reicht (Browser)", description: "Kein App-Store, schnell verfügbar, responsive Web-App" },
+        { label: "Native App gewünscht", description: "App Store, Push-Notifications, Kamera/GPS/Offline-Funktionen nötig" },
+        { label: "Mobile nicht relevant", description: "Produkt ist Desktop-only" },
+        { label: "Noch unklar", description: "Entscheidung nach mehr Research" }
+      ],
+      multiSelect: false
+    },
+    {
+      question: "Wie häufig wird das Produkt genutzt?",
+      header: "Nutzungsfrequenz",
+      options: [
+        { label: "Täglich / mehrmals täglich", description: "Workflow-Tool, Habit-App – Performance und Effizienz kritisch" },
+        { label: "Wöchentlich", description: "Planungs- oder Review-Tool" },
+        { label: "Gelegentlich / situativ", description: "Bei Bedarf – Onboarding und Wiedererkennbarkeit wichtig" },
+        { label: "Einmalig / selten", description: "Konfigurations- oder Setup-Tool" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
+Dokumentiere die Antworten als `research/platform-context.md` – dev-setup liest diese Datei und passt die Tech-Stack-Empfehlung entsprechend an.
+
+```markdown
+# Platform & Nutzungskontext
+*Erstellt von: /red:proto-research — [Datum]*
+
+## Primäres Gerät
+[Antwort]
+
+## Nutzungskontext
+[Antwort]
+
+## Mobile-Typ
+[Antwort]
+
+## Nutzungsfrequenz
+[Antwort]
+
+## Implikationen für Tech-Stack
+[2–3 Sätze: Was bedeutet das für die Platform-Entscheidung?
+z.B.: "Primär Mobile + Native gewünscht → React Native oder Flutter statt Next.js prüfen"
+z.B.: "Desktop-fokussiert + täglicher Workflow → Web-App mit Keyboard-Shortcuts, Performance-Budget beachten"]
+```
+
+---
+
+## Phase 2b: Dokumente einlesen (falls vorhanden)
 
 Frage den User:
 
@@ -122,7 +224,7 @@ AskUserQuestion({
       question: "Sind Research-Grundlagen vollständig?",
       header: "Review",
       options: [
-        { label: "Approved – weiter zu /red:proto-requirements", description: "Alle drei Artefakte sind gut" },
+        { label: "Approved", description: "Alle Artefakte sind vollständig" },
         { label: "Anpassungen nötig", description: "Feedback im Chat" }
       ],
       multiSelect: false
@@ -145,18 +247,40 @@ git push
 Prüfe den aktuellen Stand:
 
 ```bash
-ls features/ 2>/dev/null | grep "FEAT-"
+DEV_SETUP_DONE=$([ -f project-config.md ] && echo "ja" || echo "nein")
+FEATURES_EXIST=$(ls features/FEAT-*.md 2>/dev/null | wc -l)
+echo "Dev-Setup: $DEV_SETUP_DONE | Feature-Specs: $FEATURES_EXIST"
 ```
 
-Sage dem User:
+**Modus A (Dev-Setup noch nicht gemacht):**
 
+Sage dem User:
 ```
 Research gespeichert.
 
-Haben alle Features bereits einen Spec (features/FEAT-*.md)?
-→ JA  → /red:proto-workflow   zeigt den nächsten Schritt basierend auf aktuellem Stand
-→ NEIN → /red:proto-requirements   Feature Specs definieren (einen nach dem anderen)
-
-Research ist optional und kann jederzeit nachgeholt werden –
-die Personas und das Problem Statement stehen ab sofort allen Agents zur Verfügung.
+Die Platform- und Nutzungskontext-Erkenntnisse stehen jetzt für den Tech-Stack bereit.
+Nächster Schritt: /red:proto-dev-setup – ich berücksichtige research/platform-context.md bei der Stack-Empfehlung.
 ```
+
+**Modus B, keine Features vorhanden:**
+
+Sage dem User:
+```
+Research nachgeholt. Personas und Problem Statement stehen allen Agents zur Verfügung.
+Nächster Schritt: /red:proto-requirements – Feature Specs definieren.
+```
+
+**Modus B, Features bereits vorhanden:**
+
+Sage dem User:
+```
+Research nachgeholt.
+
+Da bereits Feature-Specs existieren: Bitte /red:proto-requirements erneut aufrufen –
+im Review-Modus prüfen wir ob die bestehenden Specs mit den neuen Research-Erkenntnissen
+noch übereinstimmen oder angepasst werden müssen.
+
+Nächster Schritt: /red:proto-requirements (Review bestehender Specs)
+```
+
+Öffne requirements und informiere es explizit, dass es im **Review-Modus** läuft: bestehende Specs gegen Research-Erkenntnisse prüfen, nicht neu schreiben.
