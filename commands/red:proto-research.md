@@ -142,6 +142,21 @@ git commit -m "docs: add user research, personas and problem statement"
 git push
 ```
 
-Dann: "Research gespeichert. Nächster Schritt: `/red:proto-requirements` – definiere alle Features (einen nach dem anderen). Erst wenn ALLE Features einen Spec haben, läuft `/red:proto-flows`.
+Prüfe den aktuellen Stand:
 
-Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."
+```bash
+ls features/ 2>/dev/null | grep "FEAT-"
+```
+
+Sage dem User:
+
+```
+Research gespeichert.
+
+Haben alle Features bereits einen Spec (features/FEAT-*.md)?
+→ JA  → /red:proto-workflow   zeigt den nächsten Schritt basierend auf aktuellem Stand
+→ NEIN → /red:proto-requirements   Feature Specs definieren (einen nach dem anderen)
+
+Research ist optional und kann jederzeit nachgeholt werden –
+die Personas und das Problem Statement stehen ab sofort allen Agents zur Verfügung.
+```
