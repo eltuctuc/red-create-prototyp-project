@@ -38,19 +38,25 @@ Jeder Command ist eigenständig – du kannst an jedem Punkt einsteigen oder auf
 
 ---
 
-## Installation
+## Installation – zwei Schritte, zwei verschiedene Dinge
 
-### Option A – npx Installer (empfohlen)
+> **Wichtig:** Es gibt zwei Schritte, die unterschiedliche Zwecke haben. Beide sind nötig.
 
-Einmalig ausführen. Der Installer fragt interaktiv ob global oder lokal:
+### Schritt 1 – `npx red-proto` installiert das Framework auf deinem Computer
+
+Macht die `/red:proto-*` Commands in Claude Code verfügbar. Einmalig pro Computer ausführen.
 
 ```bash
 npx red-proto@latest
 ```
 
-> **Update:** Einfach denselben Befehl erneut ausführen – der Installer erkennt bestehende Installationen und fragt was zu tun ist.
+Der Installer fragt interaktiv:
+- **Global** (`~/.claude/`) → Commands in allen Projekten verfügbar
+- **Lokal** (`./.claude/`) → nur im aktuellen Verzeichnis
 
-### Option B – Manuell via Git
+> **Update:** Denselben Befehl erneut ausführen – der Installer erkennt bestehende Installationen.
+
+**Option B – Manuell via Git (falls kein npx):**
 
 ```bash
 git clone https://github.com/eltuctuc/red-create-prototyp-project.git ~/.claude/templates/red-create-prototyp-project && \
@@ -59,9 +65,15 @@ cp ~/.claude/templates/red-create-prototyp-project/commands/red\:proto.md ~/.cla
 
 ---
 
-### Framework in ein Projekt einrichten
+### Schritt 2 – `/red:proto` richtet ein einzelnes Projekt ein
 
-Nach der Installation (Option A oder B) in Claude Code:
+> **Diesen Schritt musst du für jedes neue Projekt wiederholen.**
+
+`npx` installiert nur die Commands. `/red:proto` baut die Projektstruktur auf:
+
+- legt `research/`, `features/`, `flows/`, `bugs/`, `docs/` an
+- kopiert das neutrale Design System ins Projekt
+- erstellt `project-config.md` als Basis für alle Agents
 
 ```bash
 mkdir mein-projekt && cd mein-projekt
@@ -74,13 +86,22 @@ Dann in Claude Code:
 /red:proto
 ```
 
-Das kopiert alle Commands und Agents in `.claude/commands/` und `.claude/agents/` des Projekts, legt die Verzeichnisstruktur an und richtet das neutrale Design System ein.
-
-### Schritt 3 – Loslegen
+**Danach loslegen:**
 
 ```
 /red:proto-sparring
 ```
+
+---
+
+### Kurzübersicht: Was macht was?
+
+| Befehl | Wann | Was passiert |
+|--------|------|--------------|
+| `npx red-proto@latest` | Einmalig pro Computer | Installiert Commands in `~/.claude/` (global) oder `./.claude/` (lokal) |
+| `/red:proto` | Einmalig pro Projekt | Legt Projektstruktur an, kopiert Design System |
+| `/red:proto-sparring` | Start jedes Projekts | Erste Anlaufstelle – Idee zu PRD |
+| `/red:proto-workflow` | Nach jeder Session-Pause | Zeigt wo du stehst, was als nächstes kommt |
 
 ---
 
