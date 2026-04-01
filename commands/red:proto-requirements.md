@@ -153,7 +153,7 @@ AskUserQuestion({
       question: "Ist die Feature Spec vollständig und korrekt?",
       header: "Review",
       options: [
-        { label: "Approved – weiter zu /red:proto-ux", description: "Spec ist ready" },
+        { label: "Approved – spec ist ready", description: "Nächstes Feature mit /red:proto-requirements oder alle Specs fertig → /red:proto-flows" },
         { label: "Änderungen nötig", description: "Feedback im Chat" }
       ],
       multiSelect: false
@@ -170,7 +170,27 @@ git commit -m "docs: FEAT-[X] spec – [Feature Name]"
 git push
 ```
 
-Sage dem User: "FEAT-X gespeichert. Nächster Schritt: `/red:proto-ux` für UI/UX-Entscheidungen."
+Prüfe wie viele Features noch den Status "Spec" brauchen:
+
+```bash
+ls features/ 2>/dev/null | grep "FEAT-"
+grep -l "Aktueller Schritt: Spec" features/*.md 2>/dev/null | wc -l
+```
+
+Sage dem User:
+
+```
+FEAT-[X] gespeichert.
+
+Weitere Features zu spezifizieren?
+→ /red:proto-requirements     für das nächste Feature
+
+Alle Features haben einen Spec?
+→ /red:proto-flows             Screen-Inventar + Transitions (einmalig, vor UX)
+  Danach: /red:proto-ux        pro Feature
+
+Nach einer Pause: /red:proto-workflow zeigt dir exakt wo du stehst.
+```
 
 ## Feature abbrechen
 

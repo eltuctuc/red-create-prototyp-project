@@ -142,4 +142,6 @@ git commit -m "docs: add user research, personas and problem statement"
 git push
 ```
 
-Dann: "Research gespeichert. Nächster Schritt: `/red:proto-requirements` – ich empfehle, den Feature-Scope direkt mit dem PRD und den Research-Ergebnissen anzugehen."
+Dann: "Research gespeichert. Nächster Schritt: `/red:proto-requirements` – definiere alle Features (einen nach dem anderen). Erst wenn ALLE Features einen Spec haben, läuft `/red:proto-flows`.
+
+Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."

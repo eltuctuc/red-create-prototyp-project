@@ -9,15 +9,21 @@ Ein KI-gestütztes Product Development Framework für [Claude Code](https://clau
 Eine Sammlung von Claude Code Commands und Agents, die eine vollständige Produktentwicklungs-Pipeline abbilden. Du arbeitest mit natürlicher Sprache – Claude führt die Pipeline aus, du triffst die Entscheidungen.
 
 ```
+/red:proto-workflow     → Nach jeder Pause: zeigt exakt wo du stehst und was als nächstes zu tun ist
+
 /red:proto-sparring     → Idee schärfen → PRD
 /red:proto-dev-setup    → Tech-Stack wählen, Projekt scaffolden, Git/GitHub einrichten
-/red:proto-research     → Problem Statement Map + Personas
-/red:proto-requirements → Feature Specs (User Stories, Acceptance Criteria, Edge Cases)
-/red:proto-flows        → Screen-Inventar + verbindliche Transition-Tabelle
-/red:proto-ux           → UX-Entscheidungen pro Feature – DS-konform, Transitions aus /flows
+/red:proto-research     → Problem Statement Map + Personas (optional)
+/red:proto-requirements → Feature Specs – einmal pro Feature, für ALLE Features
+                          ↓ wenn ALLE Features Specs haben:
+/red:proto-flows        → Screen-Inventar + verbindliche Transition-Tabelle (einmalig)
+/red:proto-ux           → UX-Entscheidungen – einmal pro Feature
+
+dann pro Feature (Build-Loop bis QA grün):
 /red:proto-architect    → Technisches Design + Security + Test-Setup
 /red:proto-dev          → Implementierung (Frontend + Backend, parallel falls nötig)
 /red:proto-qa           → Tests, Accessibility, Security, Bug-Loop bis Production-Ready
+                          └── Bugs? → /red:proto-dev → /red:proto-qa (wiederholen)
 ```
 
 Jeder Command ist eigenständig – du kannst an jedem Punkt einsteigen oder aufhören. Die Commands bauen aber aufeinander auf: jeder liest den Output des vorherigen und ergänzt die gemeinsamen Artefakte.

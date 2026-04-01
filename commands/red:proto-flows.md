@@ -21,12 +21,22 @@ cat features/*.md 2>/dev/null
 
 Verstehe: Welche Aufgaben haben die Nutzer? Welche Screens werden in den Feature Specs erwähnt oder impliziert?
 
-**Guard – Feature Specs müssen existieren:**
+**Guard – Feature Specs müssen existieren und vollständig sein:**
 ```bash
 if [ ! "$(ls features/*.md 2>/dev/null)" ]; then
   echo "FEHLER: Keine Feature Specs gefunden."
   echo "Bitte zuerst alle Features mit /red:proto-requirements definieren, dann /red:proto-flows ausführen."
   exit 1
+fi
+
+# Prüfe ob noch Features ohne Spec-Status vorhanden sind
+MISSING=$(grep -rL "Aktueller Schritt: Spec" features/*.md 2>/dev/null | grep -v "REJECTED\|ABANDONED")
+if [ -n "$MISSING" ]; then
+  echo "HINWEIS: Folgende Features haben noch keinen finalen Spec:"
+  echo "$MISSING"
+  echo ""
+  echo "Empfehlung: Zuerst alle Features mit /red:proto-requirements abschließen."
+  echo "Trotzdem fortfahren? (flows wird dann unvollständig sein)"
 fi
 ```
 
@@ -181,7 +191,9 @@ git commit -m "docs: product flows – screen inventory + transitions"
 git push
 ```
 
-Sage dem User: "Flows dokumentiert. Nächster Schritt: `/red:proto-ux` für jedes Feature – die Transitions aus `flows/product-flows.md` sind die verbindliche Referenz."
+Sage dem User: "Flows dokumentiert. Nächster Schritt: `/red:proto-ux` für jedes Feature (einmal pro Feature) – die Transitions aus `flows/product-flows.md` sind die verbindliche Referenz.
+
+Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."
 
 ## Flows aktualisieren (Re-Run)
 

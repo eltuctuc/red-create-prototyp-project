@@ -305,4 +305,6 @@ git commit -m "feat: implement FEAT-[X] – [Feature Name]"
 git push
 ```
 
-Sage dem User: "Implementierung abgeschlossen. Nächster Schritt: `/red:proto-qa`."
+Sage dem User: "Implementierung abgeschlossen. Nächster Schritt: `/red:proto-qa`.
+
+Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."

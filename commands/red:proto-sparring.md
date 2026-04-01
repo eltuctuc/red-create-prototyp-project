@@ -111,7 +111,27 @@ else
 fi
 ```
 
-Sage dem User: "PRD gespeichert. Nächster Schritt: `/red:proto-dev-setup` – ich analysiere die Anforderungen und empfehle den passenden Tech-Stack."
+Sage dem User:
+
+```
+PRD gespeichert. Dein Weg von hier:
+
+  JETZT:
+  → /red:proto-dev-setup     Tech-Stack wählen, Projekt scaffolden, Git einrichten
+
+  DANACH (Reihenfolge wichtig):
+  → /red:proto-research      Personas + Problem Statement (optional, aber empfohlen)
+  → /red:proto-requirements  Feature Specs – einmal pro Feature, für ALLE Features
+                              ↓ wenn ALLE Features Specs haben:
+  → /red:proto-flows         Screen-Inventar + Transitions (einmalig, vor UX)
+  → /red:proto-ux            UX-Entscheidungen – einmal pro Feature
+
+  DANN PRO FEATURE (Build-Loop bis QA grün):
+  → /red:proto-architect → /red:proto-dev → /red:proto-qa
+     └── Bugs? → /red:proto-dev → /red:proto-qa (wiederholen)
+
+Nach einer Pause: /red:proto-workflow zeigt dir exakt wo du stehst.
+```
 
 ## Wichtig
 

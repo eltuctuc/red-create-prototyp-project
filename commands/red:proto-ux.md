@@ -289,4 +289,6 @@ git commit -m "docs: FEAT-[X] ux design + screen transitions – [Feature Name]"
 git push
 ```
 
-Sage dem User: "UX-Entscheidungen dokumentiert. Nächster Schritt: `/red:proto-architect` für das technische Design."
+Sage dem User: "UX-Entscheidungen dokumentiert. Nächster Schritt: `/red:proto-architect` für das technische Design.
+
+Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."

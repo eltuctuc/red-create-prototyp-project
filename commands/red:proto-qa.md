@@ -225,4 +225,7 @@ git push
 git push origin --tags
 ```
 
-Sage dem User: "v[X.Y.Z] getaggt und gepusht. Feature FEAT-[X] ist Production-Ready."
+Sage dem User: "v[X.Y.Z] getaggt und gepusht. Feature FEAT-[X] ist Production-Ready.
+
+Weiteres Feature? → `/red:proto-requirements` oder direkt in den Build-Loop für das nächste.
+Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."

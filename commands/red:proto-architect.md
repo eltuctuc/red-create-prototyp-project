@@ -129,7 +129,9 @@ git commit -m "docs: FEAT-[X] tech design – [Feature Name]"
 git push
 ```
 
-Sage dem User: "Tech-Design dokumentiert. Nächster Schritt: `/red:proto-dev`."
+Sage dem User: "Tech-Design dokumentiert. Nächster Schritt: `/red:proto-dev`.
+
+Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."
 
 ## Checklist vor Abschluss
 

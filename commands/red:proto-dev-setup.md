@@ -529,7 +529,10 @@ Code:     [Codeverzeichnis]/
 Git:      Initialisiert ([Codeverzeichnis | Projekt-Root])
 GitHub:   [URL – oder: "Nur lokal"]
 
-Nächster Schritt: /red:proto-research – oder /red:proto-requirements wenn Research nicht nötig ist.
+Nächster Schritt: /red:proto-research (empfohlen)
+                  oder direkt /red:proto-requirements wenn Research nicht nötig ist.
+
+Nach einer Pause: /red:proto-workflow zeigt dir exakt wo du stehst.
 ```
 
 ## Checklist
