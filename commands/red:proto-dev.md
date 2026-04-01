@@ -46,6 +46,29 @@ cat design-system/patterns/*.md 2>/dev/null
 
 **Wichtig – Codeverzeichnis:** Entnimm den konfigurierten Pfad aus `project-config.md` (Feld `Codeverzeichnis:`). Standard ist `projekt/`, kann aber `src/`, `.` oder ein anderer Pfad sein. Nutze diesen Wert für **alle** weiteren Befehle statt des hartkodierten `projekt/`.
 
+## Phase 1.6: A11y-Architektur-Plan
+
+Lies den A11y-Architektur-Abschnitt aus dem Tech-Design (`## 3. Technisches Design → A11y-Architektur`).
+
+Falls kein A11y-Architektur-Abschnitt existiert: Erstelle ihn selbst aus dem UX-Abschnitt:
+
+| Element | ARIA-Pattern | Geplant |
+|---------|-------------|---------|
+| Haupt-Container | Landmark? | ... |
+| Listen / Grids | aria-label eindeutig? | ... |
+| Live-Regions | Trigger: Aktion (nicht initialer Render!) | ... |
+| Fokus-Management | Nach Aktion X → Fokus auf Y? | ... |
+
+**Dann prüfen ob diese ARIA-Werte bereits im Projekt vergeben sind:**
+
+```bash
+grep -r "role=" [Codeverzeichnis]/ --include="*.tsx" --include="*.vue" --include="*.svelte" 2>/dev/null
+grep -r "aria-label=" [Codeverzeichnis]/ --include="*.tsx" --include="*.vue" --include="*.svelte" 2>/dev/null
+grep -r "aria-live\|role=\"status\"\|role=\"alert\"" [Codeverzeichnis]/ --include="*.tsx" --include="*.vue" 2>/dev/null
+```
+
+Doppelte Landmarks oder doppelte `aria-label`-Werte auf gleicher Ebene → jetzt auflösen, nicht nach der Implementierung.
+
 ## Phase 1.5: UX-Zustände als Implementierungs-Checkliste
 
 Lies Abschnitt `## 2. UX Entscheidungen` im Feature-File und extrahiere ALLE beschriebenen Zustände, Interaktionsmuster und Feedback-Anforderungen in eine interne Checkliste:
@@ -65,6 +88,15 @@ Jede Zeile muss vor Phase 5 abgehakt sein. Wer A11y und States als "Frontend-Pri
 > "Abschnitt '3. Technisches Design' fehlt in FEAT-[ID].md. Bitte zuerst `/red:proto-architect` ausführen."
 
 **Guard 2 – Abhängigkeiten prüfen:** Lies den Abschnitt `## Abhängigkeiten` im Feature-File.
+
+**Guard 3 – Offene Bugs aus anderen Features:**
+
+```bash
+# Offene Bugs aus ALLEN Features (nicht nur dem aktuellen):
+ls bugs/ 2>/dev/null | grep -v "\-fixed" | grep -v "FEAT-\[ID\]"
+```
+
+Wenn offene Bugs aus anderen Features existieren: Informiere den User und frage ob diese zuerst gefixt werden sollen – offene Bugs können als Regression in das neue Feature wandern. Der User entscheidet bewusst ob er weitermacht oder zuerst fixt.
 
 ```bash
 # Für jede gelistete Abhängigkeit (FEAT-Y):
@@ -254,7 +286,25 @@ Lies den konfigurierten Stack aus `project-config.md` und wende diese universell
 
 Wende diese Checks mit den Mustern und APIs an, die für den konfigurierten Stack gelten.
 
-### E – Bug-Fix Ripple (nur wenn Bugs gefixed wurden)
+### E – CSS-Conflict-Check (nach jeder Komponente mit interaktiven Elementen)
+- [ ] Hat ein Vorfahren-Element `overflow:hidden`, `clip-path` oder `clip`? → Touch-Target (min. 44px) und Focus-Ring betroffen?
+- [ ] Hat ein Vorfahren-Element `transform` oder `filter`? → `position:fixed` Elemente darin verhalten sich unerwartet
+- [ ] CSS-Transitions auf `border-width` oder `outline`? → können Focus-Ring-Übergänge brechen
+
+```bash
+grep -r "overflow.*hidden\|clip-path\|clip:" [Codeverzeichnis]/ --include="*.css" --include="*.vue" --include="*.tsx" 2>/dev/null
+```
+
+### F – Test-Existenz-Guard (PFLICHT vor Phase 5)
+```bash
+# Test-Files für dieses Feature prüfen:
+ls [Codeverzeichnis]/[Test-Pfad aus project-config.md]/ 2>/dev/null | grep -i "[feature-name]\|feat"
+```
+- [ ] Test-Files für dieses Feature vorhanden?
+
+Wenn keine Test-Files gefunden → **stopp**. Tests zuerst schreiben gemäß Test-Setup aus `## 3. Technisches Design → Test-Setup`. Kein Review-Checkpoint ohne Tests.
+
+### G – Bug-Fix Ripple (nur wenn Bugs gefixed wurden)
 Bereits abgedeckt in Phase 4 – Ripple-Effekt-Check. Hier bestätigen:
 - [ ] Ripple-Check für alle geänderten Module durchgeführt?
 

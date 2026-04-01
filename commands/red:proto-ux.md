@@ -79,6 +79,21 @@ Prüfe für jede selbst gewählte Komponente ob eine Spec in `design-system/comp
 ls design-system/components/ 2>/dev/null
 ```
 
+**DS Regel-Compliance – PFLICHT für jede vorhandene Komponente:**
+
+Komponente vorhanden ≠ Regel-Compliance. Für jede als "vorhanden" markierte Komponente:
+
+```bash
+# Pflicht-Regeln der Komponente lesen:
+cat design-system/components/[komponente].md | grep -i "nicht\|never\|nur\|only\|erst\|pflicht\|must\|required\|verboten"
+```
+
+Prüfe: Verletzt der geplante Einsatz eine dieser Regeln? Beispiele:
+- `danger`-Button: DS-Regel "erst nach expliziter Bestätigung" – wird ein Confirmation-Step geplant?
+- `primary`-Button: DS-Regel "max. 1 pro sichtbarem Bereich" – gibt es mehrere auf demselben Screen?
+
+Wenn eine Regel verletzt wird → als **Hypothesentest** dokumentieren oder Implementierung anpassen. Nie still ignorieren.
+
 **Wenn alle Komponenten vorhanden sind:** Weiter zu Phase 5.
 
 **Wenn Komponenten fehlen:** Stoppe und zeige die vollständige Lücken-Liste:
@@ -231,9 +246,18 @@ Route (falls neu): `/[pfad]`
 - **Bewusste Abweichungen (Hypothesentest):** [Liste oder "–"]
 
 ### Barrierefreiheit (A11y)
-- Keyboard-Navigation: [...]
-- Screen Reader: [...]
-- Farbkontrast: [Referenz: design-system/tokens/colors.md]
+- Keyboard-Navigation: [Welche Aktionen sind per Tab/Enter/Space erreichbar?]
+- Screen Reader: [Welche Elemente brauchen aria-label? Welche Live-Regions?]
+- Farbkontrast (berechnet, nicht geschätzt):
+
+| Element | Vordergrund-Token | Hintergrund-Token | Hex fg | Hex bg | Ratio | WCAG |
+|---------|------------------|------------------|--------|--------|-------|------|
+| Button-Text (primary) | color-primary-... | color-surface-... | #... | #... | X:1 | ✅/❌ 4.5:1 |
+| Body-Text | color-text-... | color-surface-... | #... | #... | X:1 | ✅/❌ 4.5:1 |
+| Großer Text / Icons | color-... | color-... | #... | #... | X:1 | ✅/❌ 3:1 |
+
+Hex-Werte aus `design-system/tokens/colors.md` entnehmen und Kontrastverhältnis berechnen.
+Grenzwerte: 4.5:1 für Normaltext (WCAG 1.4.3), 3:1 für großen Text und UI-Komponenten (WCAG 1.4.11).
 
 ### Mobile-Verhalten
 - [...]

@@ -25,9 +25,15 @@ cat features/FEAT-[ID].md    # Feature Spec + UX-Entscheidungen
 git ls-files [Codeverzeichnis]/[Komponenten-Pfad] 2>/dev/null | head -30
 git ls-files [Codeverzeichnis]/[API-Routen-Pfad] 2>/dev/null | head -20
 git log --oneline -10 2>/dev/null
+
+# Bug-History lesen – bekannte Fallstricke aus früheren Features
+ls bugs/ 2>/dev/null | grep "\-fixed" | head -10
+# Die letzten 5 Fixed Bugs lesen um Muster zu erkennen:
+for f in $(ls -t bugs/*-fixed.md 2>/dev/null | head -5); do echo "=== $f ==="; cat "$f"; done
 ```
 
 Bestehende Infrastruktur kennen, bevor neue designed wird – Wiederverwendung vor Neubau.
+Bug-History kennen um bekannte Patterns (z.B. falsch getriggerte Live-Regions, CSS-Konflikte) nicht zu wiederholen.
 
 ## Phase 2: Klärungsfragen (nur wenn nötig)
 
@@ -96,11 +102,29 @@ Gespeichert in: [localStorage / Datenbank-Tabelle / API-State]
 [Neue Packages die installiert werden müssen]
 - `package-name` – Zweck
 
+### A11y-Architektur
+[Verbindlicher Plan – wird von /red:proto-dev direkt umgesetzt]
+
+| Element | ARIA-Pattern | Entscheidung |
+|---------|-------------|--------------|
+| Haupt-Container | Landmark (main/section/nav)? | ... |
+| Listen / Grids | aria-label eindeutig, kein Duplikat? | ... |
+| Live-Regions | Trigger: welche Aktion? Niemals initialer Render! | ... |
+| Fokus-Management | Nach Aktion X → Fokus auf Y? | ... |
+| Dialoge / Modals | aria-modal, Fokus-Trap, Escape-Handler? | ... |
+
 ### Test-Setup
 [Welche Tests sollen implementiert werden?]
 - Unit Tests: [Was wird unit-getestet?]
 - Integration Tests: [Welche Integrationen werden getestet?]
 - E2E Tests: [Welche User-Flows werden E2E getestet?]
+
+### Test-Infrastruktur
+[Wie wird die Testbarkeit hergestellt – Mocks, Environment, Cleanup]
+- Test-Environment: [z.B. happy-dom, jsdom – und bekannte Limitierungen]
+- Mocks erforderlich: [z.B. localStorage → vi.stubGlobal, fetch → vi.fn()]
+- Setup/Teardown: [beforeEach/afterEach Patterns für dieses Feature]
+- Bekannte Fallstricke: [z.B. "localStorage.getItem funktioniert in happy-dom nicht ohne Stub"]
 ```
 
 ## Phase 4: Review und Handoff
@@ -141,5 +165,7 @@ Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."
 - [ ] Daten-Model beschrieben (kein SQL)
 - [ ] Security-Anforderungen explizit adressiert
 - [ ] Test-Setup definiert (was wird wie getestet)
+- [ ] Test-Infrastruktur spezifiziert (Mocks, Environment, Cleanup-Patterns)
+- [ ] A11y-Architektur geplant (Landmarks, Live-Regions, Fokus-Management)
 - [ ] Dependencies aufgelistet
 - [ ] User hat approved

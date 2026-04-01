@@ -39,6 +39,7 @@ Agent("qa-engineer", {
   prompt: `Führe ein technisches QA-Review für FEAT-[ID] durch.
   Lies: features/FEAT-[ID].md
   Lies: project-config.md
+  Codeverzeichnis: [Wert aus project-config.md → Codeverzeichnis]
   Bestehende Bugs: ls bugs/
   Git-Änderungen: git diff --name-only HEAD~1
   Befolge die Anweisungen aus .claude/agents/qa-engineer.md
@@ -48,6 +49,8 @@ Agent("qa-engineer", {
 Agent("ux-reviewer", {
   prompt: `Führe ein UX-Review für FEAT-[ID] durch.
   Lies: features/FEAT-[ID].md (besonders Abschnitt 2: UX)
+  Lies: project-config.md
+  Codeverzeichnis: [Wert aus project-config.md → Codeverzeichnis]
   Lies: research/personas.md falls vorhanden
   Befolge die Anweisungen aus .claude/agents/ux-reviewer.md
   Schreibe Bug-Files nach bugs/ (Naming: BUG-FEAT[ID]-UX-001.md, BUG-FEAT[ID]-UX-002.md etc.)`
@@ -89,6 +92,38 @@ Severity-Definition:
 - **Low:** Optik, Edge-Case-UX, nice-to-have Fix
 
 Im Feature-File (`## 5. QA Ergebnisse`) nur die Bug-IDs referenzieren, nicht den vollen Report.
+
+## Phase 3b: Deduplizierung und Konflikt-Detektion
+
+**Bevor** die konsolidierte Übersicht erstellt wird:
+
+**Schritt 1 – Duplikate erkennen:**
+```bash
+ls bugs/BUG-FEAT[ID]-QA-*.md bugs/BUG-FEAT[ID]-UX-*.md 2>/dev/null
+```
+Vergleiche alle neuen Bug-Files auf: gleiche betroffene Datei + gleiche Zeile/Element + gleicher Fehlertyp.
+Wenn Duplikat gefunden → die ausführlichere Beschreibung behalten, die andere löschen und in der Übersicht als "zusammengeführt" markieren.
+
+**Schritt 2 – Konflikte erkennen:**
+Wenn QA-Agent und UX-Reviewer entgegengesetzte Empfehlungen für dasselbe Element geben (z.B. QA: "aria-required entfernen" vs. UX: "aria-required hinzufügen"):
+→ **Nicht** beide Bug-Files stehen lassen
+→ Konflikt explizit im Abschnitt `## 5. QA Ergebnisse → Konflikte` dokumentieren
+→ User zur Entscheidung auffordern **bevor** `/red:proto-dev` mit den Fixes startet:
+
+```typescript
+AskUserQuestion({
+  questions: [{
+    question: "Widersprüchliche Empfehlungen für [Element]: QA sagt [X], UX sagt [Y]. Welche Richtung?",
+    header: "Konflikt: [Element]",
+    options: [
+      { label: "QA-Empfehlung umsetzen", description: "[QA-Begründung]" },
+      { label: "UX-Empfehlung umsetzen", description: "[UX-Begründung]" },
+      { label: "Kompromiss – ich erkläre im Chat", description: "" }
+    ],
+    multiSelect: false
+  }]
+})
+```
 
 ## Phase 4: Ergebnisse zusammenführen
 
