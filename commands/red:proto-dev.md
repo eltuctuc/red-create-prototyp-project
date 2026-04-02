@@ -177,32 +177,17 @@ Dann weiter mit Phase 4.
 
 ## Phase 4: Bug-Fixes (falls offene Bugs vorhanden)
 
-**Schritt 1 – Fix-Schwelle lesen:**
-
 ```bash
-SCHWELLE=$(grep "^Fix-Schwelle:" features/FEAT-[ID].md | sed 's/Fix-Schwelle: //')
-echo "Fix-Schwelle: $SCHWELLE"
-# Beispiel: "Critical, High" → nur Bugs mit Severity Critical oder High werden gefixt
+ls bugs/ 2>/dev/null
 ```
 
-**Schritt 2 – Offene Bugs nach Schwelle filtern:**
+Nur offene Bugs bearbeiten (Dateien ohne `-fixed` im Namen):
 
 ```bash
-echo "=== Zu fixende Bugs (innerhalb Fix-Schwelle: $SCHWELLE) ==="
-for BUG in bugs/BUG-FEAT[ID]-*.md; do
-  [[ "$BUG" == *"-fixed"* ]] && continue
-  SEV=$(grep "\*\*Severity:\*\*" "$BUG" | head -1 | sed 's/.*Severity:\*\* //')
-  if echo "$SCHWELLE" | grep -q "$SEV"; then
-    echo "→ FIX: $BUG ($SEV)"
-  else
-    echo "→ SKIP (unterhalb Schwelle): $BUG ($SEV)"
-  fi
-done
+ls bugs/ 2>/dev/null | grep "FEAT-[ID]" | grep -v "\-fixed"
 ```
 
-Nur Bugs mit `→ FIX` bearbeiten. Bugs mit `→ SKIP` bleiben offen – kein Fix, kein Rename.
-
-Für jeden zu fixenden Bug:
+Für jeden offenen Bug:
 
 1. Bug-File lesen: `cat bugs/BUG-FEAT[X]-[TYPE]-[NNN].md`
 2. Fix implementieren

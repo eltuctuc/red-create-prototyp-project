@@ -30,39 +30,13 @@ Gehe **jeden AC** durch. Teste ihn. Dokumentiere Ergebnis.
 - ✅ Passed
 - ❌ Failed → Bug-File anlegen
 
-### 2b. Edge-Case-Compliance-Pass – PFLICHT, systematisch
+### 2b. Edge Cases Tests
 
-Dieser Pass ist nicht opportunistisch. Gehe **jeden** dokumentierten Edge Case aus der Spec einzeln durch und prüfe ob er im Code explizit implementiert und durch einen Test abgesichert ist.
-
-**Schritt 1: Edge Cases aus der Spec extrahieren**
-
-Lies Abschnitt 1 (Requirements/Edge Cases) und Abschnitt 3 (Tech-Design) des Feature-Files. Jeder Satz der "wenn … dann …"-Logik beschreibt einen Edge Case. Erstelle eine Liste:
-
-| # | Edge Case (aus Spec) | Im Code implementiert? | Test vorhanden? | Befund |
-|---|---------------------|----------------------|-----------------|--------|
-| 1 | [z.B. "Leere Eingabe → kein Todo, Fokus bleibt im Input"] | ✅ / ❌ | ✅ / ❌ | – / Bug |
-| 2 | [z.B. "Identischer Titel → eigene UUID"] | ✅ / ❌ | ✅ / ❌ | – / Bug |
-| 3 | [z.B. "Fokus nach Löschen → nächstes Item oder Input"] | ✅ / ❌ | ✅ / ❌ | – / Bug |
-
-**Schritt 2: Für jeden nicht abgesicherten Edge Case gilt:**
-- Code vorhanden, Test fehlt → Bug-File anlegen (Severity: Medium, Bereich: Test-Coverage)
-- Code fehlt → Bug-File anlegen (Severity: passend zum Edge Case)
-- Beides fehlt → Bug-File mit Severity High
-
-**Schritt 3: AC-Test-Matrix des Developer-Agents prüfen**
-
-Falls der Developer-Agent eine AC-Test-Matrix im Abschlussbericht geliefert hat:
-```bash
-# Test-Matrix aus dem Feature-File oder Developer-Bericht lesen
-```
-Vergleiche die Matrix mit den tatsächlich vorhandenen Tests. Jede Zeile der Matrix die keinen korrespondierenden Test im Testfile hat → Bug-File.
-
-**Zusätzliche eigene Edge Cases aus QA-Perspektive:**
+Alle dokumentierten Edge Cases aus der Spec testen. Zusätzlich eigene aus QA-Perspektive:
 - Was passiert bei leerem Input?
-- Was passiert bei Maximal-Werten (z.B. sehr langer Text)?
-- Was passiert bei gleichzeitigen Aktionen (z.B. Edit + Delete gleichzeitig triggerbar)?
-- Was passiert bei identischen Timestamps oder IDs?
-- Was passiert wenn der Fokus-Management-Pfad nicht greift (z.B. ref ist null)?
+- Was passiert bei Maximal-Werten?
+- Was passiert bei gleichzeitigen Aktionen?
+- Was passiert bei Netzwerkfehlern?
 
 ### 2c. Security-Tests (immer)
 
@@ -124,7 +98,7 @@ Gib zurück:
 
 ### Getestete Bereiche
 - Acceptance Criteria: X/Y passed
-- Edge-Case-Compliance-Pass: X/Y Edge Cases implementiert + getestet (Details: Tabelle aus 2b)
+- Edge Cases: X getestet
 - Security: [kurzes Ergebnis]
 - Cross-Browser/Responsive: [kurzes Ergebnis]
 - Regression: [betroffene Bereiche geprüft]
