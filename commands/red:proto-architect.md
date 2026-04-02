@@ -129,9 +129,48 @@ git commit -m "docs: FEAT-[X] tech design – [Feature Name]"
 git push
 ```
 
-Sage dem User: "Tech-Design dokumentiert. Nächster Schritt: `/red:proto-dev`.
+## Routing nach Approval
 
-Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."
+Scanne alle Feature-Files um zu sehen wo noch Tech-Design fehlt:
+
+```bash
+ls features/
+grep -l "Status:" features/*.md 2>/dev/null | xargs grep "Status:" 2>/dev/null
+```
+
+Werte den Status jedes Features aus. Ein Feature hat Tech-Design abgeschlossen wenn sein Status "Tech", "Dev" oder höher ist.
+
+Baue dann die AskUserQuestion dynamisch auf Basis der Scan-Ergebnisse:
+
+- Für jedes Feature das noch **keinen Tech-Status** hat (aber UX abgeschlossen): füge eine Option hinzu "Weiter mit [FEAT-ID] – [Feature Name] (Tech-Design fehlt noch)"
+- Immer verfügbar: "Alle Features abgedeckt – weiter zu /red:proto-dev" (auch wenn noch Features offen sind – der User entscheidet)
+- Immer verfügbar: "Dieses Feature jetzt komplett: direkt zu /red:proto-dev für [aktuelles Feature]"
+
+Rufe AskUserQuestion auf mit den ermittelten Optionen:
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Tech-Design für dieses Feature ist abgeschlossen. Wie möchtest du weitermachen?",
+      header: "Nächster Schritt",
+      options: [
+        // Dynamisch: eine Option pro Feature ohne Tech-Status
+        // + die beiden fixen Optionen unten
+        { label: "Alle Features abgedeckt – weiter zu /red:proto-dev", description: "Tech-Phase abschließen und Entwicklung starten" },
+        { label: "Dieses Feature komplett: direkt zu /red:proto-dev für [aktuelles Feature]", description: "Kein Batch – dieses Feature von Tech bis Dev durchziehen" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
+**Bei Wahl "Weiter mit Feature X":** Starte sofort Phase 0 für das nächste Feature – kein neuer Command-Aufruf nötig.
+
+**Bei Wahl "Alle Features abgedeckt":** Sage dem User: "Tech-Phase abgeschlossen. Nächster Schritt: `/red:proto-dev` – für jedes Feature der Reihe nach."
+
+**Bei Wahl "Komplett durcharbeiten":** Sage dem User: "Tech-Design fertig. Nächster Schritt: `/red:proto-dev FEAT-[X]` direkt für dieses Feature."
 
 ## Checklist vor Abschluss
 
