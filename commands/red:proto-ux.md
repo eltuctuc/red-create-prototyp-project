@@ -311,10 +311,36 @@ Nach Approval: Status in Feature-File auf "UX" setzen.
 
 ```bash
 git add features/FEAT-[X]-*.md flows/product-flows.md 2>/dev/null
-git commit -m "docs: FEAT-[X] ux design + screen transitions – [Feature Name]"
+git commit -m "docs: FEAT-[X] ux design + navigation – [Feature Name]"
 git push
 ```
 
-Sage dem User: "UX-Entscheidungen dokumentiert. Nächster Schritt: `/red:proto-architect` für das technische Design.
+## Routing nach Approval
 
-Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."
+**STATUS.md aktualisieren:** Lies `features/STATUS.md`, setze in der Zeile von FEAT-[X] den UX-Wert auf `✓`. Schreibe die Datei zurück.
+
+Dann lies STATUS.md erneut um den aktuellen Gesamtstand zu sehen:
+
+```bash
+cat features/STATUS.md
+```
+
+Baue die AskUserQuestion auf Basis der STATUS.md-Tabelle:
+
+- Für jede Zeile wo UX noch `–` ist: füge eine Option hinzu "Weiter mit [FEAT-ID] – [Feature Name] (UX fehlt noch)"
+- Immer verfügbar: "Alle Features abgedeckt – weiter zu /red:proto-architect"
+- Immer verfügbar: "Dieses Feature komplett: direkt zu /red:proto-architect für FEAT-[X]"
+
+Rufe AskUserQuestion auf mit den ermittelten Optionen.
+
+**Bei Wahl "Weiter mit Feature X":** Starte sofort Phase 0 für das nächste Feature – kein neuer Command-Aufruf nötig.
+
+**Bei Wahl "Alle Features abgedeckt":** Committe STATUS.md und sage: "UX-Phase abgeschlossen. Nächster Schritt: `/red:proto-architect` – für jedes Feature der Reihe nach."
+
+**Bei Wahl "Komplett durcharbeiten":** Committe STATUS.md und sage: "UX fertig. Nächster Schritt: `/red:proto-architect FEAT-[X]` direkt für dieses Feature."
+
+```bash
+git add features/STATUS.md features/FEAT-[X]-*.md flows/product-flows.md 2>/dev/null
+git commit -m "docs: FEAT-[X] ux design – [Feature Name]"
+git push
+```

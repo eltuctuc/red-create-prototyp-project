@@ -221,9 +221,35 @@ git commit -m "docs: FEAT-[X] tech design – [Feature Name]"
 git push
 ```
 
-Sage dem User: "Tech-Design dokumentiert. Nächster Schritt: `/red:proto-dev`.
+## Routing nach Approval
 
-Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."
+**STATUS.md aktualisieren:** Lies `features/STATUS.md`, setze in der Zeile von FEAT-[X] den Tech-Wert auf `✓`. Schreibe die Datei zurück.
+
+Dann lies STATUS.md erneut um den aktuellen Gesamtstand zu sehen:
+
+```bash
+cat features/STATUS.md
+```
+
+Baue die AskUserQuestion auf Basis der STATUS.md-Tabelle:
+
+- Für jede Zeile wo Tech noch `–` ist (aber UX `✓`): füge eine Option hinzu "Weiter mit [FEAT-ID] – [Feature Name] (Tech fehlt noch)"
+- Immer verfügbar: "Alle Features abgedeckt – weiter zu /red:proto-dev"
+- Immer verfügbar: "Dieses Feature komplett: direkt zu /red:proto-dev für FEAT-[X]"
+
+Rufe AskUserQuestion auf mit den ermittelten Optionen.
+
+**Bei Wahl "Weiter mit Feature X":** Starte sofort Phase 0 für das nächste Feature – kein neuer Command-Aufruf nötig.
+
+**Bei Wahl "Alle Features abgedeckt":** Committe STATUS.md und sage: "Tech-Phase abgeschlossen. Nächster Schritt: `/red:proto-dev` – für jedes Feature der Reihe nach."
+
+**Bei Wahl "Komplett durcharbeiten":** Committe STATUS.md und sage: "Tech-Design fertig. Nächster Schritt: `/red:proto-dev FEAT-[X]` direkt für dieses Feature."
+
+```bash
+git add features/STATUS.md features/FEAT-[X]-*.md
+git commit -m "docs: FEAT-[X] tech design – [Feature Name]"
+git push
+```
 
 ## Checklist vor Abschluss
 

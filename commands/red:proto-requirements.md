@@ -173,19 +173,29 @@ AskUserQuestion({
 })
 ```
 
-Nach Approval: Feature-File speichern. `project-config.md` aktualisieren (Nächste freie ID um 1 erhöhen). Dann committen:
+Nach Approval: Feature-File speichern. `project-config.md` aktualisieren (Nächste freie ID um 1 erhöhen).
 
-```bash
-git add features/FEAT-[X]-*.md project-config.md
-git commit -m "docs: FEAT-[X] spec – [Feature Name]"
-git push
+**STATUS.md aktualisieren:** Lies `features/STATUS.md`. Wenn die Datei noch nicht existiert, erstelle sie mit diesem Header:
+
+```markdown
+# Feature Status
+*Zentrale Übersicht – wird von jedem Command automatisch aktualisiert*
+
+| ID | Feature | UX | Tech | Dev | QA |
+|----|---------|----|----|-----|-----|
 ```
 
-Prüfe wie viele Features noch den Status "Spec" brauchen:
+Füge eine neue Zeile für dieses Feature ein (oder aktualisiere die bestehende):
+```
+| FEAT-[X] | [Feature Name] | – | – | – | – |
+```
+
+Dann committen:
 
 ```bash
-ls features/ 2>/dev/null | grep "FEAT-"
-grep -l "Aktueller Schritt: Spec" features/*.md 2>/dev/null | wc -l
+git add features/FEAT-[X]-*.md features/STATUS.md project-config.md
+git commit -m "docs: FEAT-[X] spec – [Feature Name]"
+git push
 ```
 
 Sage dem User:

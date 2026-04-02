@@ -371,8 +371,10 @@ Nach Approval: Ergänze Abschnitt `## 4. Implementierung` in `FEAT-X.md`:
 
 Status in Feature-File auf "Dev" setzen.
 
+**STATUS.md aktualisieren:** Lies `features/STATUS.md`, setze in der Zeile von FEAT-[X] den Dev-Wert auf `✓`. Schreibe die Datei zurück.
+
 ```bash
-git add .
+git add . features/STATUS.md
 git commit -m "feat: implement FEAT-[X] – [Feature Name]"
 git push
 ```

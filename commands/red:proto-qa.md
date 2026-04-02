@@ -265,9 +265,11 @@ Logik:
 npm version [patch|minor] --no-git-tag-version 2>/dev/null || true
 ```
 
+**STATUS.md aktualisieren:** Lies `features/STATUS.md`, setze in der Zeile von FEAT-[X] den QA-Wert auf `✓`. Schreibe die Datei zurück.
+
 **Commit + Tag + Push:**
 ```bash
-git add .
+git add . features/STATUS.md
 git commit -m "release: v[X.Y.Z] – FEAT-[X] [Feature Name]"
 git tag v[X.Y.Z]
 git push
