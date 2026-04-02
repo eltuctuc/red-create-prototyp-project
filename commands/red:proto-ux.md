@@ -59,62 +59,21 @@ ls design-system/screens/*/ 2>/dev/null
 
 Erstelle intern eine Liste aller verfügbaren Komponenten aus `design-system/components/`.
 
-## Phase 3: UX-Entscheidungen klären
+## Phase 3: Autonome UX-Analyse
 
-```typescript
-AskUserQuestion({
-  questions: [
-    {
-      question: "Wo im Produkt lebt dieses Feature?",
-      header: "Einbettung",
-      options: [
-        { label: "Neue Seite / eigener Screen", description: "Eigene Route, Navigation-Eintrag" },
-        { label: "Modal / Overlay", description: "Über bestehenden Content" },
-        { label: "Erweiterung einer bestehenden Seite", description: "Neuer Bereich auf existierender Page" },
-        { label: "Noch unklar", description: "Lass uns das herausfinden" }
-      ],
-      multiSelect: false
-    },
-    {
-      question: "Welches primäre Interaktionsmuster passt?",
-      header: "Interaktion",
-      options: [
-        { label: "Formular", description: "User gibt Daten ein und submitted" },
-        { label: "Liste + Detailansicht", description: "Übersicht → Drill-Down" },
-        { label: "Wizard / Schritt-für-Schritt", description: "Geführter Prozess" },
-        { label: "Dashboard / Übersicht", description: "Informationsanzeige" },
-        { label: "Inline-Editing", description: "Direkte Bearbeitung" }
-      ],
-      multiSelect: false
-    }
-  ]
-})
-```
+**Du entscheidest – nicht der Nutzer.** Leite alle UX-Entscheidungen selbst aus dem gelesenen Kontext ab: PRD, Personas, Feature-Spec, Design System, Flows.
 
-## Phase 4: Komponenten-Entscheidung durch UX Designer
+Analysiere und dokumentiere intern:
 
-**Du fragst – der Designer entscheidet:**
+**Einbettung:** Wo lebt das Feature im Produkt? Leite ab aus: Feature-Scope, bestehenden Flows, Navigation-Struktur im DS. Begründe deine Wahl (z.B. "Modal, weil der Feature-Scope eng ist und kein eigener Navigation-Eintrag gerechtfertigt ist").
 
-```typescript
-AskUserQuestion({
-  questions: [
-    {
-      question: "Welche Komponenten möchtest du in diesem Feature einsetzen?",
-      header: "Komponenten",
-      options: [
-        { label: "Ich nenne sie im Chat", description: "Liste alle Komponenten die du brauchst" }
-      ],
-      multiSelect: false
-    }
-  ]
-})
-```
+**Interaktionsmuster:** Welches primäre Pattern passt? Leite ab aus: Feature-Ziel, Persona-Verhalten, Datenmenge, Mobile-Kontext. Begründe deine Wahl (z.B. "Liste + Detailansicht, weil Personas täglich zwischen mehreren Einträgen navigieren müssen").
 
-Nimm die genannte Liste entgegen. Dann:
+**Komponenten-Auswahl:** Wähle alle benötigten Komponenten eigenständig aus `design-system/components/`. Begründe jede Wahl kurz. Prüfe dann:
 
-### DS-Validierung
+## Phase 4: DS-Validierung
 
-Prüfe für jede genannte Komponente ob eine Spec in `design-system/components/` existiert:
+Prüfe für jede selbst gewählte Komponente ob eine Spec in `design-system/components/` existiert:
 
 ```bash
 ls design-system/components/ 2>/dev/null
@@ -168,7 +127,9 @@ AskUserQuestion({
 - **Fortfahren mit Tokens:** Notiere genehmigte Lücken für Phase 6 (DS-Status).
 - **Bewusste Abweichung:** Frage nach dem Testgrund und notiere ihn für Phase 6.
 
-## Phase 5: Screen Transitions definieren
+## Phase 5: Navigation nach Aktionen definieren
+
+*(Was passiert nach welcher Nutzer-Aktion? Z.B. nach "Speichern" → Wo landet der Nutzer? Nach "Abbrechen" → Zurück wohin?)*
 
 **Guard – Flows-Dokument prüfen:**
 
@@ -187,11 +148,11 @@ AskUserQuestion({
       options: [
         {
           label: "Jetzt /red:proto-flows ausführen",
-          description: "Empfohlen – definiert alle Screen Transitions übergreifend bevor wir weitermachen"
+          description: "Empfohlen – definiert übergreifend wo Nutzer nach jeder Aktion landen"
         },
         {
-          label: "Transitions nur für dieses Feature definieren",
-          description: "Nur die Transitions dieses Features werden dokumentiert – ohne übergreifenden Kontext"
+          label: "Nur für dieses Feature definieren",
+          description: "Nur die Navigations-Abfolge dieses Features wird dokumentiert – ohne übergreifenden Kontext"
         }
       ],
       multiSelect: false
@@ -200,27 +161,13 @@ AskUserQuestion({
 })
 ```
 
-**Transitions für dieses Feature erfassen:**
+**Navigation eigenständig ableiten:**
 
-Frage den Designer nach jeder Transition die dieses Feature betrifft:
+Leite alle Navigations-Abfolgen aus `flows/product-flows.md` und dem Feature-Scope ab: Welche Aktionen führt der Nutzer aus? Wo landet er danach jeweils? Definiere dies selbst und dokumentiere es in Phase 6.
 
-```typescript
-AskUserQuestion({
-  questions: [
-    {
-      question: "Welche Screen Transitions gehören zu diesem Feature? (Von welchem Screen, welcher Trigger, zu welchem Ziel?)",
-      header: "Transitions",
-      options: [
-        { label: "Ich definiere sie im Chat", description: "Format: Von Screen → Trigger → Ziel-Screen (+ Bedingung falls nötig)" },
-        { label: "Keine Transitions – Feature ist in-page", description: "Keine Navigationsänderungen" }
-      ],
-      multiSelect: false
-    }
-  ]
-})
-```
+Nur wenn genuiner Interpretations-Spielraum bleibt (z.B. ob ein Fehler als Inline-Meldung oder auf einer eigenen Seite erscheint), stelle diese eine gezielte Frage im Chat.
 
-Wenn Flows-Dokument vorhanden: Trage alle Transitions in `flows/product-flows.md` ein.
+Wenn Flows-Dokument vorhanden: Trage alle Navigations-Abfolgen in `flows/product-flows.md` ein.
 
 ## Skill: UI/UX Design Guidelines
 
@@ -268,13 +215,15 @@ Route (falls neu): `/[pfad]`
 | [Name]           | ⚠ Tokens-Build    | Keine Spec – genehmigt [Datum]            |
 | [Name]           | 🧪 Hypothesentest  | Abweichung von [Pattern] – Grund: [...]   |
 
-### Screen Transitions (verbindlich)
-| Von              | Trigger                  | Wohin            | Bedingung              |
+### Navigation nach Aktionen (verbindlich)
+*Was passiert nach welcher Nutzer-Aktion?*
+
+| Ausgangs-Screen  | Aktion des Nutzers       | Ziel             | Bedingung              |
 |------------------|--------------------------|------------------|------------------------|
 | [Screen]         | "[Aktion]"               | [Ziel-Screen]    | –                      |
-| [Screen]         | Submit (Fehler)          | gleiche Seite    | Inline-Fehler          |
+| [Screen]         | Speichern (mit Fehler)   | gleiche Seite    | Inline-Fehlermeldung   |
 
-*(Vollständige Transitions auch in flows/product-flows.md eingetragen)*
+*(Vollständige Navigations-Abfolgen auch in flows/product-flows.md eingetragen)*
 
 ### DS-Status dieser Implementierung
 - **Konforme Komponenten:** [Liste]
