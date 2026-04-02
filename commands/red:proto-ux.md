@@ -267,43 +267,30 @@ git push
 
 ## Routing nach Approval
 
-Scanne alle Feature-Files um zu sehen wo noch UX fehlt:
+**STATUS.md aktualisieren:** Lies `features/STATUS.md`, setze in der Zeile von FEAT-[X] den UX-Wert auf `✓`. Schreibe die Datei zurück.
+
+Dann lies STATUS.md erneut um den aktuellen Gesamtstand zu sehen:
 
 ```bash
-ls features/
-grep -l "Status:" features/*.md 2>/dev/null | xargs grep "Status:" 2>/dev/null
+cat features/STATUS.md
 ```
 
-Werte den Status jedes Features aus. Ein Feature hat UX abgeschlossen wenn sein Status "UX", "Tech", "Dev" oder höher ist.
+Baue die AskUserQuestion auf Basis der STATUS.md-Tabelle:
 
-Baue dann die AskUserQuestion dynamisch auf Basis der Scan-Ergebnisse:
+- Für jede Zeile wo UX noch `–` ist: füge eine Option hinzu "Weiter mit [FEAT-ID] – [Feature Name] (UX fehlt noch)"
+- Immer verfügbar: "Alle Features abgedeckt – weiter zu /red:proto-architect"
+- Immer verfügbar: "Dieses Feature komplett: direkt zu /red:proto-architect für FEAT-[X]"
 
-- Für jedes Feature das noch **keinen UX-Status** hat: füge eine Option hinzu "Weiter mit [FEAT-ID] – [Feature Name] (UX fehlt noch)"
-- Immer verfügbar: "Alle Features abgedeckt – weiter zu /red:proto-architect" (auch wenn noch Features offen sind – der User entscheidet)
-- Immer verfügbar: "Dieses Feature jetzt komplett durcharbeiten – direkt zu /red:proto-architect für [aktuelles Feature]"
-
-Rufe AskUserQuestion auf mit den ermittelten Optionen:
-
-```typescript
-AskUserQuestion({
-  questions: [
-    {
-      question: "UX für dieses Feature ist abgeschlossen. Wie möchtest du weitermachen?",
-      header: "Nächster Schritt",
-      options: [
-        // Dynamisch: eine Option pro Feature ohne UX-Status
-        // + die beiden fixen Optionen unten
-        { label: "Alle Features abgedeckt – weiter zu /red:proto-architect", description: "UX-Phase abschließen und technisches Design starten" },
-        { label: "Dieses Feature komplett: direkt zu /red:proto-architect für [aktuelles Feature]", description: "Kein Batch – dieses Feature von UX bis Dev durchziehen" }
-      ],
-      multiSelect: false
-    }
-  ]
-})
-```
+Rufe AskUserQuestion auf mit den ermittelten Optionen.
 
 **Bei Wahl "Weiter mit Feature X":** Starte sofort Phase 0 für das nächste Feature – kein neuer Command-Aufruf nötig.
 
-**Bei Wahl "Alle Features abgedeckt":** Sage dem User: "UX-Phase abgeschlossen. Nächster Schritt: `/red:proto-architect` – für jedes Feature der Reihe nach."
+**Bei Wahl "Alle Features abgedeckt":** Committe STATUS.md und sage: "UX-Phase abgeschlossen. Nächster Schritt: `/red:proto-architect` – für jedes Feature der Reihe nach."
 
-**Bei Wahl "Komplett durcharbeiten":** Sage dem User: "UX fertig. Nächster Schritt: `/red:proto-architect FEAT-[X]` direkt für dieses Feature."
+**Bei Wahl "Komplett durcharbeiten":** Committe STATUS.md und sage: "UX fertig. Nächster Schritt: `/red:proto-architect FEAT-[X]` direkt für dieses Feature."
+
+```bash
+git add features/STATUS.md features/FEAT-[X]-*.md flows/product-flows.md 2>/dev/null
+git commit -m "docs: FEAT-[X] ux design – [Feature Name]"
+git push
+```
