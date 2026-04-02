@@ -144,37 +144,58 @@ Danach noch fragen:
 AskUserQuestion({
   questions: [
     {
-      question: "Wie soll das GitHub-Repository heißen?",
-      header: "Repository-Name",
-      options: [
-        { label: "Ich gebe den Namen im Chat an", description: "Kurz, keine Leerzeichen (z.B. mein-projekt) – nur für GitHub, nicht der Code-Ordner" }
-      ],
-      multiSelect: false
-    },
-    {
       question: "In welchem Verzeichnis soll der Programm-Code liegen?",
       header: "Code-Verzeichnis",
       options: [
         { label: "projekt/", description: "Standard – neuer Ordner im Framework-Root" },
         { label: "src/", description: "Klassisch für viele Frameworks" },
         { label: "app/", description: "Üblich bei Django, Laravel etc." },
-        { label: "Anderer Name", description: "Ich gebe den Namen im Chat an" }
-      ],
-      multiSelect: false
-    },
-    {
-      question: "Soll ein GitHub-Repository angelegt werden?",
-      header: "GitHub",
-      options: [
-        { label: "Ja, privat (private)", description: "Empfohlen – nur du siehst das Repo" },
-        { label: "Ja, öffentlich (public)", description: "Für Open-Source oder öffentliche Projekte" },
-        { label: "Nein, nur lokal", description: "Git lokal, kein GitHub" }
+        { label: "Anderer Name – ich nenne ihn im Chat", description: "Beliebiger Verzeichnisname" }
       ],
       multiSelect: false
     }
   ]
 })
 ```
+
+Warte auf Antwort. Falls "Anderer Name": nachfragen im Chat.
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Soll ein GitHub-Repository angelegt werden?",
+      header: "GitHub Repository",
+      options: [
+        { label: "Ja, privat", description: "Empfohlen – nur du siehst das Repo" },
+        { label: "Ja, öffentlich", description: "Für Open-Source oder öffentliche Projekte" },
+        { label: "Nein, nur lokal", description: "Git lokal einrichten, kein GitHub" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
+Falls GitHub gewünscht:
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Wie soll das GitHub-Repository heißen?",
+      header: "Repository-Name",
+      options: [
+        { label: "Produktname in Kleinbuchstaben", description: "z.B. mein-projekt – empfohlen, klar und einprägsam" },
+        { label: "Anderer Name – ich nenne ihn im Chat", description: "Eigener Name, keine Leerzeichen, Bindestriche statt Unterstriche" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
+Warte auf Antwort. Falls "Anderer Name": nachfragen im Chat.
 
 Falls GitHub Ja:
 

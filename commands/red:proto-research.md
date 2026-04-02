@@ -152,7 +152,109 @@ Gute Forschungsfragen sind:
 - Verhaltensbezogen, nicht meinungsbezogen
 - Relevant für Produkt-Entscheidungen
 
-Präsentiere 5–8 Forschungsfragen zur Diskussion. Frage den User ob etwas fehlt oder falsch priorisiert ist.
+Entwickle 5–8 Forschungsfragen. Nummeriere sie klar (1. / 2. / ...) und präsentiere sie im Chat.
+
+Frage den User ob etwas fehlt oder falsch priorisiert ist – passe die Liste an bis sie stimmt.
+
+## Phase 3b: Beantwortung der Forschungsfragen
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Die Forschungsfragen sind bereit. Wie möchtest du vorgehen?",
+      header: "Research-Methode",
+      options: [
+        {
+          label: "Jetzt interaktiv beantworten",
+          description: "Ich führe dich Frage für Frage durch – du antwortest direkt im Chat auf Basis deiner Annahmen, Erfahrungen oder vorhandenem Wissen"
+        },
+        {
+          label: "Pause – echten Research durchführen",
+          description: "Ich speichere die offenen Fragen. Du führst Interviews, Umfragen oder Beobachtungen durch und rufst /red:proto-research danach erneut auf"
+        }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
+**Bei "Pause – echten Research durchführen":**
+
+Speichere die Forschungsfragen in `research/research-questions.md`:
+
+```markdown
+# Forschungsfragen
+*Erstellt von: /red:proto-research — [Datum]*
+*Status: Offen – noch nicht beantwortet*
+
+## Offene Fragen
+
+1. [Frage 1]
+2. [Frage 2]
+...
+
+## Methoden-Empfehlung
+- Nutzerinterviews (30–45 min, 3–5 Teilnehmer)
+- Kontextuelle Beobachtung wenn möglich
+- Kurze Online-Umfrage für quantitative Einschätzung
+
+## Nächster Schritt
+Beantworte diese Fragen durch echten User Research.
+Danach: `/red:proto-research` erneut aufrufen – ich verarbeite deine Antworten.
+```
+
+Dann stoppen und dem User sagen:
+```
+Forschungsfragen gespeichert in research/research-questions.md.
+
+Führe deinen Research durch (Interviews, Umfragen, Beobachtungen) und trage
+die Antworten direkt in die Datei ein – oder beschreibe sie mir beim nächsten Aufruf.
+
+Wenn du fertig bist: /red:proto-research erneut aufrufen.
+```
+
+**Bei "Jetzt interaktiv beantworten":**
+
+Gehe jede Frage einzeln durch. Stelle eine Frage im Chat und warte auf die Antwort bevor du zur nächsten gehst:
+
+```
+Frage 1 von [N]:
+[Vollständiger Fragetext]
+
+(Deine Antwort kann eine Vermutung, eine Beobachtung oder eine Erfahrung sein –
+kein perfektes Research nötig, wir arbeiten mit dem was du weißt)
+```
+
+Sammle alle Antworten. Speichere danach `research/research-questions.md`:
+
+```markdown
+# Forschungsfragen & Antworten
+*Erstellt von: /red:proto-research — [Datum]*
+*Status: Interaktiv beantwortet (Hypothesen)*
+
+## Fragen & Antworten
+
+### 1. [Frage 1]
+**Antwort:** [Antwort des Users]
+
+### 2. [Frage 2]
+**Antwort:** [Antwort des Users]
+
+...
+
+## Hinweis
+Diese Antworten basieren auf Annahmen und Hypothesen, nicht auf echtem User Research.
+Sie sind ein valider Ausgangspunkt – können aber durch spätere echte Interviews ergänzt werden.
+```
+
+Danach dem User mitteilen:
+```
+Antworten gespeichert. Weiter mit Phase 4 – Problem Statement Map.
+```
+
+Und direkt mit Phase 4 fortfahren.
 
 ## Phase 4: Problem Statement Map erstellen
 

@@ -64,6 +64,52 @@ mkdir -p design-system/screens
 [ ! -f project-config.md ] && mkdir -p projekt
 ```
 
+**Schritt 2b – Terminal-Permissions einrichten (.claude/settings.json):**
+
+Damit du nicht bei jedem Bash-, Git- oder Node-Befehl manuell zustimmen musst, werden die Permissions einmalig gesetzt.
+
+**Wichtig:** Falls bereits eine `.claude/settings.json` existiert (z.B. durch MCP-Einstellungen), wird sie **erweitert**, nicht überschrieben.
+
+```bash
+if [ -f .claude/settings.json ]; then
+  echo "settings.json existiert bereits – wird erweitert"
+  cat .claude/settings.json
+else
+  echo "Keine settings.json vorhanden – wird neu erstellt"
+fi
+```
+
+Wenn die Datei **nicht existiert**: erstelle `.claude/settings.json` mit folgendem Inhalt:
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Grep(*)"
+    ],
+    "deny": []
+  }
+}
+```
+
+Wenn die Datei **bereits existiert**: lies sie vollständig, prüfe ob ein `permissions`-Block vorhanden ist:
+- Falls **kein** `permissions`-Block → füge ihn zum bestehenden JSON hinzu (JSON korrekt mergen, alle anderen Felder erhalten)
+- Falls `permissions`-Block **bereits vorhanden** → nichts ändern, dem User mitteilen dass Permissions bereits konfiguriert sind
+
+Zeige dem User danach den aktuellen Stand der settings.json:
+```
+✅ Terminal-Permissions gesetzt – du wirst nicht mehr bei jedem Befehl gefragt.
+   Bash, Git, Read, Write und Edit sind für dieses Projekt vorab genehmigt.
+   (Konfiguriert in .claude/settings.json – jederzeit anpassbar)
+```
+
+---
+
 **Schritt 3a – Nur fehlende Dateien kopieren** (Modus: "Nur fehlende"):
 
 ```bash
