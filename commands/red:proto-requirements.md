@@ -114,6 +114,18 @@ Schreibe die vollständige Spec direkt. Zeige sie im Chat bevor du speicherst.
 
 ## Phase 6: Feature Spec schreiben
 
+Vor dem Schreiben: Fix-Schwelle aus Scope-Typ in `prd.md` ableiten:
+
+```bash
+SCOPE=$(grep -A1 "## Scope-Typ" prd.md 2>/dev/null | tail -1 | xargs)
+echo "Erkannter Scope-Typ: $SCOPE"
+# Mapping:
+# "Klickbarer Prototyp"       → Fix-Schwelle: Critical
+# "Funktionierender Prototyp" → Fix-Schwelle: Critical, High
+# "Produktionsreifes MVP"     → Fix-Schwelle: Critical, High, Medium
+# Kein Scope / Unklar         → Fix-Schwelle: Critical, High  (Fallback)
+```
+
 Datei: `/features/FEAT-X-feature-name.md`
 
 ```markdown
@@ -121,6 +133,7 @@ Datei: `/features/FEAT-X-feature-name.md`
 
 ## Status
 Aktueller Schritt: Spec
+Fix-Schwelle: [Critical | Critical, High | Critical, High, Medium]
 
 ## Abhängigkeiten
 - Benötigt: FEAT-Y (Name) – Grund  [oder: Keine]
@@ -233,8 +246,3 @@ Falls ein Feature während der Spec-Phase gecancelt oder als nicht-realisierbar 
 - [ ] FEAT-X ID vergeben, kein Duplikat
 - [ ] Status auf "Spec" gesetzt
 - [ ] User hat approved
-- [ ] **Edge-State-Feedback vollständig?** Für jede nicht-offensichtliche Zustandsänderung ist definiert was der Nutzer sieht:
-  - Datenverlust oder -korruption → welches Feedback? (Banner, Toast, Modal?)
-  - Automatische Aktionen im Hintergrund (Speichern, Sync, Reset) → sichtbar für den Nutzer?
-  - Teilweise fehlgeschlagene Operationen → wie kommuniziert?
-  - Leerer Zustand nach Filterung/Fehler → erklärender Text oder nur leere Fläche?

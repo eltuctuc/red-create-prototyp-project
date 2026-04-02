@@ -46,29 +46,6 @@ cat design-system/patterns/*.md 2>/dev/null
 
 **Wichtig – Codeverzeichnis:** Entnimm den konfigurierten Pfad aus `project-config.md` (Feld `Codeverzeichnis:`). Standard ist `projekt/`, kann aber `src/`, `.` oder ein anderer Pfad sein. Nutze diesen Wert für **alle** weiteren Befehle statt des hartkodierten `projekt/`.
 
-## Phase 1.6: A11y-Architektur-Plan
-
-Lies den A11y-Architektur-Abschnitt aus dem Tech-Design (`## 3. Technisches Design → A11y-Architektur`).
-
-Falls kein A11y-Architektur-Abschnitt existiert: Erstelle ihn selbst aus dem UX-Abschnitt:
-
-| Element | ARIA-Pattern | Geplant |
-|---------|-------------|---------|
-| Haupt-Container | Landmark? | ... |
-| Listen / Grids | aria-label eindeutig? | ... |
-| Live-Regions | Trigger: Aktion (nicht initialer Render!) | ... |
-| Fokus-Management | Nach Aktion X → Fokus auf Y? | ... |
-
-**Dann prüfen ob diese ARIA-Werte bereits im Projekt vergeben sind:**
-
-```bash
-grep -r "role=" [Codeverzeichnis]/ --include="*.tsx" --include="*.vue" --include="*.svelte" 2>/dev/null
-grep -r "aria-label=" [Codeverzeichnis]/ --include="*.tsx" --include="*.vue" --include="*.svelte" 2>/dev/null
-grep -r "aria-live\|role=\"status\"\|role=\"alert\"" [Codeverzeichnis]/ --include="*.tsx" --include="*.vue" 2>/dev/null
-```
-
-Doppelte Landmarks oder doppelte `aria-label`-Werte auf gleicher Ebene → jetzt auflösen, nicht nach der Implementierung.
-
 ## Phase 1.5: UX-Zustände als Implementierungs-Checkliste
 
 Lies Abschnitt `## 2. UX Entscheidungen` im Feature-File und extrahiere ALLE beschriebenen Zustände, Interaktionsmuster und Feedback-Anforderungen in eine interne Checkliste:
@@ -88,15 +65,6 @@ Jede Zeile muss vor Phase 5 abgehakt sein. Wer A11y und States als "Frontend-Pri
 > "Abschnitt '3. Technisches Design' fehlt in FEAT-[ID].md. Bitte zuerst `/red:proto-architect` ausführen."
 
 **Guard 2 – Abhängigkeiten prüfen:** Lies den Abschnitt `## Abhängigkeiten` im Feature-File.
-
-**Guard 3 – Offene Bugs aus anderen Features:**
-
-```bash
-# Offene Bugs aus ALLEN Features (nicht nur dem aktuellen):
-ls bugs/ 2>/dev/null | grep -v "\-fixed" | grep -v "FEAT-\[ID\]"
-```
-
-Wenn offene Bugs aus anderen Features existieren: Informiere den User und frage ob diese zuerst gefixt werden sollen – offene Bugs können als Regression in das neue Feature wandern. Der User entscheidet bewusst ob er weitermacht oder zuerst fixt.
 
 ```bash
 # Für jede gelistete Abhängigkeit (FEAT-Y):
@@ -209,17 +177,32 @@ Dann weiter mit Phase 4.
 
 ## Phase 4: Bug-Fixes (falls offene Bugs vorhanden)
 
-```bash
-ls bugs/ 2>/dev/null
-```
-
-Nur offene Bugs bearbeiten (Dateien ohne `-fixed` im Namen):
+**Schritt 1 – Fix-Schwelle lesen:**
 
 ```bash
-ls bugs/ 2>/dev/null | grep "FEAT-[ID]" | grep -v "\-fixed"
+SCHWELLE=$(grep "^Fix-Schwelle:" features/FEAT-[ID].md | sed 's/Fix-Schwelle: //')
+echo "Fix-Schwelle: $SCHWELLE"
+# Beispiel: "Critical, High" → nur Bugs mit Severity Critical oder High werden gefixt
 ```
 
-Für jeden offenen Bug:
+**Schritt 2 – Offene Bugs nach Schwelle filtern:**
+
+```bash
+echo "=== Zu fixende Bugs (innerhalb Fix-Schwelle: $SCHWELLE) ==="
+for BUG in bugs/BUG-FEAT[ID]-*.md; do
+  [[ "$BUG" == *"-fixed"* ]] && continue
+  SEV=$(grep "\*\*Severity:\*\*" "$BUG" | head -1 | sed 's/.*Severity:\*\* //')
+  if echo "$SCHWELLE" | grep -q "$SEV"; then
+    echo "→ FIX: $BUG ($SEV)"
+  else
+    echo "→ SKIP (unterhalb Schwelle): $BUG ($SEV)"
+  fi
+done
+```
+
+Nur Bugs mit `→ FIX` bearbeiten. Bugs mit `→ SKIP` bleiben offen – kein Fix, kein Rename.
+
+Für jeden zu fixenden Bug:
 
 1. Bug-File lesen: `cat bugs/BUG-FEAT[X]-[TYPE]-[NNN].md`
 2. Fix implementieren
@@ -241,28 +224,6 @@ grep -r "[geänderter Funktionsname]" [Codeverzeichnis]/ --include="*.tsx" --inc
 - Alle Importeure der geänderten Funktion identifiziert und geprüft?
 - Reaktive Abhängigkeiten die von geänderten Werten abhängen identifiziert?
 - Kein Fix der lokal korrekt ist, aber an anderer Stelle eine unbeabsichtigte Neuauslösung (Re-Trigger, Reconnect, Re-Fetch) erzeugt?
-
-**Fix-Propagation-Check nach CSS/Token/Pattern-Fixes (PFLICHT):**
-
-Wenn ein Fix einen hardcodierten Wert durch einen Token ersetzt oder ein CSS-Pattern korrigiert:
-```bash
-# Gleichen hardcodierten Wert an anderen Stellen suchen:
-grep -r "[korrigierter Wert, z.B. '150ms'\|'32px'\|'#3B82F6']" [Codeverzeichnis]/ --include="*.css" --include="*.tsx" --include="*.vue" --include="*.svelte" 2>/dev/null
-
-# Gleiches fehlendes Pattern suchen (z.B. fehlende prefers-reduced-motion):
-grep -rL "prefers-reduced-motion" [Codeverzeichnis]/ --include="*.css" 2>/dev/null
-```
-
-Wenn dieselbe Lücke an anderen Stellen gefunden wird → **alle Stellen im gleichen Fix beheben**, nicht nur die gemeldete. Neuen Bug-Eintrag nur wenn der Scope des aktuellen Fixes überschritten wird.
-
-**Regressions-Test nach jedem Fix (PFLICHT):**
-
-```bash
-# Alle Tests für dieses Feature laufen lassen:
-npm test -- --testPathPattern="[feature-name]" 2>/dev/null || npx vitest run [feature-name] 2>/dev/null
-```
-
-Wenn Tests nach dem Fix rot sind → Fix ist unvollständig. Nicht umbenennen zu `-fixed.md` bevor Tests grün sind.
 
 Nach allen Fixes: committen und pushen:
 
@@ -308,25 +269,7 @@ Lies den konfigurierten Stack aus `project-config.md` und wende diese universell
 
 Wende diese Checks mit den Mustern und APIs an, die für den konfigurierten Stack gelten.
 
-### E – CSS-Conflict-Check (nach jeder Komponente mit interaktiven Elementen)
-- [ ] Hat ein Vorfahren-Element `overflow:hidden`, `clip-path` oder `clip`? → Touch-Target (min. 44px) und Focus-Ring betroffen?
-- [ ] Hat ein Vorfahren-Element `transform` oder `filter`? → `position:fixed` Elemente darin verhalten sich unerwartet
-- [ ] CSS-Transitions auf `border-width` oder `outline`? → können Focus-Ring-Übergänge brechen
-
-```bash
-grep -r "overflow.*hidden\|clip-path\|clip:" [Codeverzeichnis]/ --include="*.css" --include="*.vue" --include="*.tsx" 2>/dev/null
-```
-
-### F – Test-Existenz-Guard (PFLICHT vor Phase 5)
-```bash
-# Test-Files für dieses Feature prüfen:
-ls [Codeverzeichnis]/[Test-Pfad aus project-config.md]/ 2>/dev/null | grep -i "[feature-name]\|feat"
-```
-- [ ] Test-Files für dieses Feature vorhanden?
-
-Wenn keine Test-Files gefunden → **stopp**. Tests zuerst schreiben gemäß Test-Setup aus `## 3. Technisches Design → Test-Setup`. Kein Review-Checkpoint ohne Tests.
-
-### G – Bug-Fix Ripple (nur wenn Bugs gefixed wurden)
+### E – Bug-Fix Ripple (nur wenn Bugs gefixed wurden)
 Bereits abgedeckt in Phase 4 – Ripple-Effekt-Check. Hier bestätigen:
 - [ ] Ripple-Check für alle geänderten Module durchgeführt?
 

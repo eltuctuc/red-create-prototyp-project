@@ -39,7 +39,6 @@ Agent("qa-engineer", {
   prompt: `Führe ein technisches QA-Review für FEAT-[ID] durch.
   Lies: features/FEAT-[ID].md
   Lies: project-config.md
-  Codeverzeichnis: [Wert aus project-config.md → Codeverzeichnis]
   Bestehende Bugs: ls bugs/
   Git-Änderungen: git diff --name-only HEAD~1
   Befolge die Anweisungen aus .claude/agents/qa-engineer.md
@@ -49,8 +48,6 @@ Agent("qa-engineer", {
 Agent("ux-reviewer", {
   prompt: `Führe ein UX-Review für FEAT-[ID] durch.
   Lies: features/FEAT-[ID].md (besonders Abschnitt 2: UX)
-  Lies: project-config.md
-  Codeverzeichnis: [Wert aus project-config.md → Codeverzeichnis]
   Lies: research/personas.md falls vorhanden
   Befolge die Anweisungen aus .claude/agents/ux-reviewer.md
   Schreibe Bug-Files nach bugs/ (Naming: BUG-FEAT[ID]-UX-001.md, BUG-FEAT[ID]-UX-002.md etc.)`
@@ -93,38 +90,6 @@ Severity-Definition:
 
 Im Feature-File (`## 5. QA Ergebnisse`) nur die Bug-IDs referenzieren, nicht den vollen Report.
 
-## Phase 3b: Deduplizierung und Konflikt-Detektion
-
-**Bevor** die konsolidierte Übersicht erstellt wird:
-
-**Schritt 1 – Duplikate erkennen:**
-```bash
-ls bugs/BUG-FEAT[ID]-QA-*.md bugs/BUG-FEAT[ID]-UX-*.md 2>/dev/null
-```
-Vergleiche alle neuen Bug-Files auf: gleiche betroffene Datei + gleiche Zeile/Element + gleicher Fehlertyp.
-Wenn Duplikat gefunden → die ausführlichere Beschreibung behalten, die andere löschen und in der Übersicht als "zusammengeführt" markieren.
-
-**Schritt 2 – Konflikte erkennen:**
-Wenn QA-Agent und UX-Reviewer entgegengesetzte Empfehlungen für dasselbe Element geben (z.B. QA: "aria-required entfernen" vs. UX: "aria-required hinzufügen"):
-→ **Nicht** beide Bug-Files stehen lassen
-→ Konflikt explizit im Abschnitt `## 5. QA Ergebnisse → Konflikte` dokumentieren
-→ User zur Entscheidung auffordern **bevor** `/red:proto-dev` mit den Fixes startet:
-
-```typescript
-AskUserQuestion({
-  questions: [{
-    question: "Widersprüchliche Empfehlungen für [Element]: QA sagt [X], UX sagt [Y]. Welche Richtung?",
-    header: "Konflikt: [Element]",
-    options: [
-      { label: "QA-Empfehlung umsetzen", description: "[QA-Begründung]" },
-      { label: "UX-Empfehlung umsetzen", description: "[UX-Begründung]" },
-      { label: "Kompromiss – ich erkläre im Chat", description: "" }
-    ],
-    multiSelect: false
-  }]
-})
-```
-
 ## Phase 4: Ergebnisse zusammenführen
 
 Erstelle eine konsolidierte Übersicht aller gefundenen Bugs (aus beiden Agents):
@@ -137,24 +102,127 @@ Erstelle eine konsolidierte Übersicht aller gefundenen Bugs (aus beiden Agents)
 | BUG-FEAT[X]-002 | ... | Medium | UX | UX Reviewer |
 ```
 
-## Phase 5: User-Review und Bug-Priorisierung
+## Phase 5: Fix-Schwelle prüfen und ggf. anpassen
+
+**Schritt 1 – Fix-Schwelle und Folge-Run-Status lesen:**
+
+```bash
+SCHWELLE=$(grep "^Fix-Schwelle:" features/FEAT-[ID].md | sed 's/Fix-Schwelle: //')
+echo "Aktuelle Fix-Schwelle: $SCHWELLE"
+
+# Offene Bugs nach Severity zählen:
+for SEV in Critical High Medium Low; do
+  COUNT=$(ls bugs/ 2>/dev/null | grep "FEAT-[ID]" | grep -v "\-fixed" | xargs -I{} grep -l "Severity:.*$SEV" bugs/{} 2>/dev/null | wc -l | xargs)
+  echo "$SEV: $COUNT offen"
+done
+
+# Folge-Run erkennen: wurde "Fix-Schwelle bestätigt" schon ins Feature-File geschrieben?
+FOLGE_RUN=$(grep -c "Fix-Schwelle bestätigt" features/FEAT-[ID].md 2>/dev/null || echo "0")
+echo "Folge-Run: $FOLGE_RUN"
+```
+
+---
+
+**Schritt 2a – Erster QA-Run: Schwelle bestätigen oder überschreiben**
+
+Nur wenn `FOLGE_RUN` = 0:
 
 ```typescript
 AskUserQuestion({
   questions: [
     {
-      question: "X Bugs gefunden (Y von QA Engineer, Z von UX Reviewer). Wie soll priorisiert werden?",
-      header: "Bug-Priorisierung",
+      question: `Fix-Schwelle (aus Scope-Typ gesetzt): ${SCHWELLE} – alle Bugs auf dieser Stufe oder höher werden von /red:proto-dev gefixt. Anpassen?`,
+      header: "Fix-Schwelle bestätigen",
       options: [
-        { label: "Alle Critical + High sofort fixen", description: "Empfohlen" },
-        { label: "Nur Criticals sofort, Rest im nächsten Sprint", description: "" },
-        { label: "Wir besprechen Bug für Bug", description: "" }
+        { label: "Critical", description: "Nur show-stopper" },
+        { label: "High", description: "Kernfunktionalität muss sauber sein" },
+        { label: "Medium", description: "Auch eingeschränkte Nutzbarkeit und A11y-Probleme" },
+        { label: "Low", description: "Alle Bugs inklusive Edge-Cases und Optik" }
+      ],
+      multiSelect: true
+    }
+  ]
+})
+```
+
+Gewählte Levels = neue Fix-Schwelle. In Feature-File aktualisieren und Bestätigung vermerken:
+
+```bash
+# Fix-Schwelle aktualisieren:
+sed -i "s/^Fix-Schwelle: .*/Fix-Schwelle: [gewählte Levels, kommagetrennt]/" features/FEAT-[ID].md
+# Bestätigung vermerken (verhindert erneute Schwellen-Frage in Folge-Runs):
+echo "\nFix-Schwelle bestätigt: [Datum]" >> features/FEAT-[ID].md
+```
+
+---
+
+**Schritt 2b – Folge-Run (2. QA-Run und später): Fortfahren oder abbrechen**
+
+Nur wenn `FOLGE_RUN` > 0. Offene Bugs oberhalb der Schwelle auflisten:
+
+```bash
+echo "=== Offene Bugs oberhalb der Fix-Schwelle ($SCHWELLE) ==="
+for BUG in bugs/BUG-FEAT[ID]-*.md; do
+  [[ "$BUG" == *"-fixed"* ]] && continue
+  TITLE=$(grep "^# " "$BUG" | head -1)
+  SEV=$(grep "\*\*Severity:\*\*" "$BUG" | head -1)
+  echo "$TITLE | $SEV"
+done
+```
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: `Noch offene Bugs oberhalb der Fix-Schwelle (${SCHWELLE}). Wie weiter?`,
+      header: "Dev-QA-Loop",
+      options: [
+        { label: "Dev-Loop fortsetzen", description: "→ /red:proto-dev fixt die verbleibenden Bugs" },
+        { label: "Schwelle anpassen", description: "Fix-Schwelle neu setzen – danach erneut entscheiden" },
+        { label: "Loop beenden – restliche Bugs als Known Issues dokumentieren", description: "Bewusst zurückstellen und trotzdem releasen" }
       ],
       multiSelect: false
     }
   ]
 })
 ```
+
+**Bei "Schwelle anpassen":** Multiselect aus Schritt 2a erneut zeigen → Schwelle aktualisieren → erneut Schritt 2b.
+
+**Bei "Loop beenden":** Weiter mit Schritt 2c (Known Issues dokumentieren), dann direkt zu Phase 7.
+
+---
+
+**Schritt 2c – Loop-Abort: Known Issues erfassen und dokumentieren**
+
+```bash
+echo "=== Bewusst zurückgestellte Bugs ==="
+for BUG in bugs/BUG-FEAT[ID]-*.md; do
+  [[ "$BUG" == *"-fixed"* ]] && continue
+  grep -E "^# |\*\*Severity:\*\*|\*\*Bereich:\*\*" "$BUG"
+  echo "---"
+done
+```
+
+Ergänze im Feature-File unter `## 5. QA Ergebnisse`:
+
+```markdown
+### Bewusst zurückgestellte Bugs (Known Issues)
+*Loop manuell beendet am [Datum]*
+
+| Bug-ID | Titel | Severity | Bereich |
+|--------|-------|----------|---------|
+| BUG-FEAT[X]-[NNN] | [Titel] | [Severity] | [Bereich] |
+```
+
+`docs/releases.md` bekommt zusätzlich einen Abschnitt:
+
+```markdown
+### Known Issues
+- **BUG-FEAT[X]-[NNN]:** [Titel] *(Severity: [X] – bewusst zurückgestellt)*
+```
+
+Danach direkt weiter mit Phase 7 (Docs) und Phase 8 (Versionierung + Release-Commit) – ein Release mit Known Issues ist ein valider Release.
 
 ## Phase 6: Feature-File aktualisieren
 
@@ -183,36 +251,24 @@ Ergänze Abschnitt `## 5. QA Ergebnisse` in `features/FEAT-X.md`:
 - ❌ X Bugs (X Critical, X High, X Medium, X Low)
 
 ### Production-Ready
-✅ Ready | ❌ NOT Ready – Begründung
+✅ Ready | ⚠️ Ready with Known Issues | ❌ NOT Ready – Begründung
 ```
 
 ## Bug-Loop
 
-Nach Bug-Report und User-Priorisierung:
+Nach Bug-Report und Schwellen-Bestätigung (Phase 5):
 
-1. User ruft `/red:proto-dev` auf → Bugs fixen → Bug-Files umbenennen zu `BUG-FEAT[X]-[TYPE]-[NNN]-fixed.md`
+1. User ruft `/red:proto-dev` auf → fixt Bugs bis zur Fix-Schwelle → Bug-Files umbenennen zu `BUG-FEAT[X]-[TYPE]-[NNN]-fixed.md`
 2. User ruft `/red:proto-qa` erneut auf → beide Agents prüfen erneut (Regression + Retest der -fixed Bugs)
-3. Loop bis keine Critical/High Bugs mehr offen (nur Dateien ohne `-fixed` im Namen zählen als offen)
-
-**Beim erneuten QA-Durchlauf (Runde 2+): Regressions-Fokus explizit mitgeben:**
-
-```typescript
-Agent("qa-engineer", {
-  prompt: `Retest für FEAT-[ID] nach Bug-Fixes.
-  Neu gefixte Bugs: [Liste der umbenannten -fixed.md Files]
-  WICHTIG: Prüfe zusätzlich ob die Fixes neue Regressions eingeführt haben:
-  - Waren vorher grüne ACs noch grün?
-  - Haben sich CSS-Selektoren durch DOM-Änderungen verändert?
-  - Haben sich Event-Handler-Sequenzen durch neue State-Logik verändert?
-  Fokus: Sowohl fixe Bugs retesten als auch vorher bestehende Funktionalität prüfen.`
-})
-```
+3. In Phase 5 (Folge-Run): User entscheidet ob Loop weiterläuft oder beendet wird
+4. Loop endet wenn: keine offenen Bugs mehr oberhalb der Fix-Schwelle – oder User bricht bewusst ab
 
 **Production-Ready Entscheidung:**
-- ✅ **Ready:** Keine Critical oder High Bugs offen
-- ❌ **NOT Ready:** Mindestens ein Critical oder High Bug offen
+- ✅ **Ready:** Keine Bugs offen oberhalb der Fix-Schwelle
+- ⚠️ **Ready with Known Issues:** Loop manuell beendet – offene Bugs unterhalb Schwelle oder bewusst zurückgestellt (sind in `### Bewusst zurückgestellte Bugs` dokumentiert)
+- ❌ **NOT Ready:** Noch Bugs offen oberhalb der Fix-Schwelle und Loop läuft weiter
 
-## Phase 7: Docs aktualisieren (nur bei Production-Ready ✅)
+## Phase 7: Docs aktualisieren (bei Production-Ready ✅ oder ⚠️)
 
 ### 7a. `docs/produktfähigkeiten.md` ergänzen
 
