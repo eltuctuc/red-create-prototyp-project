@@ -98,22 +98,58 @@ Faustregel: Kann es unabhängig getestet werden? Hat es eine andere User-Rolle? 
 
 Bei Zweifel: aufteilen und begründen.
 
-## Phase 4: Feature verstehen
+## Phase 4: Feature verstehen – Frage für Frage
+
+Stelle jede Frage einzeln als separaten `AskUserQuestion`-Call. Nicht bündeln.
+
+**Frage 1 – Zielgruppe:**
+
+Lies zuerst vorhandene Personas:
+```bash
+cat research/personas.md 2>/dev/null | grep "^## Persona:"
+```
+
+Baue die Optionen dynamisch aus den gefundenen Personas auf. Immer zusätzlich anbieten:
+- "Alle Personas gleichwertig"
+- "Eigene Beschreibung – ich erkläre im Chat"
 
 ```typescript
 AskUserQuestion({
   questions: [
     {
-      question: "Welche Persona(s) nutzt dieses Feature primär?",
-      header: "Zielgruppe",
-      options: [] // Dynamisch befüllen aus /research/personas.md falls vorhanden
-      // Fallback: offene Frage im Chat
-    },
-    {
-      question: "Was ist der kritischste Acceptance Criterion – ohne den das Feature wertlos wäre?",
-      header: "Core AC",
+      question: "Welche Persona nutzt dieses Feature primär?",
+      header: "Zielgruppe für FEAT-[X]",
       options: [
-        { label: "Ich beschreibe es im Chat", description: "" }
+        // Aus research/personas.md befüllen, z.B.:
+        { label: "[Persona 1 Name]", description: "[Kontext der Persona]" },
+        { label: "[Persona 2 Name]", description: "[Kontext der Persona]" },
+        // Falls keine Personas vorhanden:
+        { label: "Endnutzer (allgemein)", description: "Keine spezifische Persona definiert" },
+        { label: "Alle Personas gleichwertig", description: "Dieses Feature ist für alle Nutzertypen relevant" },
+        { label: "Eigene Beschreibung", description: "Ich erkläre die Zielgruppe im Chat" }
+      ],
+      multiSelect: true
+    }
+  ]
+})
+```
+
+**Frage 2 – Kernwert:**
+
+Leite aus der Feature-Idee 3–4 konkrete Kandidaten für das wichtigste Acceptance Criterion ab. Formuliere sie als testbare Aussagen.
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Was ist das wichtigste Acceptance Criterion – ohne das dieses Feature wertlos wäre?",
+      header: "Kernwert FEAT-[X]",
+      options: [
+        // Konkret aus dem Feature-Kontext ableiten, z.B. für "Todo anlegen":
+        { label: "[AC-Kandidat 1 aus Feature-Kontext]", description: "z.B. 'Nutzer kann einen Todo-Eintrag erstellen und er erscheint sofort in der Liste'" },
+        { label: "[AC-Kandidat 2 aus Feature-Kontext]", description: "z.B. 'Todo wird nach App-Neustart noch angezeigt'" },
+        { label: "[AC-Kandidat 3 aus Feature-Kontext]", description: "z.B. 'Leerer Todo-Titel wird abgelehnt'" },
+        { label: "Eigene Formulierung", description: "Ich beschreibe das wichtigste Criterion im Chat" }
       ],
       multiSelect: false
     }
@@ -121,20 +157,67 @@ AskUserQuestion({
 })
 ```
 
-Stelle so lange Follow-up-Fragen bis du wirklich Klarheit über Scope, Nutzer und Kernwert hast.
-
-## Phase 5: Edge Cases klären
+**Frage 3 – Scope-Grenze:**
 
 ```typescript
 AskUserQuestion({
   questions: [
     {
-      question: "Was passiert bei [kritischstem Edge Case]?",
-      header: "Edge Case",
+      question: "Was ist explizit NICHT Teil dieses Features?",
+      header: "Out of Scope FEAT-[X]",
       options: [
-        { label: "Option A", description: "..." },
-        { label: "Option B", description: "..." },
-        { label: "Noch nicht entschieden", description: "Wir klären das" }
+        // Konkrete Abgrenzungen aus dem Feature-Kontext vorschlagen, z.B.:
+        { label: "[Scope-Grenze 1]", description: "z.B. 'Bearbeiten und Löschen von Todos – eigene Features'" },
+        { label: "[Scope-Grenze 2]", description: "z.B. 'Kategorien oder Tags – Version 2'" },
+        { label: "[Scope-Grenze 3]", description: "z.B. 'Synchronisation mit externen Diensten'" },
+        { label: "Eigene Abgrenzung", description: "Ich beschreibe es im Chat" },
+        { label: "Noch nicht klar", description: "Wir klären das beim Schreiben der Spec" }
+      ],
+      multiSelect: true
+    }
+  ]
+})
+```
+
+## Phase 5: Edge Cases klären – Frage für Frage
+
+Identifiziere zuerst 3–5 relevante Edge Cases aus dem Feature-Kontext. Dann stelle für jeden Edge Case eine **separate** `AskUserQuestion` – eine nach der anderen, nicht gebündelt.
+
+Für jeden Edge Case: formuliere 2–3 konkrete Verhaltensoptionen die tatsächlich sinnvoll sind, plus immer:
+- "Eigene Entscheidung – ich beschreibe es im Chat"
+- "Noch nicht entschieden – wir definieren das in der Spec"
+
+Beispiel für FEAT "Todo anlegen":
+
+```typescript
+// Edge Case 1
+AskUserQuestion({
+  questions: [
+    {
+      question: "Was passiert wenn der Nutzer einen leeren Todo-Titel speichern will?",
+      header: "Edge Case: Leerer Titel",
+      options: [
+        { label: "Speichern blockieren – Fehlermeldung direkt am Input", description: "Inline-Validierung, Button bleibt deaktiviert solange Titel leer" },
+        { label: "Speichern blockieren – Toast/Banner oben", description: "Nutzer klickt auf Speichern, bekommt Fehlermeldung als Nachricht" },
+        { label: "Leerzeichen trimmen und bei wirklich leer blockieren", description: "Nur Leerzeichen = ungültig, aber erst beim Submit prüfen" },
+        { label: "Eigene Entscheidung", description: "Ich beschreibe das gewünschte Verhalten im Chat" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+
+// Edge Case 2
+AskUserQuestion({
+  questions: [
+    {
+      question: "Was passiert wenn der Nutzer sehr langen Text eingibt (z.B. 500+ Zeichen)?",
+      header: "Edge Case: Maximallänge",
+      options: [
+        { label: "Harte Grenze – Input stoppt bei X Zeichen", description: "Nutzer kann nicht mehr tippen wenn Limit erreicht; Zeichenzähler anzeigen" },
+        { label: "Warnung – aber Speichern erlaubt", description: "Roter Counter unter dem Input, Speichern bleibt möglich" },
+        { label: "Kein Limit – alles erlaubt", description: "Kein Maximum, Layout muss langen Text abfangen" },
+        { label: "Eigene Entscheidung", description: "Ich beschreibe das gewünschte Verhalten im Chat" }
       ],
       multiSelect: false
     }
@@ -142,7 +225,7 @@ AskUserQuestion({
 })
 ```
 
-Identifiziere mindestens 3–5 Edge Cases. Stelle für jeden unklar gebliebenen eine gezielte Frage.
+Generiere alle Edge-Case-Fragen kontextspezifisch aus dem Feature – nie generische Platzhalter verwenden.
 
 ## Phase 6: Feature Spec schreiben
 
