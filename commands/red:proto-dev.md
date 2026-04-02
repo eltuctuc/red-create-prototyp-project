@@ -242,6 +242,28 @@ grep -r "[geänderter Funktionsname]" [Codeverzeichnis]/ --include="*.tsx" --inc
 - Reaktive Abhängigkeiten die von geänderten Werten abhängen identifiziert?
 - Kein Fix der lokal korrekt ist, aber an anderer Stelle eine unbeabsichtigte Neuauslösung (Re-Trigger, Reconnect, Re-Fetch) erzeugt?
 
+**Fix-Propagation-Check nach CSS/Token/Pattern-Fixes (PFLICHT):**
+
+Wenn ein Fix einen hardcodierten Wert durch einen Token ersetzt oder ein CSS-Pattern korrigiert:
+```bash
+# Gleichen hardcodierten Wert an anderen Stellen suchen:
+grep -r "[korrigierter Wert, z.B. '150ms'\|'32px'\|'#3B82F6']" [Codeverzeichnis]/ --include="*.css" --include="*.tsx" --include="*.vue" --include="*.svelte" 2>/dev/null
+
+# Gleiches fehlendes Pattern suchen (z.B. fehlende prefers-reduced-motion):
+grep -rL "prefers-reduced-motion" [Codeverzeichnis]/ --include="*.css" 2>/dev/null
+```
+
+Wenn dieselbe Lücke an anderen Stellen gefunden wird → **alle Stellen im gleichen Fix beheben**, nicht nur die gemeldete. Neuen Bug-Eintrag nur wenn der Scope des aktuellen Fixes überschritten wird.
+
+**Regressions-Test nach jedem Fix (PFLICHT):**
+
+```bash
+# Alle Tests für dieses Feature laufen lassen:
+npm test -- --testPathPattern="[feature-name]" 2>/dev/null || npx vitest run [feature-name] 2>/dev/null
+```
+
+Wenn Tests nach dem Fix rot sind → Fix ist unvollständig. Nicht umbenennen zu `-fixed.md` bevor Tests grün sind.
+
 Nach allen Fixes: committen und pushen:
 
 ```bash

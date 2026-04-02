@@ -223,3 +223,8 @@ Falls ein Feature während der Spec-Phase gecancelt oder als nicht-realisierbar 
 - [ ] FEAT-X ID vergeben, kein Duplikat
 - [ ] Status auf "Spec" gesetzt
 - [ ] User hat approved
+- [ ] **Edge-State-Feedback vollständig?** Für jede nicht-offensichtliche Zustandsänderung ist definiert was der Nutzer sieht:
+  - Datenverlust oder -korruption → welches Feedback? (Banner, Toast, Modal?)
+  - Automatische Aktionen im Hintergrund (Speichern, Sync, Reset) → sichtbar für den Nutzer?
+  - Teilweise fehlgeschlagene Operationen → wie kommuniziert?
+  - Leerer Zustand nach Filterung/Fehler → erklärender Text oder nur leere Fläche?

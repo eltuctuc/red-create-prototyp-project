@@ -35,6 +35,74 @@ for f in $(ls -t bugs/*-fixed.md 2>/dev/null | head -5); do echo "=== $f ==="; c
 Bestehende Infrastruktur kennen, bevor neue designed wird – Wiederverwendung vor Neubau.
 Bug-History kennen um bekannte Patterns (z.B. falsch getriggerte Live-Regions, CSS-Konflikte) nicht zu wiederholen.
 
+## Phase 1b: State-Komplexitäts-Check
+
+Lies die Feature Spec und prüfe ob eines dieser Muster vorkommt:
+
+```
+□ Edit-Modus: Nutzer kann einen Wert inline bearbeiten und speichern/abbrechen
+□ Multi-Step: Formular oder Wizard mit mehreren Schritten
+□ Optimistic Update: UI ändert sich sofort, Server-Antwort kommt später
+□ Race Condition möglich: mehrere Events können denselben State treffen (blur + enter, click + keydown)
+□ Fokus-Management nach DOM-Mutation: Elemente werden ein-/ausgeblendet und Fokus muss übergeben werden
+□ Parallele Subscriptions: mehrere Event-Listener oder reaktive Quellen schreiben auf denselben State
+```
+
+**Wenn 2 oder mehr Punkte zutreffen → State Machine Pflicht:**
+
+Füge dem Tech-Design-Abschnitt ein verbindliches State-Diagramm hinzu:
+
+```markdown
+### State Machine
+[Pflicht wenn State-Komplexität ≥ 2 der oben genannten Muster]
+
+States: [idle | editing | saving | error | ...]
+Events: [EDIT_START | EDIT_SAVE | EDIT_CANCEL | SAVE_SUCCESS | SAVE_ERROR | ...]
+
+Transitionen:
+idle      + EDIT_START  → editing
+editing   + EDIT_SAVE   → saving
+editing   + EDIT_CANCEL → idle
+saving    + SAVE_SUCCESS → idle
+saving    + SAVE_ERROR  → error
+error     + RETRY       → saving
+error     + DISMISS     → idle
+
+Implementierungshinweis: useReducer oder XState statt useState+useEffect-Kaskaden.
+useEffect darf NICHT auf State-Variablen reagieren die selbst durch den Effekt gesetzt werden.
+```
+
+**Wenn weniger als 2 Punkte zutreffen:** Kurze Notiz im Tech-Design: "State-Komplexität geprüft – kein State Machine erforderlich."
+
+## Phase 1c: Externe-Daten-Validation-Check
+
+Prüfe ob das Feature Daten aus externen Quellen liest:
+
+```
+□ localStorage / sessionStorage
+□ API-Response (fetch, axios, etc.)
+□ URL-Parameter / Query-Strings
+□ File-Upload / Clipboard
+□ Third-Party-Daten (Webhooks, Feeds)
+```
+
+**Wenn eine Quelle betroffen ist → Validation-Strategie Pflicht im Tech-Design:**
+
+```markdown
+### Daten-Validation
+[Pflicht wenn externe Daten gelesen werden]
+
+Quelle: [localStorage | API | URL-Param | ...]
+Risiko: TypeScript-Types bieten KEINEN Runtime-Schutz. `as Task[]` nach JSON.parse erzeugt keine Fehlermeldung wenn die Struktur falsch ist.
+
+Validation-Strategie:
+- Existenz-Check: Ist der Wert null/undefined?
+- Typ-Check: Ist es ein Array / Objekt / String?
+- Struktur-Check: Hat jedes Objekt die erwarteten Felder? (Array.isArray + .every(item => 'id' in item && 'title' in item))
+- Fallback: Was passiert wenn Validation fehlschlägt? [Reset / Fehler anzeigen / Default-Wert]
+- Nutzer-Feedback: Bekommt der Nutzer Feedback bei Datenverlust oder -korruption?
+```
+
 ## Phase 2: Klärungsfragen (nur wenn nötig)
 
 Nur fragen, was wirklich unklar ist:
@@ -167,5 +235,7 @@ Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."
 - [ ] Test-Setup definiert (was wird wie getestet)
 - [ ] Test-Infrastruktur spezifiziert (Mocks, Environment, Cleanup-Patterns)
 - [ ] A11y-Architektur geplant (Landmarks, Live-Regions, Fokus-Management)
+- [ ] State-Komplexität geprüft – State Machine falls ≥ 2 Muster zutreffen
+- [ ] Externe Daten-Quellen: Validation-Strategie definiert (nicht nur TypeScript-Types)
 - [ ] Dependencies aufgelistet
 - [ ] User hat approved

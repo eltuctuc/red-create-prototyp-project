@@ -194,6 +194,20 @@ Nach Bug-Report und User-Priorisierung:
 2. User ruft `/red:proto-qa` erneut auf → beide Agents prüfen erneut (Regression + Retest der -fixed Bugs)
 3. Loop bis keine Critical/High Bugs mehr offen (nur Dateien ohne `-fixed` im Namen zählen als offen)
 
+**Beim erneuten QA-Durchlauf (Runde 2+): Regressions-Fokus explizit mitgeben:**
+
+```typescript
+Agent("qa-engineer", {
+  prompt: `Retest für FEAT-[ID] nach Bug-Fixes.
+  Neu gefixte Bugs: [Liste der umbenannten -fixed.md Files]
+  WICHTIG: Prüfe zusätzlich ob die Fixes neue Regressions eingeführt haben:
+  - Waren vorher grüne ACs noch grün?
+  - Haben sich CSS-Selektoren durch DOM-Änderungen verändert?
+  - Haben sich Event-Handler-Sequenzen durch neue State-Logik verändert?
+  Fokus: Sowohl fixe Bugs retesten als auch vorher bestehende Funktionalität prüfen.`
+})
+```
+
 **Production-Ready Entscheidung:**
 - ✅ **Ready:** Keine Critical oder High Bugs offen
 - ❌ **NOT Ready:** Mindestens ein Critical oder High Bug offen
