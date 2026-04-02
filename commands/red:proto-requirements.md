@@ -98,61 +98,19 @@ Faustregel: Kann es unabhängig getestet werden? Hat es eine andere User-Rolle? 
 
 Bei Zweifel: aufteilen und begründen.
 
-## Phase 4: Feature verstehen – Frage für Frage
+## Phase 4: Spec autonom erstellen
 
-Jede Frage ist ein **eigener** AskUserQuestion-Call. Warte auf Antwort bevor du zur nächsten gehst.
+Leite aus PRD, Research und Feature-Beschreibung selbstständig ab:
+- **Zielgruppe:** Welche Persona(s) aus `research/personas.md` nutzen dieses Feature? Falls kein Research: aus PRD ableiten.
+- **Kernwert:** Was ist das wichtigste Acceptance Criterion – ohne das das Feature wertlos wäre?
+- **Out of Scope:** Was ist bewusst nicht Teil dieses Features (naheliegende Abgrenzungen)?
+- **User Stories:** Mindestens 3–5, rollen-spezifisch, aus Nutzerperspektive.
+- **Acceptance Criteria:** Mindestens 5, konkret und testbar, kein Konjunktiv.
+- **Edge Cases:** Mindestens 3–5 – leite sie aus dem Feature-Kontext ab und entscheide das Verhalten selbst auf Basis von PRD, Research und gesundem Menschenverstand.
 
-**Frage 1 – Zielgruppe**
+Nur nachfragen wenn etwas genuiner Klärungsbedarf hat der sich nicht aus den vorhandenen Artefakten ableiten lässt – das sollte die Ausnahme sein, nicht die Regel.
 
-Lies vorhandene Personas:
-```bash
-cat research/personas.md 2>/dev/null | grep "^## Persona:"
-```
-
-Erstelle die options-Liste mit den tatsächlichen Persona-Namen aus der Datei. Falls keine Personas vorhanden: generische Nutzertypen aus dem PRD ableiten. Immer als letzte Option "Eigene Beschreibung" hinzufügen.
-
-Rufe AskUserQuestion auf mit:
-- question: "Welche Persona nutzt FEAT-[X] primär?"
-- header: "Zielgruppe"
-- options: [alle gefundenen Personas als eigene Option] + ["Alle Personas gleichwertig", "Eigene Beschreibung – ich erkläre im Chat"]
-- multiSelect: true
-
-**Frage 2 – Kernwert**
-
-Leite aus der Feature-Beschreibung 3 konkrete, testbare Acceptance Criteria ab. Jedes muss eine überprüfbare Aussage sein, kein Konjunktiv.
-
-Rufe AskUserQuestion auf mit:
-- question: "Was ist das wichtigste Acceptance Criterion – ohne das FEAT-[X] wertlos wäre?"
-- header: "Kernwert"
-- options: [die 3 abgeleiteten ACs als eigene Optionen mit kurzer Erklärung] + ["Eigene Formulierung – ich beschreibe es im Chat"]
-- multiSelect: false
-
-**Frage 3 – Out of Scope**
-
-Leite aus dem Feature-Kontext 3 naheliegende Dinge ab die bewusst NICHT Teil dieses Features sind.
-
-Rufe AskUserQuestion auf mit:
-- question: "Was ist explizit NICHT Teil von FEAT-[X]?"
-- header: "Out of Scope"
-- options: [die 3 abgeleiteten Ausschlüsse als eigene Optionen] + ["Eigene Abgrenzung – ich beschreibe es im Chat", "Noch nicht klar"]
-- multiSelect: true
-
-## Phase 5: Edge Cases klären – Frage für Frage
-
-Identifiziere 3–5 relevante Edge Cases aus dem Feature-Kontext. Stelle jeden als **eigenen** AskUserQuestion-Call – einen nach dem anderen, nach jeder Antwort erst zur nächsten Frage.
-
-Für jeden Edge Case:
-1. Formuliere die Situation als konkrete Frage ("Was passiert wenn...?")
-2. Leite 3 reale Verhaltensoptionen ab die für diesen Edge Case tatsächlich sinnvoll sind
-3. Füge immer "Eigene Entscheidung – ich beschreibe es im Chat" als letzte Option hinzu
-
-Rufe für jeden Edge Case AskUserQuestion auf mit:
-- question: "Was passiert wenn [konkrete Situation]?"
-- header: "Edge Case: [kurzer Name]"
-- options: [3 kontextspezifische Verhaltensoptionen] + ["Eigene Entscheidung – ich beschreibe es im Chat"]
-- multiSelect: false
-
-Keine generischen Platzhalter. Alle Optionen konkret aus dem Feature ableiten.
+Schreibe die vollständige Spec direkt. Zeige sie im Chat bevor du speicherst.
 
 ## Phase 6: Feature Spec schreiben
 
