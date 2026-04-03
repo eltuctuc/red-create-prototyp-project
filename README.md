@@ -4,6 +4,44 @@ Ein KI-gestütztes Product Development Framework für [Claude Code](https://clau
 
 ---
 
+## Was ist das?
+
+Eine Sammlung von Claude Code Commands, die eine vollständige Produktentwicklungs-Pipeline abbilden. Du beschreibst deine Idee in natürlicher Sprache – Claude führt die Pipeline aus, du triffst die Entscheidungen.
+
+```
+/red:proto-workflow     → Nach jeder Pause: zeigt exakt wo du stehst und was als nächstes zu tun ist
+
+/red:proto-sparring     → Idee schärfen → PRD
+/red:proto-dev-setup    → Tech-Stack wählen, Projekt scaffolden, Git/GitHub einrichten
+/red:proto-research     → Problem Statement Map + Personas (optional)
+/red:proto-requirements → Feature Specs – einmal pro Feature, für ALLE Features
+                          ↓ wenn ALLE Features Specs haben:
+/red:proto-flows        → Screen-Inventar + verbindliche Transition-Tabelle (einmalig)
+/red:proto-ux           → UX-Entscheidungen – einmal pro Feature
+
+dann pro Feature (Build-Loop bis QA grün):
+/red:proto-architect    → Technisches Design + Security + Test-Setup
+/red:proto-dev          → Implementierung (Frontend + Backend, parallel falls nötig)
+                          └── schreibt context/FEAT-x-dev-handoff.md am Ende
+/red:proto-qa           → Tests, Accessibility, Security, Bug-Loop bis Production-Ready
+                          └── Bugs? → neue Session → /red:proto-dev → /red:proto-qa
+```
+
+Jeder Command ist eigenständig – du kannst an jedem Punkt einsteigen oder aufhören. Die Commands bauen aufeinander auf: jeder liest den Output des vorherigen und ergänzt die gemeinsamen Artefakte.
+
+---
+
+### Kurzübersicht: Was macht was?
+
+| Befehl | Wann | Was passiert |
+|--------|------|--------------|
+| `npx red-proto@latest` | Einmalig pro Computer | Installiert Commands in Claude Code |
+| `/red:proto` | Einmalig pro Projekt | Legt Projektstruktur an, kopiert Design System |
+| `/red:proto-sparring` | Start jedes Projekts | Erste Anlaufstelle – Idee zu PRD |
+| `/red:proto-workflow` | Nach jeder Session-Pause | Zeigt wo du stehst, was als nächstes kommt |
+
+---
+
 ## Workflow
 
 ```mermaid
@@ -47,33 +85,6 @@ flowchart TD
 ```
 
 **Faustregel:** Alles bis `/red:proto-flows` machst du einmal für dein Projekt. Ab `/red:proto-ux` wiederholst du den Loop für jedes Feature. `proto-dev` und `proto-qa` laufen in **getrennten Sessions** – `proto-dev` schreibt am Ende ein Handoff-File, das `proto-qa` in der neuen Session einliest.
-
----
-
-## Was ist das?
-
-Eine Sammlung von Claude Code Commands und Agents, die eine vollständige Produktentwicklungs-Pipeline abbilden. Du arbeitest mit natürlicher Sprache – Claude führt die Pipeline aus, du triffst die Entscheidungen.
-
-```
-/red:proto-workflow     → Nach jeder Pause: zeigt exakt wo du stehst und was als nächstes zu tun ist
-
-/red:proto-sparring     → Idee schärfen → PRD
-/red:proto-dev-setup    → Tech-Stack wählen, Projekt scaffolden, Git/GitHub einrichten
-/red:proto-research     → Problem Statement Map + Personas (optional)
-/red:proto-requirements → Feature Specs – einmal pro Feature, für ALLE Features
-                          ↓ wenn ALLE Features Specs haben:
-/red:proto-flows        → Screen-Inventar + verbindliche Transition-Tabelle (einmalig)
-/red:proto-ux           → UX-Entscheidungen – einmal pro Feature
-
-dann pro Feature (Build-Loop bis QA grün):
-/red:proto-architect    → Technisches Design + Security + Test-Setup
-/red:proto-dev          → Implementierung (Frontend + Backend, parallel falls nötig)
-                          └── schreibt context/FEAT-x-dev-handoff.md am Ende
-/red:proto-qa           → Tests, Accessibility, Security, Bug-Loop bis Production-Ready
-                          └── Bugs? → neue Session → /red:proto-dev → /red:proto-qa
-```
-
-Jeder Command ist eigenständig – du kannst an jedem Punkt einsteigen oder aufhören. Die Commands bauen aber aufeinander auf: jeder liest den Output des vorherigen und ergänzt die gemeinsamen Artefakte.
 
 ---
 
@@ -148,17 +159,6 @@ Dann in Claude Code:
 ```
 /red:proto-sparring
 ```
-
----
-
-### Kurzübersicht: Was macht was?
-
-| Befehl | Wann | Was passiert |
-|--------|------|--------------|
-| `npx red-proto@latest` | Einmalig pro Computer | Installiert Commands in `~/.claude/` (global) oder `./.claude/` (lokal) |
-| `/red:proto` | Einmalig pro Projekt | Legt Projektstruktur an, kopiert Design System |
-| `/red:proto-sparring` | Start jedes Projekts | Erste Anlaufstelle – Idee zu PRD |
-| `/red:proto-workflow` | Nach jeder Session-Pause | Zeigt wo du stehst, was als nächstes kommt |
 
 ---
 
