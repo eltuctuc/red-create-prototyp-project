@@ -373,54 +373,11 @@ AskUserQuestion({
 })
 ```
 
-Nach Approval: Problem Statement Map und Personas als Drafts speichern.
-
-`research/problem-statement.md`:
-```markdown
----
-status: draft
----
-
-# Problem Statement Map
-*Erstellt von: /red:proto-research — [Datum]*
-
-[Inhalt aus Phase 4]
-```
-
-`research/personas.md`:
-```markdown
----
-status: draft
----
-
-# Personas
-*Erstellt von: /red:proto-research — [Datum]*
-
-[Inhalt aus Phase 5]
-```
-
-Dann dem User sagen:
-```
-📝 Drafts gespeichert:
-  → research/problem-statement.md
-  → research/personas.md
-  (+ research/platform-context.md und research/research-questions.md falls noch offen)
-
-Kurze Pause?
-→ Schreib `weiter` wenn du alle Dateien geprüft hast
-
-Echter Research (Interviews, Umfragen, Tage)?
-→ Trag deine Findings direkt in die Dateien ein
-→ Dann /red:proto-research erneut aufrufen – ich erkenne die Drafts automatisch
-```
+Nach Approval: Problem Statement Map und Personas als Drafts speichern (YAML `status: draft`, Header mit Dateinamen und Datum). User per CONVENTIONS.md §Resume Pattern (Option 2 – Research) informieren.
 
 ## Phase 6b: Finalisieren
 
-Nach `weiter` oder Korrekturen im Chat:
-
-1. Alle Research-Dateien lesen und eventuelle Chat-Korrekturen einarbeiten
-2. YAML-Frontmatter in allen Dateien auf `status: approved` setzen
-3. Zusammenfassung zeigen und committen:
+Nach `weiter` oder Korrekturen: Alle Research-Dateien einlesen, Korrekturen übernehmen, `status: approved` in allen Dateien setzen.
 
 ```bash
 echo "Ich committe jetzt:"

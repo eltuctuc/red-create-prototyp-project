@@ -176,27 +176,11 @@ AskUserQuestion({ questions: [{ question: "UX-Entscheidungen vollständig?", hea
 ], multiSelect: false }] })
 ```
 
-Nach Approval im Chat: FEAT-[X].md erweitern (Abschnitt `## 2. UX Entscheidungen` schreiben), YAML-Frontmatter auf `status: draft` setzen.
-
-Dann dem User sagen:
-```
-📝 Draft gespeichert: features/FEAT-[X]-[name].md
-
-Öffne die Datei, prüfe die UX-Entscheidungen und bearbeite sie direkt falls nötig.
-
-→ Schreib `weiter` wenn alles passt
-→ Oder sag mir direkt was geändert werden soll
-```
+Nach Approval: FEAT-[X].md um Abschnitt `## 2. UX Entscheidungen` erweitern, YAML `status: draft` setzen. User per CONVENTIONS.md §Resume Pattern informieren.
 
 ## Phase 7b: Finalisieren
 
-Nach `weiter` oder Korrekturen im Chat:
-
-1. FEAT-[X].md einlesen, Korrekturen übernehmen
-2. YAML-Frontmatter auf `status: approved` setzen
-3. `## Fortschritt` → `Status: Approved`, `Aktueller Schritt: UX` setzen
-4. STATUS.md aktualisieren (UX-Spalte auf ✓ setzen)
-5. Commit-Zusammenfassung zeigen und committen:
+Nach `weiter` oder Korrekturen: FEAT-[X].md einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Approved, Aktueller Schritt: UX` setzen. STATUS.md (UX-Spalte ✓).
 
 ```bash
 echo "Ich committe jetzt:"

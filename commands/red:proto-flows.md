@@ -224,24 +224,11 @@ AskUserQuestion({
 })
 ```
 
-Nach Approval im Chat: flows/product-flows.md ist bereits als Draft gespeichert (Phase 5). Dem User sagen:
-
-```
-📝 Draft gespeichert: flows/product-flows.md
-
-Öffne die Datei, prüfe alle Screens und Transitions und bearbeite direkt falls nötig.
-
-→ Schreib `weiter` wenn alles passt
-→ Oder sag mir direkt was geändert werden soll
-```
+Nach Approval: `flows/product-flows.md` ist bereits als Draft gespeichert (Phase 5). User per CONVENTIONS.md §Resume Pattern informieren.
 
 ## Phase 6b: Finalisieren
 
-Nach `weiter` oder Korrekturen im Chat:
-
-1. flows/product-flows.md einlesen, Korrekturen übernehmen
-2. YAML-Frontmatter auf `status: approved` setzen
-3. Commit-Zusammenfassung zeigen und committen:
+Nach `weiter` oder Korrekturen: `flows/product-flows.md` einlesen, Korrekturen übernehmen, `status: approved` setzen.
 
 ```bash
 echo "Ich committe jetzt:"

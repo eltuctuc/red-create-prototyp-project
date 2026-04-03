@@ -193,25 +193,11 @@ AskUserQuestion({
 })
 ```
 
-Nach Approval im Chat: Feature-File als Draft speichern. `project-config.md` aktualisieren (Nächste freie ID um 1 erhöhen).
-
-Dann dem User sagen:
-```
-📝 Draft gespeichert: features/FEAT-[X]-[name].md
-
-Öffne die Datei, prüfe sie und bearbeite sie direkt falls nötig.
-
-→ Schreib `weiter` wenn alles passt
-→ Oder sag mir direkt was geändert werden soll
-```
+Nach Approval: Feature-File als Draft speichern. `project-config.md` aktualisieren (Nächste freie ID um 1 erhöhen). User per CONVENTIONS.md §Resume Pattern informieren.
 
 ## Phase 7b: Finalisieren
 
-Nach `weiter` oder Korrekturen im Chat:
-
-1. Feature-File einlesen, eventuelle Korrekturen übernehmen
-2. YAML-Frontmatter auf `status: approved` setzen
-3. `## Fortschritt` → `Status: Approved` setzen
+Nach `weiter` oder Korrekturen: Feature-File einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Approved` setzen.
 
 **STATUS.md aktualisieren:** Lies `features/STATUS.md`. Wenn die Datei noch nicht existiert, erstelle sie mit diesem Header:
 

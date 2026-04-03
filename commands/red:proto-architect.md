@@ -134,27 +134,11 @@ AskUserQuestion({ questions: [{ question: "Passt das technische Design?", header
 ], multiSelect: false }] })
 ```
 
-Nach Approval im Chat: FEAT-[X].md erweitern (Abschnitt `## 3. Technisches Design` schreiben), YAML-Frontmatter auf `status: draft` setzen.
-
-Dann dem User sagen:
-```
-📝 Draft gespeichert: features/FEAT-[X]-[name].md
-
-Öffne die Datei, prüfe das technische Design und bearbeite es direkt falls nötig.
-
-→ Schreib `weiter` wenn alles passt
-→ Oder sag mir direkt was geändert werden soll
-```
+Nach Approval: FEAT-[X].md um Abschnitt `## 3. Technisches Design` erweitern, YAML `status: draft` setzen. User per CONVENTIONS.md §Resume Pattern informieren.
 
 ## Phase 4b: Finalisieren
 
-Nach `weiter` oder Korrekturen im Chat:
-
-1. FEAT-[X].md einlesen, Korrekturen übernehmen
-2. YAML-Frontmatter auf `status: approved` setzen
-3. `## Fortschritt` → `Status: Approved`, `Aktueller Schritt: Tech` setzen
-4. STATUS.md aktualisieren (Tech-Spalte auf ✓ setzen)
-5. Commit-Zusammenfassung zeigen und committen:
+Nach `weiter` oder Korrekturen: FEAT-[X].md einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Approved, Aktueller Schritt: Tech` setzen. STATUS.md (Tech-Spalte ✓).
 
 ```bash
 echo "Ich committe jetzt:"
