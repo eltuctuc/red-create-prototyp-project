@@ -1,0 +1,159 @@
+# Changelog
+
+Alle nennenswerten Änderungen an red · Create Prototyp Project sind hier dokumentiert.
+Neueste Version zuerst – ältere Versionen weiter unten.
+
+---
+
+## v0.13.3 — 3. April 2026
+
+Kein neues Feature, aber ein sauberes Fundament: Diese Version räumt auf, was hinter den Kulissen nicht gestimmt hat.
+
+### Verbesserungen
+
+- **npm-Installation zuverlässiger:** Der `npx red-proto`-Befehl hat beim letzten Publish still und heimlich nicht funktioniert – der Pfad zum Installationsskript war minimal falsch formatiert. Gefixt. Wer `npx red-proto` ausgeführt hat und nichts passiert ist, kann es jetzt erneut versuchen.
+- **GitHub Community Standards:** Das Projekt hat jetzt eine vollständige offene Infrastruktur – Lizenz (MIT), Contributing Guide, Code of Conduct, Security Policy und Issue-Templates für Bugs und Feature-Requests.
+
+---
+
+## v0.13.2 — März 2026
+
+### Verbesserungen
+
+- **Klarere Sprache:** Framework-interne Fachbegriffe aus User-facing Texten entfernt. Claude spricht jetzt wie ein Kollege, nicht wie ein Spezifikationsdokument.
+- **Weniger Wiederholungen:** Ca. 90 Zeilen duplizierten Text aus 6 Commands entfernt. Schnellere Ausführung, weniger Rauschen.
+- **Design System Index:** `design-system/INDEX.md` eingeführt – Agents laden jetzt nur noch die Teile des Design Systems, die sie wirklich brauchen. Weniger Kontext-Overhead, präzisere Ausgaben.
+
+---
+
+## v0.13.0 — Februar 2026
+
+### Neue Features
+
+- **Uninstall-Befehl:** `npx red-proto uninstall` entfernt das Framework sauber vom System. Wer aussteigt, hinterlässt keine Leichen.
+- **Doppelte Installation erkennen:** Wer `npx red-proto` zweimal ausführt, bekommt jetzt eine verständliche Warnung statt stummes Überschreiben.
+
+### Fixes
+
+- Git-Output während der Installation war für Nicht-Entwickler verwirrend und technisch. Claude redet jetzt nicht mehr im Terminal-Monolog mit sich selbst.
+
+---
+
+## v0.11.0 — Januar 2026
+
+Der "Wie war nochmal der Stand?"-Release. Wer morgens die KI öffnet und vergessen hat, wo man gestern aufgehört hat, hat jetzt ein System dafür.
+
+### Neue Features
+
+- **Draft-Konvention:** Artefakte werden als Entwurf markiert, bevor sie final sind. Kein versehentliches Weiterarbeiten auf halbgaren Outputs mehr.
+- **STATUS.md:** Jedes Feature bekommt eine eigene Statusdatei. Ein Blick reicht, um zu wissen: fertig, in Arbeit, blockiert.
+- **Resume-Pattern:** `/red:proto-workflow` zeigt nach einer Unterbrechung exakt, wo man steht und was als nächstes zu tun ist – ohne alles nochmal lesen zu müssen.
+
+### Fixes
+
+- Git gab beim Einrichten eines neuen Projekts ausführliche technische Statusmeldungen aus, die für normale Nutzer keinen Mehrwert hatten. Unterdrückt.
+
+---
+
+## v0.10.0 — Dezember 2025
+
+### Neue Features
+
+- **Dynamisches Feature-Routing:** Nach dem UX-Review entscheidet der Agent jetzt selbst, welcher nächste Schritt sinnvoll ist – statt stur eine vorgegebene Reihenfolge abzuarbeiten.
+- **Bessere Bug-Prävention:** Agents machen jetzt Vor-Implementierungs-Checks, bevor sie loslegen. Einige Klassen von Bugs entstehen damit gar nicht mehr.
+- **A11y im QA-Prozess verankert:** Accessibility war bisher optional und wurde oft vergessen. Jetzt ist es ein fester Bestandteil des QA-Durchlaufs, mit klarer Zuständigkeit.
+- **Feature-Status-Index:** `features/STATUS.md` gibt einen zentralen Überblick über alle Features und ihren Fortschritt.
+
+---
+
+## v0.9.0 — November 2025
+
+### Neue Features
+
+- **Autonomer UX-Agent:** Der `/red:proto-ux`-Command entscheidet jetzt selbst über Komponenten, Einbettung und Navigation – und legt diese Entscheidungen zur Review vor, statt endlose Fragen zu stellen. Weniger Rückfragen, mehr Ergebnis.
+- **Requirements-Interview neu gestaltet:** Frage für Frage, mit konkreten Optionen und Freitext-Fallback. Kein Formular mehr, das man ausfüllt – sondern ein echtes Gespräch.
+- **Autonome Spec-Ableitung:** Der Requirements-Agent leitet Spezifikationen selbst ab und zeigt sie zur Bestätigung – statt auf manuelle Eingaben zu warten.
+
+### Fixes
+
+- Platzhalter-Templates in den Requirements haben dazu geführt, dass `AskUserQuestion` nicht ausgeführt wurde. Gefixt. Entschuldigung – das war ärgerlich.
+
+---
+
+## v0.8.0 — Oktober 2025
+
+### Neue Features
+
+- **npx-Installer:** Das Framework lässt sich jetzt mit einem einzigen Befehl installieren: `npx red-proto`. Kein manuelles Kopieren von Dateien mehr.
+- **Interaktives Research-Interview:** Fragen werden jetzt aufgeteilt und nacheinander gestellt – nicht als Wand aus Stichpunkten auf einmal.
+- **Automatische Claude Code Permissions:** Werden beim Setup direkt korrekt gesetzt.
+
+---
+
+## v0.7.0 — September 2025
+
+### Neue Features
+
+- **Research neu positioniert:** `/red:proto-research` läuft jetzt vor dem Dev-Setup – damit der Tech-Stack auf Basis echter Erkenntnisse gewählt wird, nicht umgekehrt.
+- **Zwei Research-Modi:** Schneller Modus für kleinere Projekte, tiefer Modus für komplexere Domänen.
+
+### Fixes
+
+- Der Research-Command hat nach seinem Abschluss fälschlicherweise immer auf `/red:proto-requirements` verwiesen – auch wenn das nicht der nächste sinnvolle Schritt war.
+
+---
+
+## v0.6.0 — August 2025
+
+### Neue Features
+
+- **Workflow-Klarheit:** Der übergreifende Ablauf zwischen den Commands ist jetzt expliziter dokumentiert und leichter nachvollziehbar.
+- **Session Re-Entry verbessert:** Wer eine Arbeitssitzung unterbricht und später weitermacht, findet sich schneller wieder zurecht.
+
+---
+
+## v0.5.0 — Juli 2025
+
+### Neue Features
+
+- **Design System Integration:** `design-system/` mit neutralen Templates eingeführt. Alle visuellen Entscheidungen laufen jetzt durch ein konsistentes System.
+- **Screen-Inventar und Transitions:** `/red:proto-flows` verwaltet alle Screens und ihre Übergänge in einer verbindlichen Tabelle.
+- **UX Compliance Enforcement:** Der UX-Command prüft jetzt aktiv auf Design-System-Lücken und stellt sicher, dass Flows korrekt integriert sind.
+
+---
+
+## v0.4.0 — Juni 2025
+
+### Neue Features
+
+- **Developer Self-Review Phase:** Entwickler-Agents überprüfen ihre eigene Arbeit vor der QA – weniger offensichtliche Fehler, schnellere QA-Runden.
+- Umbenennung: `/ia-ux` → `/ux-design` – der Name hat jetzt beschrieben, was der Command tut.
+
+---
+
+## v0.3.0 — Mai 2025
+
+### Neue Features
+
+- Einheitliches `red:proto-*`-Namespace für alle Commands. Vorher gab es verschiedene Benennungskonventionen, die für Verwirrung gesorgt haben.
+
+### Fixes
+
+- Installations-Pfad in der README war falsch angegeben. Templates müssen in `~/.claude/templates/` landen – und jetzt tun sie das auch.
+
+---
+
+## v0.2.0 — April 2025
+
+### Neue Features
+
+- Erste vollständige Pipeline: Sparring → Dev-Setup → Requirements → Flows → UX → Architect → Dev → QA.
+- Jeder Command ist eigenständig und kann einzeln eingesetzt werden.
+
+---
+
+## v0.1.0 — März 2025
+
+Der Anfang. Ein Framework als Sammlung von Claude Code Commands – von der Idee bis zum getesteten Prototyp, mit Human-in-the-Loop an jedem Schritt.
+
+Noch roh. Noch ohne Installer. Noch ohne vieles. Aber der Kern war da.
