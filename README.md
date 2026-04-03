@@ -29,20 +29,7 @@ dann pro Feature (Build-Loop bis QA grün):
 
 Jeder Command ist eigenständig – du kannst an jedem Punkt einsteigen oder aufhören. Die Commands bauen aufeinander auf: jeder liest den Output des vorherigen und ergänzt die gemeinsamen Artefakte.
 
----
-
-### Kurzübersicht: Was macht was?
-
-| Befehl | Wann | Was passiert |
-|--------|------|--------------|
-| `npx red-proto@latest` | Einmalig pro Computer | Installiert Commands in Claude Code |
-| `/red:proto` | Einmalig pro Projekt | Legt Projektstruktur an, kopiert Design System |
-| `/red:proto-sparring` | Start jedes Projekts | Erste Anlaufstelle – Idee zu PRD |
-| `/red:proto-workflow` | Nach jeder Session-Pause | Zeigt wo du stehst, was als nächstes kommt |
-
----
-
-## Workflow
+### Workflow
 
 ```mermaid
 flowchart TD
