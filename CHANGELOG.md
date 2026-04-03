@@ -16,7 +16,7 @@ Kein neues Feature, aber ein sauberes Fundament: Diese Version räumt auf, was h
 
 ---
 
-## v0.13.2 — März 2026
+## v0.13.2 — 3. April 2026
 
 ### Verbesserungen
 
@@ -26,7 +26,7 @@ Kein neues Feature, aber ein sauberes Fundament: Diese Version räumt auf, was h
 
 ---
 
-## v0.13.0 — Februar 2026
+## v0.13.0 — 3. April 2026
 
 ### Neue Features
 
@@ -39,7 +39,7 @@ Kein neues Feature, aber ein sauberes Fundament: Diese Version räumt auf, was h
 
 ---
 
-## v0.11.0 — Januar 2026
+## v0.11.0 — 3. April 2026
 
 Der "Wie war nochmal der Stand?"-Release. Wer morgens die KI öffnet und vergessen hat, wo man gestern aufgehört hat, hat jetzt ein System dafür.
 
@@ -55,7 +55,7 @@ Der "Wie war nochmal der Stand?"-Release. Wer morgens die KI öffnet und vergess
 
 ---
 
-## v0.10.0 — Dezember 2025
+## v0.10.0 — 3. April 2026
 
 ### Neue Features
 
@@ -66,7 +66,7 @@ Der "Wie war nochmal der Stand?"-Release. Wer morgens die KI öffnet und vergess
 
 ---
 
-## v0.9.0 — November 2025
+## v0.9.0 — 2. April 2026
 
 ### Neue Features
 
@@ -80,7 +80,7 @@ Der "Wie war nochmal der Stand?"-Release. Wer morgens die KI öffnet und vergess
 
 ---
 
-## v0.8.0 — Oktober 2025
+## v0.8.0 — 2. April 2026
 
 ### Neue Features
 
@@ -90,7 +90,7 @@ Der "Wie war nochmal der Stand?"-Release. Wer morgens die KI öffnet und vergess
 
 ---
 
-## v0.7.0 — September 2025
+## v0.7.0 — 2. April 2026
 
 ### Neue Features
 
@@ -103,7 +103,7 @@ Der "Wie war nochmal der Stand?"-Release. Wer morgens die KI öffnet und vergess
 
 ---
 
-## v0.6.0 — August 2025
+## v0.6.0 — 1. April 2026
 
 ### Neue Features
 
@@ -112,7 +112,16 @@ Der "Wie war nochmal der Stand?"-Release. Wer morgens die KI öffnet und vergess
 
 ---
 
-## v0.5.0 — Juli 2025
+## v0.5.0 — 31. März 2026
+
+### Neue Features
+
+- **npx-Installer:** Das Framework lässt sich jetzt mit `npx red-proto` installieren – kein manuelles Klonen mehr nötig.
+- **Developer Self-Review Phase:** Entwickler-Agents überprüfen ihre eigene Arbeit vor der QA – weniger offensichtliche Fehler, schnellere QA-Runden.
+
+---
+
+## v0.4.0 — 30. März 2026
 
 ### Neue Features
 
@@ -122,16 +131,7 @@ Der "Wie war nochmal der Stand?"-Release. Wer morgens die KI öffnet und vergess
 
 ---
 
-## v0.4.0 — Juni 2025
-
-### Neue Features
-
-- **Developer Self-Review Phase:** Entwickler-Agents überprüfen ihre eigene Arbeit vor der QA – weniger offensichtliche Fehler, schnellere QA-Runden.
-- Umbenennung: `/ia-ux` → `/ux-design` – der Name hat jetzt beschrieben, was der Command tut.
-
----
-
-## v0.3.0 — Mai 2025
+## v0.3.0 — 30. März 2026
 
 ### Neue Features
 
@@ -143,7 +143,7 @@ Der "Wie war nochmal der Stand?"-Release. Wer morgens die KI öffnet und vergess
 
 ---
 
-## v0.2.0 — April 2025
+## v0.2.0 — 30. März 2026
 
 ### Neue Features
 
@@ -152,7 +152,7 @@ Der "Wie war nochmal der Stand?"-Release. Wer morgens die KI öffnet und vergess
 
 ---
 
-## v0.1.0 — März 2025
+## v0.1.0 — 27. März 2026
 
 Der Anfang. Ein Framework als Sammlung von Claude Code Commands – von der Idee bis zum getesteten Prototyp, mit Human-in-the-Loop an jedem Schritt.
 
