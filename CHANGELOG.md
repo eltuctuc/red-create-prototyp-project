@@ -33,9 +33,13 @@ Kein neues Feature, aber ein sauberes Fundament: Diese Version räumt auf, was h
 - **Uninstall-Befehl:** `npx red-proto uninstall` entfernt das Framework sauber vom System. Wer aussteigt, hinterlässt keine Leichen.
 - **Doppelte Installation erkennen:** Wer `npx red-proto` zweimal ausführt, bekommt jetzt eine verständliche Warnung statt stummes Überschreiben.
 
+---
+
+## v0.11.1 — 3. April 2026
+
 ### Fixes
 
-- Git-Output während der Installation war für Nicht-Entwickler verwirrend und technisch. Claude redet jetzt nicht mehr im Terminal-Monolog mit sich selbst.
+- Git gab beim Einrichten eines neuen Projekts ausführliche technische Statusmeldungen aus, die für normale Nutzer keinen Mehrwert hatten. Unterdrückt.
 
 ---
 
@@ -49,9 +53,15 @@ Der "Wie war nochmal der Stand?"-Release. Wer morgens die KI öffnet und vergess
 - **STATUS.md:** Jedes Feature bekommt eine eigene Statusdatei. Ein Blick reicht, um zu wissen: fertig, in Arbeit, blockiert.
 - **Resume-Pattern:** `/red:proto-workflow` zeigt nach einer Unterbrechung exakt, wo man steht und was als nächstes zu tun ist – ohne alles nochmal lesen zu müssen.
 
-### Fixes
+---
 
-- Git gab beim Einrichten eines neuen Projekts ausführliche technische Statusmeldungen aus, die für normale Nutzer keinen Mehrwert hatten. Unterdrückt.
+## v0.10.1 — 3. April 2026
+
+### Verbesserungen
+
+- **Commands um 42% komprimiert:** Alle Commands und Agents wurden gestrafft – weniger Text, gleiche Wirkung. Schnellere Ausführung, weniger Token-Verbrauch.
+- **Session Handoff:** Übergabedokument am Ende jeder Dev-Session – damit die nächste Session sofort weiß, wo sie anfangen soll.
+- **Design System Index-First:** Agents laden jetzt den Index zuerst und nur bei Bedarf die Details – statt das gesamte Design System auf einmal.
 
 ---
 
@@ -131,11 +141,23 @@ Der "Wie war nochmal der Stand?"-Release. Wer morgens die KI öffnet und vergess
 
 ---
 
+## v0.3.1 — 30. März 2026
+
+### Fixes
+
+- Vereinzelte Commands trugen noch alte Namen. Alle verbleibenden Referenzen auf das alte Namensschema wurden auf `red:proto-*` umgestellt.
+
+---
+
 ## v0.3.0 — 30. März 2026
 
 ### Neue Features
 
 - Einheitliches `red:proto-*`-Namespace für alle Commands. Vorher gab es verschiedene Benennungskonventionen, die für Verwirrung gesorgt haben.
+
+---
+
+## v0.2.1 — 30. März 2026
 
 ### Fixes
 
