@@ -6,9 +6,45 @@ Ein KI-gestütztes Product Development Framework für [Claude Code](https://clau
 
 ## Workflow
 
-![red·proto Workflow](docs/workflow.svg)
+```mermaid
+flowchart TD
+    A([Idee]) --> B
 
-> Maschinenlesbare BPMN 2.0 Datei: [workflow.bpmn](docs/workflow.bpmn) – öffenbar in [Camunda Modeler](https://camunda.com/download/modeler/) oder [bpmn.io](https://bpmn.io)
+    subgraph setup["📐 Einmalig pro Projekt"]
+        B["/red:proto-sparring\nIdee → PRD"]
+        B --> C["/red:proto-dev-setup\nTech-Stack + GitHub"]
+        C --> D{Research?}
+        D -->|optional| E["/red:proto-research\nPersonas + Problem Statement"]
+        D -->|überspringen| F
+        E --> F["/red:proto-requirements\nSpecs für alle Features"]
+        F --> G["/red:proto-flows\nScreen-Inventar + Transitions"]
+    end
+
+    subgraph feature["🔁 Pro Feature wiederholen"]
+        G --> H["/red:proto-ux\nUX-Entscheidungen"]
+        H --> I["/red:proto-architect\nTech-Design + Security + Tests"]
+        I --> J
+
+        subgraph session1["Session 1"]
+            J["/red:proto-dev\nImplementierung"]
+            J --> J2["Handoff schreiben\ncontext/FEAT-x-dev-handoff.md"]
+        end
+
+        subgraph session2["Session 2 (neu starten)"]
+            J2 --> K["/red:proto-qa\nTests + Bugs"]
+        end
+
+        K --> L{Bugs?}
+        L -->|Critical / High| J
+        L -->|Grün ✅| M([Production-Ready])
+    end
+
+    M --> N{Weitere Features?}
+    N -->|ja| H
+    N -->|nein| O([Release 🎉])
+
+    P(["/red:proto-workflow\nOrientierung jederzeit"]) -.->|wo stehe ich?| feature
+```
 
 **Faustregel:** Alles bis `/red:proto-flows` machst du einmal für dein Projekt. Ab `/red:proto-ux` wiederholst du den Loop für jedes Feature. `proto-dev` und `proto-qa` laufen in **getrennten Sessions** – `proto-dev` schreibt am Ende ein Handoff-File, das `proto-qa` in der neuen Session einliest.
 
