@@ -65,7 +65,17 @@ Der Installer fragt interaktiv:
 - **Global** (`~/.claude/`) → Commands in allen Projekten verfügbar
 - **Lokal** (`./.claude/`) → nur im aktuellen Verzeichnis
 
+> **Hinweis:** Nicht global und lokal gleichzeitig installieren – Claude Code zeigt die Commands sonst doppelt an. Der Installer warnt dich, wenn eine andere Installation erkannt wird.
+
 > **Update:** Denselben Befehl erneut ausführen – der Installer erkennt bestehende Installationen.
+
+**Deinstallieren:**
+
+```bash
+npx red-proto --uninstall
+```
+
+Entfernt alle Commands und Agents – deine Projektdateien (`features/`, `research/`, `prd.md` usw.) bleiben unangetastet.
 
 **Option B – Manuell via Git (falls kein npx):**
 

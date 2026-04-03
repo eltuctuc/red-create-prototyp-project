@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 
 import { createInterface } from 'readline';
-import { cp, mkdir, access } from 'fs/promises';
+import { cp, mkdir, rm, access } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { homedir } from 'os';
-import { createReadStream } from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PACKAGE_ROOT = join(__dirname, '..');
@@ -20,6 +19,27 @@ const c = {
   bold:   (s) => `\x1b[1m${s}\x1b[0m`,
   dim:    (s) => `\x1b[2m${s}\x1b[0m`,
 };
+
+const COMMAND_FILES = [
+  'red:proto.md',
+  'red:proto-workflow.md',
+  'red:proto-sparring.md',
+  'red:proto-dev-setup.md',
+  'red:proto-research.md',
+  'red:proto-requirements.md',
+  'red:proto-flows.md',
+  'red:proto-ux.md',
+  'red:proto-architect.md',
+  'red:proto-dev.md',
+  'red:proto-qa.md',
+];
+
+const AGENT_FILES = [
+  'frontend-developer.md',
+  'backend-developer.md',
+  'qa-engineer.md',
+  'ux-reviewer.md',
+];
 
 async function exists(path) {
   try { await access(path); return true; }
@@ -46,9 +66,98 @@ function printHeader(version) {
   console.log('');
 }
 
-// ─── Main ────────────────────────────────────────────────────────────────────
+// ─── Uninstall ───────────────────────────────────────────────────────────────
+
+async function runUninstall() {
+  const { version } = JSON.parse(
+    await import('fs').then(fs => fs.promises.readFile(join(PACKAGE_ROOT, 'package.json'), 'utf8'))
+  );
+
+  printHeader(version);
+
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+
+  console.log(c.yellow('  Uninstall – where was red · proto installed?'));
+  console.log('');
+
+  const globalBase = join(homedir(), '.claude');
+  const localBase  = join(process.cwd(), '.claude');
+
+  const globalExists = await exists(join(globalBase, 'commands', 'red:proto.md'));
+  const localExists  = await exists(join(localBase,  'commands', 'red:proto.md'));
+
+  if (!globalExists && !localExists) {
+    console.log(c.dim('  red · proto is not installed in this location.'));
+    console.log('');
+    rl.close();
+    return;
+  }
+
+  const options = [];
+  if (globalExists) options.push({ label: `Global  ${c.dim('(~/.claude)')}`,       base: globalBase });
+  if (localExists)  options.push({ label: `Local   ${c.dim('(./.claude)')}`,        base: localBase  });
+
+  options.forEach((opt, i) => {
+    console.log(`  ${i + 1}) ${c.bold(opt.label)}`);
+  });
+  if (options.length > 1) {
+    console.log(`  ${options.length + 1}) ${c.bold('Both')}`);
+  }
+  console.log('');
+
+  const max = options.length > 1 ? options.length + 1 : options.length;
+  let choice = '';
+  while (!Array.from({ length: max }, (_, i) => String(i + 1)).includes(choice)) {
+    choice = (await ask(rl, c.dim('  Choice [1]: '))).trim() || '1';
+  }
+
+  const targets =
+    options.length > 1 && choice === String(options.length + 1)
+      ? options
+      : [options[parseInt(choice) - 1]];
+
+  console.log('');
+  console.log(c.yellow('  ⚠  This will remove all red:proto commands and agents.'));
+  console.log(c.dim('  Your project files (features/, research/, prd.md, …) are NOT touched.'));
+  console.log('');
+
+  const confirm = (await ask(rl, c.dim('  Type "yes" to confirm: '))).trim().toLowerCase();
+  rl.close();
+
+  if (confirm !== 'yes') {
+    console.log('');
+    console.log(c.dim('  Aborted. Nothing changed.'));
+    console.log('');
+    return;
+  }
+
+  let removed = 0;
+  for (const target of targets) {
+    for (const file of COMMAND_FILES) {
+      const path = join(target.base, 'commands', file);
+      if (await exists(path)) { await rm(path); removed++; }
+    }
+    for (const file of AGENT_FILES) {
+      const path = join(target.base, 'agents', file);
+      if (await exists(path)) { await rm(path); removed++; }
+    }
+  }
+
+  console.log('');
+  console.log(c.green(`  ✓ ${removed} file(s) removed`));
+  console.log(c.dim('  red · proto has been uninstalled.'));
+  console.log('');
+}
+
+// ─── Install ─────────────────────────────────────────────────────────────────
 
 async function main() {
+  const args = process.argv.slice(2);
+
+  if (args.includes('--uninstall') || args.includes('-u')) {
+    return runUninstall();
+  }
+
   const { version } = JSON.parse(
     await import('fs').then(fs => fs.promises.readFile(join(PACKAGE_ROOT, 'package.json'), 'utf8'))
   );
@@ -75,6 +184,28 @@ async function main() {
   const isGlobal = locationChoice === '1';
   const claudeBase = isGlobal ? join(homedir(), '.claude') : join(process.cwd(), '.claude');
   const label = isGlobal ? `~/.claude` : `./.claude`;
+
+  // ── Duplicate detection ────────────────────────────────────────────────────
+  const globalBase = join(homedir(), '.claude');
+  const localBase  = join(process.cwd(), '.claude');
+  const otherBase  = isGlobal ? localBase : globalBase;
+  const otherLabel = isGlobal ? './.claude' : '~/.claude';
+
+  const otherInstalled = await exists(join(otherBase, 'commands', 'red:proto.md'));
+  if (otherInstalled) {
+    console.log('');
+    console.log(c.yellow(`  ⚠  red · proto is already installed in ${otherLabel}`));
+    console.log(c.dim(`  Installing in both locations will show every command twice in Claude Code.`));
+    console.log('');
+    const proceed = (await ask(rl, c.dim('  Continue anyway? [y/N]: '))).trim().toLowerCase();
+    if (proceed !== 'y') {
+      console.log('');
+      console.log(c.dim('  Aborted. Nothing changed.'));
+      console.log('');
+      rl.close();
+      return;
+    }
+  }
 
   console.log('');
 
@@ -144,53 +275,28 @@ async function installFiles(claudeBase, isGlobal, noClobber) {
   const agentsDir = join(claudeBase, 'agents');
   const projectRoot = process.cwd();
 
-  // Create dirs
   await mkdir(commandsDir, { recursive: true });
   await mkdir(agentsDir, { recursive: true });
 
   const copyOpts = { recursive: true, force: !noClobber, errorOnExist: false };
 
-  // Commands
   const srcCommands = join(PACKAGE_ROOT, 'commands');
-  const files = [
-    'red:proto.md',
-    'red:proto-workflow.md',
-    'red:proto-sparring.md',
-    'red:proto-dev-setup.md',
-    'red:proto-research.md',
-    'red:proto-requirements.md',
-    'red:proto-flows.md',
-    'red:proto-ux.md',
-    'red:proto-architect.md',
-    'red:proto-dev.md',
-    'red:proto-qa.md',
-  ];
-
   let copied = 0;
   let skipped = 0;
 
-  for (const file of files) {
+  for (const file of COMMAND_FILES) {
     const dest = join(commandsDir, file);
     const alreadyExists = await exists(dest);
-    if (noClobber && alreadyExists) {
-      skipped++;
-      continue;
-    }
+    if (noClobber && alreadyExists) { skipped++; continue; }
     await cp(join(srcCommands, file), dest);
     copied++;
   }
 
-  // Agents
   const srcAgents = join(PACKAGE_ROOT, 'agents');
-  const agents = ['frontend-developer.md', 'backend-developer.md', 'qa-engineer.md', 'ux-reviewer.md'];
-
-  for (const file of agents) {
+  for (const file of AGENT_FILES) {
     const dest = join(agentsDir, file);
     const alreadyExists = await exists(dest);
-    if (noClobber && alreadyExists) {
-      skipped++;
-      continue;
-    }
+    if (noClobber && alreadyExists) { skipped++; continue; }
     await cp(join(srcAgents, file), dest);
     copied++;
   }
