@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  targetNamespace="http://red-proto.dev/workflow"
+  id="Definitions_RedProto">
+
+  <bpmn:collaboration id="Collab_RedProto">
+    <bpmn:participant id="Pool_RedProto" name="red·proto Workflow" processRef="Process_RedProto"/>
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_RedProto" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Nutzer" name="Nutzer">
+        <bpmn:flowNodeRef>Start_Idee</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_MoreFeatures</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Release</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Commands" name="Claude – Commands">
+        <bpmn:flowNodeRef>Task_Sparring</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_DevSetup</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Research</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Research</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Requirements</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Flows</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_UX</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Architect</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Dev</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_QA</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Bugs</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Agents" name="Sub-Agents">
+        <bpmn:flowNodeRef>Task_FrontendDev</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_BackendDev</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_QAEngineer</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_UXReviewer</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <!-- Start -->
+    <bpmn:startEvent id="Start_Idee" name="Idee"/>
+
+    <!-- Setup Phase -->
+    <bpmn:task id="Task_Sparring" name="/red:proto-sparring&#10;Idee → PRD"/>
+    <bpmn:task id="Task_DevSetup" name="/red:proto-dev-setup&#10;Tech-Stack + GitHub"/>
+    <bpmn:exclusiveGateway id="Gw_Research" name="Research?" gatewayDirection="Diverging"/>
+    <bpmn:task id="Task_Research" name="/red:proto-research&#10;Personas + Problem Statement"/>
+    <bpmn:task id="Task_Requirements" name="/red:proto-requirements&#10;Feature Specs"/>
+    <bpmn:task id="Task_Flows" name="/red:proto-flows&#10;Screen-Inventar + Transitions"/>
+
+    <!-- Feature Loop -->
+    <bpmn:task id="Task_UX" name="/red:proto-ux&#10;UX-Entscheidungen"/>
+    <bpmn:task id="Task_Architect" name="/red:proto-architect&#10;Tech-Design + Security"/>
+    <bpmn:task id="Task_Dev" name="/red:proto-dev&#10;Implementierung&#10;[Neue Session]"/>
+    <bpmn:task id="Task_QA" name="/red:proto-qa&#10;Tests + Bug-Loop&#10;[Neue Session]"/>
+    <bpmn:exclusiveGateway id="Gw_Bugs" name="Bugs gefunden?" gatewayDirection="Diverging"/>
+    <bpmn:exclusiveGateway id="Gw_MoreFeatures" name="Weitere Features?" gatewayDirection="Diverging"/>
+    <bpmn:endEvent id="End_Release" name="Release 🎉"/>
+
+    <!-- Sub-Agents -->
+    <bpmn:task id="Task_FrontendDev" name="frontend-developer"/>
+    <bpmn:task id="Task_BackendDev" name="backend-developer"/>
+    <bpmn:task id="Task_QAEngineer" name="qa-engineer"/>
+    <bpmn:task id="Task_UXReviewer" name="ux-reviewer"/>
+
+    <!-- Sequence Flows -->
+    <bpmn:sequenceFlow id="Sf_Start_Sparring" sourceRef="Start_Idee" targetRef="Task_Sparring"/>
+    <bpmn:sequenceFlow id="Sf_Sparring_Setup" sourceRef="Task_Sparring" targetRef="Task_DevSetup"/>
+    <bpmn:sequenceFlow id="Sf_Setup_GwRes" sourceRef="Task_DevSetup" targetRef="Gw_Research"/>
+    <bpmn:sequenceFlow id="Sf_GwRes_Research" name="optional" sourceRef="Gw_Research" targetRef="Task_Research"/>
+    <bpmn:sequenceFlow id="Sf_Research_Req" sourceRef="Task_Research" targetRef="Task_Requirements"/>
+    <bpmn:sequenceFlow id="Sf_GwRes_Req" name="überspringen" sourceRef="Gw_Research" targetRef="Task_Requirements"/>
+    <bpmn:sequenceFlow id="Sf_Req_Flows" sourceRef="Task_Requirements" targetRef="Task_Flows"/>
+    <bpmn:sequenceFlow id="Sf_Flows_UX" sourceRef="Task_Flows" targetRef="Task_UX"/>
+    <bpmn:sequenceFlow id="Sf_UX_Arch" sourceRef="Task_UX" targetRef="Task_Architect"/>
+    <bpmn:sequenceFlow id="Sf_Arch_Dev" sourceRef="Task_Architect" targetRef="Task_Dev"/>
+    <bpmn:sequenceFlow id="Sf_Dev_QA" sourceRef="Task_Dev" targetRef="Task_QA"/>
+    <bpmn:sequenceFlow id="Sf_QA_GwBugs" sourceRef="Task_QA" targetRef="Gw_Bugs"/>
+    <bpmn:sequenceFlow id="Sf_Bugs_Dev" name="ja – Fix &amp; Retest" sourceRef="Gw_Bugs" targetRef="Task_Dev"/>
+    <bpmn:sequenceFlow id="Sf_Bugs_GwMF" name="nein" sourceRef="Gw_Bugs" targetRef="Gw_MoreFeatures"/>
+    <bpmn:sequenceFlow id="Sf_MF_UX" name="ja" sourceRef="Gw_MoreFeatures" targetRef="Task_UX"/>
+    <bpmn:sequenceFlow id="Sf_MF_End" name="nein" sourceRef="Gw_MoreFeatures" targetRef="End_Release"/>
+    <bpmn:sequenceFlow id="Sf_Dev_FE" sourceRef="Task_Dev" targetRef="Task_FrontendDev"/>
+    <bpmn:sequenceFlow id="Sf_Dev_BE" sourceRef="Task_Dev" targetRef="Task_BackendDev"/>
+    <bpmn:sequenceFlow id="Sf_QA_QAEng" sourceRef="Task_QA" targetRef="Task_QAEngineer"/>
+    <bpmn:sequenceFlow id="Sf_QA_UXRev" sourceRef="Task_QA" targetRef="Task_UXReviewer"/>
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collab_RedProto">
+      <bpmndi:BPMNShape id="Shape_Pool" bpmnElement="Pool_RedProto" isHorizontal="true">
+        <dc:Bounds x="0" y="0" width="1600" height="680"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Nutzer" bpmnElement="Lane_Nutzer" isHorizontal="true">
+        <dc:Bounds x="38" y="44" width="1562" height="140"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Commands" bpmnElement="Lane_Commands" isHorizontal="true">
+        <dc:Bounds x="38" y="184" width="1562" height="322"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Agents" bpmnElement="Lane_Agents" isHorizontal="true">
+        <dc:Bounds x="38" y="506" width="1562" height="174"/>
+      </bpmndi:BPMNShape>
+
+      <!-- Start Event -->
+      <bpmndi:BPMNShape id="Shape_Start" bpmnElement="Start_Idee">
+        <dc:Bounds x="173" y="94" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <!-- Tasks -->
+      <bpmndi:BPMNShape id="Shape_Sparring" bpmnElement="Task_Sparring">
+        <dc:Bounds x="223" y="320" width="114" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_DevSetup" bpmnElement="Task_DevSetup">
+        <dc:Bounds x="336" y="320" width="114" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_GwRes" bpmnElement="Gw_Research">
+        <dc:Bounds x="486" y="325" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Research" bpmnElement="Task_Research">
+        <dc:Bounds x="451" y="228" width="110" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Req" bpmnElement="Task_Requirements">
+        <dc:Bounds x="558" y="320" width="114" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Flows" bpmnElement="Task_Flows">
+        <dc:Bounds x="659" y="320" width="114" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_UX" bpmnElement="Task_UX">
+        <dc:Bounds x="773" y="320" width="114" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Architect" bpmnElement="Task_Architect">
+        <dc:Bounds x="908" y="320" width="114" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Dev" bpmnElement="Task_Dev">
+        <dc:Bounds x="1041" y="320" width="114" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_QA" bpmnElement="Task_QA">
+        <dc:Bounds x="1181" y="320" width="114" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_GwBugs" bpmnElement="Gw_Bugs">
+        <dc:Bounds x="1347" y="325" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_GwMF" bpmnElement="Gw_MoreFeatures">
+        <dc:Bounds x="1460" y="94" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End" bpmnElement="End_Release">
+        <dc:Bounds x="1535" y="94" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <!-- Sub-agents -->
+      <bpmndi:BPMNShape id="Shape_FEDev" bpmnElement="Task_FrontendDev">
+        <dc:Bounds x="1008" y="557" width="104" height="44"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_BEDev" bpmnElement="Task_BackendDev">
+        <dc:Bounds x="1093" y="557" width="104" height="44"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_QAEng" bpmnElement="Task_QAEngineer">
+        <dc:Bounds x="1163" y="557" width="104" height="44"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_UXRev" bpmnElement="Task_UXReviewer">
+        <dc:Bounds x="1276" y="557" width="104" height="44"/>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

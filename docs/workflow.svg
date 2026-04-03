@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="680" viewBox="0 0 1600 680" style="background:#f8fafc;font-family:Inter, system-ui, -apple-system, sans-serif;">
+<rect x="158" y="44" width="576" height="636" rx="0" fill="#fffbeb" opacity="0.5"/>
+<rect x="742" y="44" width="832" height="636" rx="0" fill="#f0fdf4" opacity="0.4"/>
+<text x="446" y="56" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="700" letter-spacing="0.5">EINMALIG PRO PROJEKT</text>
+<text x="1158" y="56" text-anchor="middle" font-size="9" fill="#22c55e" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="700" letter-spacing="0.5">PRO FEATURE WIEDERHOLEN</text>
+<rect x="158" y="44" width="576" height="636" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="6,4"/>
+<rect x="742" y="44" width="832" height="636" fill="none" stroke="#22c55e" stroke-width="1.2" stroke-dasharray="6,4"/>
+<rect x="38" y="44" width="1562" height="140" fill="#f8fafc"/>
+<rect x="38" y="184" width="1562" height="322" fill="#ffffff"/>
+<rect x="38" y="506" width="1562" height="174" fill="#f0f9ff"/>
+<rect x="0" y="0" width="1600" height="680" rx="4" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="0" y="0" width="38" height="680" rx="4" fill="#0f172a"/>
+<text x="19" y="340" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="700" fill="#f1f5f9" font-family="Inter, system-ui, -apple-system, sans-serif" transform="rotate(-90,19,340)">red·proto Workflow</text>
+<rect x="38" y="0" width="1562" height="44" fill="#0f172a" opacity="0.92"/>
+<text x="819" y="23" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#f1f5f9" font-family="Inter, system-ui, -apple-system, sans-serif" letter-spacing="0.3">Produktentwicklungs-Pipeline</text>
+<rect x="38" y="44" width="118" height="140" fill="#1e293b"/>
+<text x="97" y="114" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="600" fill="#cbd5e1" font-family="Inter, system-ui, -apple-system, sans-serif" transform="rotate(-90,97,114)">Nutzer</text>
+<rect x="38" y="184" width="118" height="322" fill="#1e293b"/>
+<text x="97" y="345" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="600" fill="#cbd5e1" font-family="Inter, system-ui, -apple-system, sans-serif" transform="rotate(-90,97,345)">Claude – Commands</text>
+<rect x="38" y="506" width="118" height="174" fill="#1e293b"/>
+<text x="97" y="593" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="600" fill="#cbd5e1" font-family="Inter, system-ui, -apple-system, sans-serif" transform="rotate(-90,97,593)">Sub-Agents</text>
+<line x1="38" y1="184" x2="1600" y2="184" stroke="#cbd5e1" stroke-width="1"/>
+<line x1="38" y1="506" x2="1600" y2="506" stroke="#cbd5e1" stroke-width="1"/>
+<line x1="38" y1="680" x2="1600" y2="680" stroke="#cbd5e1" stroke-width="1"/>
+<line x1="156" y1="44" x2="156" y2="680" stroke="#cbd5e1" stroke-width="1"/>
+<line x1="1035" y1="190" x2="1035" y2="674" stroke="#f97316" stroke-width="1.5" stroke-dasharray="4,3"/>
+<text x="1039" y="202" font-size="8.5" fill="#f97316" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="600">Neue Session →</text>
+<line x1="1173" y1="190" x2="1173" y2="674" stroke="#f97316" stroke-width="1.5" stroke-dasharray="4,3"/>
+<text x="1177" y="202" font-size="8.5" fill="#f97316" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="600">Neue Session →</text>
+<line x1="213.0" y1="114.0" x2="222.6" y2="336.0" stroke="#64748b" stroke-width="1.5" />
+<polygon points="223.0,345.0 218.1,336.2 227.1,335.8" fill="#64748b"/>
+<line x1="337.0" y1="345.0" x2="345.0" y2="345.0" stroke="#64748b" stroke-width="1.5" />
+<polygon points="336.0,345.0 345.0,340.5 345.0,349.5" fill="#64748b"/>
+<line x1="450.0" y1="345.0" x2="477.0" y2="345.0" stroke="#64748b" stroke-width="1.5" />
+<polygon points="486.0,345.0 477.0,349.5 477.0,340.5" fill="#64748b"/>
+<line x1="506.0" y1="325.0" x2="506.0" y2="255.0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,4"/>
+<polygon points="506.0,246.0 510.5,255.0 501.5,255.0" fill="#94a3b8"/>
+<text x="506.0" y="279.5" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, system-ui, -apple-system, sans-serif" font-style="italic">optional</text>
+<path d="M 506 267 L 506 315 L 558 315 L 558 345" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,4"/>
+<polygon points="558.0,345.0 553.5,336.0 562.5,336.0" fill="#94a3b8"/>
+<line x1="526.0" y1="345.0" x2="549.0" y2="345.0" stroke="#64748b" stroke-width="1.5" />
+<polygon points="558.0,345.0 549.0,349.5 549.0,340.5" fill="#64748b"/>
+<text x="542.0" y="357.0" text-anchor="middle" font-size="9" fill="#64748b" font-family="Inter, system-ui, -apple-system, sans-serif" font-style="italic">überspringen</text>
+<line x1="672.0" y1="345.0" x2="668.0" y2="345.0" stroke="#64748b" stroke-width="1.5" />
+<polygon points="659.0,345.0 668.0,340.5 668.0,349.5" fill="#64748b"/>
+<line x1="887.0" y1="345.0" x2="899.0" y2="345.0" stroke="#64748b" stroke-width="1.5" />
+<polygon points="908.0,345.0 899.0,349.5 899.0,340.5" fill="#64748b"/>
+<line x1="1022.0" y1="345.0" x2="1032.0" y2="345.0" stroke="#64748b" stroke-width="1.5" />
+<polygon points="1041.0,345.0 1032.0,349.5 1032.0,340.5" fill="#64748b"/>
+<line x1="1155.0" y1="345.0" x2="1172.0" y2="345.0" stroke="#64748b" stroke-width="1.5" />
+<polygon points="1181.0,345.0 1172.0,349.5 1172.0,340.5" fill="#64748b"/>
+<line x1="1295.0" y1="345.0" x2="1338.0" y2="345.0" stroke="#64748b" stroke-width="1.5" />
+<polygon points="1347.0,345.0 1338.0,349.5 1338.0,340.5" fill="#64748b"/>
+<path d="M 1387 345 L 1480 345 L 1480 134" fill="none" stroke="#64748b" stroke-width="1.5"/>
+<polygon points="1480.0,134.0 1484.5,143.0 1475.5,143.0" fill="#64748b"/>
+<line x1="1500.0" y1="114.0" x2="1526.0" y2="114.0" stroke="#64748b" stroke-width="1.5" />
+<polygon points="1535.0,114.0 1526.0,118.5 1526.0,109.5" fill="#64748b"/>
+<text x="1517.5" y="108.0" text-anchor="middle" font-size="9" fill="#64748b" font-family="Inter, system-ui, -apple-system, sans-serif" font-style="italic">nein</text>
+<path d="M 1480 94 L 1480 22 L 830 22 L 830 184" fill="none" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="6,4"/>
+<polygon points="830.0,184.0 825.5,175.0 834.5,175.0" fill="#dc2626"/>
+<text x="1155" y="17" text-anchor="middle" font-size="9" fill="#dc2626" font-family="Inter, system-ui, -apple-system, sans-serif" font-style="italic">ja – nächstes Feature</text>
+<path d="M 1367 365 L 1367 698 L 1098 698 L 1098 370" fill="none" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="6,4"/>
+<polygon points="1098.0,370.0 1093.5,361.0 1102.5,361.0" fill="#dc2626"/>
+<text x="1232" y="711" text-anchor="middle" font-size="9" fill="#dc2626" font-family="Inter, system-ui, -apple-system, sans-serif" font-style="italic">Bugs gefunden – Fix &amp; Retest</text>
+<line x1="1098.0" y1="370.0" x2="1062.4" y2="497.3" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="6,4"/>
+<polygon points="1060.0,506.0 1058.1,496.1 1066.8,498.5" fill="#6366f1"/>
+<line x1="1098.0" y1="370.0" x2="1137.3" y2="497.4" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="6,4"/>
+<polygon points="1140.0,506.0 1133.0,498.7 1141.6,496.1" fill="#6366f1"/>
+<line x1="1238.0" y1="370.0" x2="1211.8" y2="497.2" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="6,4"/>
+<polygon points="1210.0,506.0 1207.4,496.3 1216.2,498.1" fill="#6366f1"/>
+<line x1="1238.0" y1="370.0" x2="1294.4" y2="497.8" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="6,4"/>
+<polygon points="1298.0,506.0 1290.3,499.6 1298.5,495.9" fill="#6366f1"/>
+<path d="M 193 134 L 193 320" fill="none" stroke="#64748b" stroke-width="1.5"/>
+<polygon points="193.0,320.0 188.5,311.0 197.5,311.0" fill="#64748b"/>
+<circle cx="193" cy="114" r="20" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5"/>
+<circle cx="193" cy="114" r="14" fill="none" stroke="#16a34a" stroke-width="1"/>
+<text x="193" y="148" text-anchor="middle" font-size="9.5" fill="#475569" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="600">Idee</text>
+<polygon points="1480,94 1500,114 1480,134 1460,114" fill="#fef9c3" stroke="#eab308" stroke-width="1.8"/>
+<text x="1480" y="118" text-anchor="middle" font-size="13" fill="#713f12" font-family="Inter, system-ui, -apple-system, sans-serif">✕</text>
+<text x="1480" y="142" text-anchor="middle" font-size="9" fill="#475569" font-family="Inter, system-ui, -apple-system, sans-serif">Weitere</text>
+<text x="1480" y="154" text-anchor="middle" font-size="9" fill="#475569" font-family="Inter, system-ui, -apple-system, sans-serif">Features?</text>
+<circle cx="1555" cy="114" r="20" fill="#fee2e2" stroke="#dc2626" stroke-width="3.5"/>
+<text x="1555" y="148" text-anchor="middle" font-size="9.5" fill="#475569" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="600">Release 🎉</text>
+<rect x="223" y="320" width="114" height="50" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+<text x="280" y="341.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">/red:proto-</text>
+<text x="280" y="356.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">sparring</text>
+<rect x="336" y="320" width="114" height="50" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+<text x="393" y="341.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">/red:proto-</text>
+<text x="393" y="356.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">dev-setup</text>
+<rect x="451" y="221" width="110" height="50" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+<text x="506" y="242.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">/red:proto-</text>
+<text x="506" y="257.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">research</text>
+<polygon points="506,325 526,345 506,365 486,345" fill="#fef9c3" stroke="#eab308" stroke-width="1.8"/>
+<text x="506" y="349" text-anchor="middle" font-size="13" fill="#713f12" font-family="Inter, system-ui, -apple-system, sans-serif">✕</text>
+<text x="506" y="373" text-anchor="middle" font-size="9" fill="#475569" font-family="Inter, system-ui, -apple-system, sans-serif">Research?</text>
+<rect x="558" y="320" width="114" height="50" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+<text x="615" y="341.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">/red:proto-</text>
+<text x="615" y="356.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">requirements</text>
+<rect x="659" y="320" width="114" height="50" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+<text x="716" y="341.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">/red:proto-</text>
+<text x="716" y="356.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">flows</text>
+<rect x="773" y="320" width="114" height="50" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+<text x="830" y="341.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">/red:proto-</text>
+<text x="830" y="356.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">ux</text>
+<rect x="908" y="320" width="114" height="50" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+<text x="965" y="341.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">/red:proto-</text>
+<text x="965" y="356.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">architect</text>
+<rect x="1041" y="320" width="114" height="50" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+<text x="1098" y="341.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">/red:proto-</text>
+<text x="1098" y="356.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">dev</text>
+<rect x="1181" y="320" width="114" height="50" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+<text x="1238" y="341.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">/red:proto-</text>
+<text x="1238" y="356.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a5f" font-family="Inter, system-ui, -apple-system, sans-serif">qa</text>
+<polygon points="1367,325 1387,345 1367,365 1347,345" fill="#fef9c3" stroke="#eab308" stroke-width="1.8"/>
+<text x="1367" y="349" text-anchor="middle" font-size="13" fill="#713f12" font-family="Inter, system-ui, -apple-system, sans-serif">✕</text>
+<text x="1369" y="373" text-anchor="middle" font-size="9" fill="#475569" font-family="Inter, system-ui, -apple-system, sans-serif">Bugs</text>
+<text x="1369" y="385" text-anchor="middle" font-size="9" fill="#475569" font-family="Inter, system-ui, -apple-system, sans-serif">gefunden?</text>
+<rect x="1156" y="331" width="90" height="28" rx="5" fill="#fff7ed" stroke="#f97316" stroke-width="1"/>
+<text x="1201" y="342" text-anchor="middle" font-size="8.5" fill="#f97316" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="600">Handoff</text>
+<text x="1201" y="354" text-anchor="middle" font-size="8" fill="#f97316" font-family="Inter, system-ui, -apple-system, sans-serif">context/FEAT-x.md</text>
+<rect x="1008" y="572" width="104" height="42" rx="7" fill="#e0e7ff" stroke="#6366f1" stroke-width="1.5"/>
+<text x="1060" y="589.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e1b4b" font-family="Inter, system-ui, -apple-system, sans-serif">frontend-</text>
+<text x="1060" y="604.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e1b4b" font-family="Inter, system-ui, -apple-system, sans-serif">developer</text>
+<rect x="1088" y="572" width="104" height="42" rx="7" fill="#e0e7ff" stroke="#6366f1" stroke-width="1.5"/>
+<text x="1140" y="589.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e1b4b" font-family="Inter, system-ui, -apple-system, sans-serif">backend-</text>
+<text x="1140" y="604.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e1b4b" font-family="Inter, system-ui, -apple-system, sans-serif">developer</text>
+<rect x="1158" y="572" width="104" height="42" rx="7" fill="#e0e7ff" stroke="#6366f1" stroke-width="1.5"/>
+<text x="1210" y="589.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e1b4b" font-family="Inter, system-ui, -apple-system, sans-serif">qa-</text>
+<text x="1210" y="604.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e1b4b" font-family="Inter, system-ui, -apple-system, sans-serif">engineer</text>
+<rect x="1246" y="572" width="104" height="42" rx="7" fill="#e0e7ff" stroke="#6366f1" stroke-width="1.5"/>
+<text x="1298" y="589.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e1b4b" font-family="Inter, system-ui, -apple-system, sans-serif">ux-</text>
+<text x="1298" y="604.5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e1b4b" font-family="Inter, system-ui, -apple-system, sans-serif">reviewer</text>
+<rect x="1032.0" y="554" width="56.0" height="18" rx="9" fill="#e2e8f0"/>
+<text x="1060" y="567.5" text-anchor="middle" font-size="9" fill="#334155" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="700">parallel</text>
+<rect x="1112.0" y="554" width="56.0" height="18" rx="9" fill="#e2e8f0"/>
+<text x="1140" y="567.5" text-anchor="middle" font-size="9" fill="#334155" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="700">parallel</text>
+<rect x="1182.0" y="554" width="56.0" height="18" rx="9" fill="#e2e8f0"/>
+<text x="1210" y="567.5" text-anchor="middle" font-size="9" fill="#334155" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="700">parallel</text>
+<rect x="1270.0" y="554" width="56.0" height="18" rx="9" fill="#e2e8f0"/>
+<text x="1298" y="567.5" text-anchor="middle" font-size="9" fill="#334155" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="700">parallel</text>
+<rect x="1390" y="648" width="200" height="24" rx="12" fill="#1e293b" opacity="0.85"/>
+<text x="1490" y="664" text-anchor="middle" font-size="9.5" fill="#f1f5f9" font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="600">/red:proto-workflow  – Orientierung jederzeit</text>
+<text x="1335" y="353" text-anchor="end" font-size="8.5" fill="#dc2626" font-family="Inter, system-ui, -apple-system, sans-serif" font-style="italic">ja</text>
+<text x="1369" y="319" text-anchor="middle" font-size="8.5" fill="#64748b" font-family="Inter, system-ui, -apple-system, sans-serif" font-style="italic">nein</text>
+</svg>
