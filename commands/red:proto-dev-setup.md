@@ -84,7 +84,7 @@ Leite aus PRD-Signalen und Recherche eine **konkrete Empfehlung** ab. Präsentie
 - Web-Technologie: **Electron** oder **Tauri** (leichtgewichtiger, Rust-basiert)
 
 **Datenbank-Empfehlung** (unabhängig vom Framework):
-- Standard (relational): **PostgreSQL via Neon** (serverless, kostenlos startbar)
+- Standard (relational): **PostgreSQL via Neon** (keine eigene Server-Verwaltung, kostenlos startbar)
 - Echtzeit + Auth integriert: **Supabase**
 - Dokument-basiert: **MongoDB**
 - Kein persistentes Backend nötig: localStorage / kein DB

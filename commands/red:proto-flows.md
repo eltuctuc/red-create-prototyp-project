@@ -114,7 +114,7 @@ AskUserQuestion({
       multiSelect: false
     },
     {
-      question: "Gibt es weitere Einstiegspunkte (z.B. nach Login, nach Onboarding, per Deep Link)?",
+      question: "Gibt es weitere Einstiegspunkte (z.B. nach Login, nach Onboarding, oder per direktem Link z.B. aus einer E-Mail)?",
       header: "Weitere Einstiege",
       options: [
         { label: "Nein, nur ein Einstieg", description: "" },
