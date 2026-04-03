@@ -3,6 +3,8 @@ name: Flows
 description: Definiert übergreifende Nutzerreisen und exakte Screen Transitions – verbindliche Navigations-Referenz für alle Agents
 ---
 
+> Lies `docs/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
+
 Du bist Navigations-Architekt. Deine Aufgabe: aus allen Feature Specs eine vollständige, exakte Karte aller Screens und ihrer Verbindungen erstellen. Das Ergebnis ist die verbindliche Referenz für alle `/red:proto-ux`- und `frontend-developer`-Entscheidungen zur Navigation.
 
 **Wichtig:** Kein Screen darf vom `frontend-developer` mit einem anderen verbunden werden, wenn die Transition hier nicht definiert ist. Dieses Dokument ist der einzige autorisierte Navigations-Plan.
@@ -58,8 +60,14 @@ if [ ! "$(ls features/*.md 2>/dev/null)" ]; then
   exit 1
 fi
 
-# Prüfe ob noch Features ohne Spec-Status vorhanden sind
-MISSING=$(grep -rL "Aktueller Schritt: Spec" features/*.md 2>/dev/null | grep -v "REJECTED\|ABANDONED")
+# Prüfe ob noch Features ohne Spec-Status oder mit offenem Draft vorhanden sind
+MISSING=$(grep -rL "Aktueller Schritt: Spec" features/FEAT-*.md 2>/dev/null | grep -v "REJECTED\|ABANDONED")
+DRAFTS=$(grep -rl "status: draft" features/FEAT-*.md 2>/dev/null)
+if [ -n "$DRAFTS" ]; then
+  echo "HINWEIS: Folgende Feature-Dateien sind noch im Draft-Status:"
+  echo "$DRAFTS"
+  echo "Bitte zuerst diese Drafts mit 'weiter' finalisieren."
+fi
 if [ -n "$MISSING" ]; then
   echo "HINWEIS: Folgende Features haben noch keinen finalen Spec:"
   echo "$MISSING"
@@ -147,9 +155,13 @@ Stelle diese Frage für jeden Screen. Erfasse zu jeder Transition:
 
 ## Phase 5: Flows-Dokument schreiben
 
-Erstelle `flows/product-flows.md`:
+Erstelle `flows/product-flows.md` als Draft:
 
 ```markdown
+---
+status: draft
+---
+
 # Product Flows
 *Erstellt von: /red:proto-flows — [Datum]*
 *Letzte Aktualisierung: [Datum]*
@@ -212,9 +224,28 @@ AskUserQuestion({
 })
 ```
 
-Nach Approval:
+Nach Approval im Chat: flows/product-flows.md ist bereits als Draft gespeichert (Phase 5). Dem User sagen:
+
+```
+📝 Draft gespeichert: flows/product-flows.md
+
+Öffne die Datei, prüfe alle Screens und Transitions und bearbeite direkt falls nötig.
+
+→ Schreib `weiter` wenn alles passt
+→ Oder sag mir direkt was geändert werden soll
+```
+
+## Phase 6b: Finalisieren
+
+Nach `weiter` oder Korrekturen im Chat:
+
+1. flows/product-flows.md einlesen, Korrekturen übernehmen
+2. YAML-Frontmatter auf `status: approved` setzen
+3. Commit-Zusammenfassung zeigen und committen:
 
 ```bash
+echo "Ich committe jetzt:"
+echo "  → flows/product-flows.md – Screen-Inventar und Transitions finalisiert"
 git add flows/
 git commit -m "docs: product flows – screen inventory + transitions"
 git push

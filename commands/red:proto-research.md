@@ -3,6 +3,20 @@ name: User Research
 description: Leitet aus PRD und Dokumenten Forschungsfragen ab, erstellt Problem Statement Map und Personas
 ---
 
+> Lies `docs/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
+
+## Phase 0b: Draft-Erkennung bei Command-Neustart
+
+```bash
+DRAFTS=$(grep -rl "status: draft" research/ 2>/dev/null)
+if [ -n "$DRAFTS" ]; then
+  echo "DRAFT-MODUS: Folgende Dateien warten auf Finalisierung:"
+  echo "$DRAFTS"
+fi
+```
+
+Wenn Drafts gefunden: Informiere den User welche Dateien noch offen sind und springe direkt zu Phase 6 (Review und Speichern).
+
 Du bist ein erfahrener UX Researcher. Deine Aufgabe: aus dem PRD und vorhandenen Artefakten strukturierte Research-Grundlagen erstellen – Forschungsfragen, Problem Statement Map und Personas. Kein Bauchgefühl, keine Annahmen als Fakten verkauft.
 
 ## Phase 0: Modus erkennen
@@ -90,9 +104,13 @@ AskUserQuestion({
 })
 ```
 
-Dokumentiere die Antworten als `research/platform-context.md` – dev-setup liest diese Datei und passt die Tech-Stack-Empfehlung entsprechend an.
+Dokumentiere die Antworten als `research/platform-context.md` mit Draft-Status – dev-setup liest diese Datei und passt die Tech-Stack-Empfehlung entsprechend an.
 
 ```markdown
+---
+status: draft
+---
+
 # Platform & Nutzungskontext
 *Erstellt von: /red:proto-research — [Datum]*
 
@@ -112,6 +130,18 @@ Dokumentiere die Antworten als `research/platform-context.md` – dev-setup lies
 [2–3 Sätze: Was bedeutet das für die Platform-Entscheidung?
 z.B.: "Primär Mobile + Native gewünscht → React Native oder Flutter statt Next.js prüfen"
 z.B.: "Desktop-fokussiert + täglicher Workflow → Web-App mit Keyboard-Shortcuts, Performance-Budget beachten"]
+```
+
+Dann dem User sagen:
+```
+📝 Draft gespeichert: research/platform-context.md
+
+Kurze Pause?
+→ Schreib `weiter` wenn du fertig bist
+
+Echter Research (Interviews, Umfragen, Tage)?
+→ Trag deine Findings direkt in die Datei ein
+→ Dann /red:proto-research erneut aufrufen – ich erkenne den Draft automatisch
 ```
 
 ---
@@ -182,9 +212,13 @@ AskUserQuestion({
 
 **Bei "Pause – echten Research durchführen":**
 
-Speichere die Forschungsfragen in `research/research-questions.md`:
+Speichere die Forschungsfragen als Draft in `research/research-questions.md`:
 
 ```markdown
+---
+status: draft
+---
+
 # Forschungsfragen
 *Erstellt von: /red:proto-research — [Datum]*
 *Status: Offen – noch nicht beantwortet*
@@ -227,9 +261,13 @@ Frage 1 von [N]:
 kein perfektes Research nötig, wir arbeiten mit dem was du weißt)
 ```
 
-Sammle alle Antworten. Speichere danach `research/research-questions.md`:
+Sammle alle Antworten. Speichere danach `research/research-questions.md` als Draft:
 
 ```markdown
+---
+status: draft
+---
+
 # Forschungsfragen & Antworten
 *Erstellt von: /red:proto-research — [Datum]*
 *Status: Interaktiv beantwortet (Hypothesen)*
@@ -335,12 +373,61 @@ AskUserQuestion({
 })
 ```
 
-Nach Approval speichern:
-- `/research/research-questions.md`
-- `/research/problem-statement.md`
-- `/research/personas.md`
+Nach Approval: Problem Statement Map und Personas als Drafts speichern.
+
+`research/problem-statement.md`:
+```markdown
+---
+status: draft
+---
+
+# Problem Statement Map
+*Erstellt von: /red:proto-research — [Datum]*
+
+[Inhalt aus Phase 4]
+```
+
+`research/personas.md`:
+```markdown
+---
+status: draft
+---
+
+# Personas
+*Erstellt von: /red:proto-research — [Datum]*
+
+[Inhalt aus Phase 5]
+```
+
+Dann dem User sagen:
+```
+📝 Drafts gespeichert:
+  → research/problem-statement.md
+  → research/personas.md
+  (+ research/platform-context.md und research/research-questions.md falls noch offen)
+
+Kurze Pause?
+→ Schreib `weiter` wenn du alle Dateien geprüft hast
+
+Echter Research (Interviews, Umfragen, Tage)?
+→ Trag deine Findings direkt in die Dateien ein
+→ Dann /red:proto-research erneut aufrufen – ich erkenne die Drafts automatisch
+```
+
+## Phase 6b: Finalisieren
+
+Nach `weiter` oder Korrekturen im Chat:
+
+1. Alle Research-Dateien lesen und eventuelle Chat-Korrekturen einarbeiten
+2. YAML-Frontmatter in allen Dateien auf `status: approved` setzen
+3. Zusammenfassung zeigen und committen:
 
 ```bash
+echo "Ich committe jetzt:"
+echo "  → research/platform-context.md – Platform & Nutzungskontext"
+echo "  → research/research-questions.md – Forschungsfragen & Antworten"
+echo "  → research/problem-statement.md – Problem Statement Map"
+echo "  → research/personas.md – Personas"
 git add research/
 git commit -m "docs: add user research, personas and problem statement"
 git push

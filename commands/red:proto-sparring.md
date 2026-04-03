@@ -90,19 +90,47 @@ AskUserQuestion({
 })
 ```
 
-## Phase 4: Speichern
+## Phase 4: Als Draft speichern
 
-Nach Approval: Speichere nur das PRD in `/prd.md`. Notiere den gewählten Scope (Prototyp-Typ) im PRD unter einem neuen Abschnitt:
+> Lies zuerst `docs/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
+
+Nach Approval: Speichere das PRD als Draft in `/prd.md`. YAML-Frontmatter `status: draft` ergänzen. Notiere den gewählten Scope (Prototyp-Typ) im PRD unter einem neuen Abschnitt:
 
 ```markdown
+---
+status: draft
+---
+
+# Product Requirements Document
+...
+
 ## Scope-Typ
 [Klickbarer Prototyp | Funktionierender Prototyp | Produktionsreifes MVP | Unklar]
 ```
 
-Commit (nur wenn Git bereits initialisiert ist – bei Erstnutzung noch nicht vorhanden):
+Dann dem User sagen:
+```
+📝 Draft gespeichert: prd.md
+
+Öffne die Datei, prüfe sie und bearbeite sie direkt falls nötig.
+
+→ Schreib `weiter` wenn alles passt
+→ Oder sag mir direkt was geändert werden soll
+```
+
+## Phase 4b: Finalisieren
+
+Nach `weiter` oder Korrektur im Chat:
+
+1. Datei einlesen: `cat prd.md`
+2. Falls Korrekturen im Chat: Änderungen in prd.md übernehmen
+3. YAML-Frontmatter auf `status: approved` setzen
+4. Commit (nur wenn Git bereits initialisiert ist – bei Erstnutzung noch nicht vorhanden):
 
 ```bash
 if git rev-parse --git-dir > /dev/null 2>&1; then
+  echo "Ich committe jetzt:"
+  echo "  → prd.md – PRD finalisiert"
   git add prd.md
   git commit -m "docs: add/update PRD"
   git push

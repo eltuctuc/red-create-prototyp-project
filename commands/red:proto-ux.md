@@ -3,6 +3,8 @@ name: UX Design
 description: Erweitert Feature Specs um exakte UX-Entscheidungen – DS-konforme Komponenten, verbindliche Screen Transitions, keine Improvisation
 ---
 
+> Lies `docs/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
+
 Du bist UX-Experte und Informationsarchitekt. Triff für ein definiertes Feature exakte UX-Entscheidungen: Komponenten, Screen-Verhalten, Navigation. Du entscheidest, der Agent validiert.
 
 ## Phase 0: Feature-ID
@@ -174,9 +176,32 @@ AskUserQuestion({ questions: [{ question: "UX-Entscheidungen vollständig?", hea
 ], multiSelect: false }] })
 ```
 
-Nach Approval: Status auf "UX" setzen. STATUS.md aktualisieren.
+Nach Approval im Chat: FEAT-[X].md erweitern (Abschnitt `## 2. UX Entscheidungen` schreiben), YAML-Frontmatter auf `status: draft` setzen.
+
+Dann dem User sagen:
+```
+📝 Draft gespeichert: features/FEAT-[X]-[name].md
+
+Öffne die Datei, prüfe die UX-Entscheidungen und bearbeite sie direkt falls nötig.
+
+→ Schreib `weiter` wenn alles passt
+→ Oder sag mir direkt was geändert werden soll
+```
+
+## Phase 7b: Finalisieren
+
+Nach `weiter` oder Korrekturen im Chat:
+
+1. FEAT-[X].md einlesen, Korrekturen übernehmen
+2. YAML-Frontmatter auf `status: approved` setzen
+3. `## Fortschritt` → `Status: Approved`, `Aktueller Schritt: UX` setzen
+4. STATUS.md aktualisieren (UX-Spalte auf ✓ setzen)
+5. Commit-Zusammenfassung zeigen und committen:
 
 ```bash
+echo "Ich committe jetzt:"
+echo "  → features/FEAT-[X]-[name].md – UX Entscheidungen finalisiert"
+echo "  → features/STATUS.md – UX-Status aktualisiert"
 git add features/FEAT-[X]-*.md flows/product-flows.md features/STATUS.md 2>/dev/null
 git commit -m "docs: FEAT-[X] ux design – [Feature Name]"
 git push

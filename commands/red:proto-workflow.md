@@ -14,11 +14,15 @@ Du bist der Workflow-Navigator. Deine einzige Aufgabe: den echten Stand lesen un
 cat prd.md 2>/dev/null | head -5 || echo "FEHLT"
 cat project-config.md 2>/dev/null | grep -E "Projektname|Tech-Stack|Codeverzeichnis|Developer aufgeteilt" || echo "FEHLT"
 
-# Alle Features und ihr Status
-for f in features/*.md 2>/dev/null; do
+# Alle Features: Fortschritt-Sektion + Draft-Status
+for f in features/FEAT-*.md 2>/dev/null; do
   echo "=== $f ==="
-  grep -E "^# |Aktueller Schritt:" "$f" 2>/dev/null
+  grep -E "^# |Status:|Aktueller Schritt:|Fix-Schwelle:" "$f" 2>/dev/null | head -5
 done
+
+# Offene Drafts in der Discovery Phase
+echo "--- OFFENE DRAFTS ---"
+grep -rl "status: draft" prd.md research/ features/ flows/ 2>/dev/null || echo "Keine offenen Drafts"
 
 # Offene Bugs (nach Feature gruppiert)
 ls bugs/ 2>/dev/null | grep -v "\-fixed" || echo "Keine offenen Bugs"
@@ -44,9 +48,12 @@ VORBEREITUNG
   [✅/⬜] Dev Setup          project-config.md
   [✅/⬜] User Research      research/
 
+OFFENE DRAFTS  ⚠️
+  [Liste offener Draft-Dateien oder: Keine – alles finalisiert ✅]
+
 FEATURES
-  FEAT-1: [Name] ──── Status: [Spec|UX|Tech|Dev|QA|Done]
-  FEAT-2: [Name] ──── Status: [...]
+  FEAT-1: [Name] ──── Schritt: [Spec|UX|Tech|Dev|QA|Done]  Status: [Draft|Approved]
+  FEAT-2: [Name] ──── Schritt: [...]  Status: [...]
   ...
 
 OFFENE BUGS
@@ -61,6 +68,46 @@ LETZTES RELEASE
   [Version + Datum oder: Noch kein Release]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+Wenn offene Drafts vorhanden sind: diese prominent anzeigen und als ersten nächsten Schritt empfehlen (vor allem anderen).
+
+## Phase 2b: STATUS.md generieren
+
+Nach der Übersicht im Chat immer eine `STATUS.md` im Projektstamm speichern als Snapshot:
+
+```markdown
+---
+generated: true
+---
+
+# Projektstatus
+> ⚠️ Automatisch generiert via /red:proto-workflow — [Datum + Uhrzeit]
+> Nicht manuell bearbeiten. Immer /red:proto-workflow aufrufen um zu aktualisieren.
+
+## Vorbereitung
+
+| Artefakt | Datei | Status |
+|---|---|---|
+| PRD | prd.md | [✅ Approved / ⚠️ Draft / ❌ Fehlt] |
+| Dev Setup | project-config.md | [✅ Vorhanden / ❌ Fehlt] |
+| User Research | research/ | [✅ Approved / ⚠️ Draft / ❌ Fehlt] |
+| Flows | flows/product-flows.md | [✅ Approved / ⚠️ Draft / ❌ Fehlt] |
+
+## Features
+
+| ID | Feature | Schritt | Status |
+|---|---|---|---|
+| FEAT-[X] | [Name] | [Spec\|UX\|Tech\|Dev\|QA\|Done] | [✅ Approved / ⚠️ Draft] |
+
+## Offene Drafts
+
+[Liste der Dateien mit status: draft – oder: Keine]
+```
+
+Status-Werte aus den Dateien lesen:
+- YAML-Frontmatter `status: draft` → ⚠️ Draft
+- YAML-Frontmatter `status: approved` → ✅ Approved
+- Datei fehlt → ❌ Fehlt
 
 ## Phase 3: Nächsten Schritt exakt benennen
 
