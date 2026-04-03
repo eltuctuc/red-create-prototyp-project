@@ -161,8 +161,7 @@ echo "Ich committe jetzt:"
 echo "  → features/FEAT-[X]-[name].md – Tech Design finalisiert"
 echo "  → features/STATUS.md – Tech-Status aktualisiert"
 git add features/FEAT-[X]-*.md features/STATUS.md
-git commit -m "docs: FEAT-[X] tech design – [Feature Name]"
-git push
+git commit -q -m "docs: FEAT-[X] tech design – [Feature Name]" && git push -q
 ```
 
 ## Routing nach Approval

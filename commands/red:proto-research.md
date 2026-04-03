@@ -429,8 +429,7 @@ echo "  → research/research-questions.md – Forschungsfragen & Antworten"
 echo "  → research/problem-statement.md – Problem Statement Map"
 echo "  → research/personas.md – Personas"
 git add research/
-git commit -m "docs: add user research, personas and problem statement"
-git push
+git commit -q -m "docs: add user research, personas and problem statement" && git push -q
 ```
 
 Prüfe den aktuellen Stand:

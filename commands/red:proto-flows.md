@@ -247,8 +247,7 @@ Nach `weiter` oder Korrekturen im Chat:
 echo "Ich committe jetzt:"
 echo "  → flows/product-flows.md – Screen-Inventar und Transitions finalisiert"
 git add flows/
-git commit -m "docs: product flows – screen inventory + transitions"
-git push
+git commit -q -m "docs: product flows – screen inventory + transitions" && git push -q
 ```
 
 Sage dem User: "Flows dokumentiert. Nächster Schritt: `/red:proto-ux` für jedes Feature (einmal pro Feature) – die Transitions aus `flows/product-flows.md` sind die verbindliche Referenz.

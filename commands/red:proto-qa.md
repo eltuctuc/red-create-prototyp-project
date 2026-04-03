@@ -146,8 +146,8 @@ STATUS.md: QA-Wert auf `✓`.
 
 ```bash
 git add . features/STATUS.md
-git commit -m "release: v[X.Y.Z] – FEAT-[X] [Feature Name]"
-git tag v[X.Y.Z] && git push && git push origin --tags
+git commit -q -m "release: v[X.Y.Z] – FEAT-[X] [Feature Name]"
+git tag v[X.Y.Z] && git push -q && git push -q origin --tags
 ```
 
 Sage: "v[X.Y.Z] getaggt. FEAT-[X] ist Production-Ready. Nächstes Feature: `/red:proto-requirements`. Nach Pause: `/red:proto-workflow`."

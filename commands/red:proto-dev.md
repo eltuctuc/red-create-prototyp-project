@@ -111,7 +111,7 @@ grep -r "[geänderte Funktion]" [Codeverzeichnis]/ --include="*.tsx" --include="
 
 Nach allen Fixes:
 ```bash
-git add . && git commit -m "fix: FEAT-[X] – [Zusammenfassung]" && git push
+git add . && git commit -q -m "fix: FEAT-[X] – [Zusammenfassung]" && git push -q
 ```
 
 ## Phase 4.5: Selbstcheck vor Review
@@ -159,8 +159,7 @@ Status auf "Dev" setzen. STATUS.md aktualisieren.
 
 ```bash
 git add . features/STATUS.md
-git commit -m "feat: implement FEAT-[X] – [Feature Name]"
-git push
+git commit -q -m "feat: implement FEAT-[X] – [Feature Name]" && git push -q
 ```
 
 ## Phase 7: Handoff schreiben
@@ -190,7 +189,7 @@ Schreibe `context/FEAT-[ID]-dev-handoff.md` (legt Kontext für `/red:proto-qa` i
 ```bash
 mkdir -p context
 git add context/FEAT-[ID]-dev-handoff.md
-git commit -m "docs: FEAT-[X] dev handoff" && git push
+git commit -q -m "docs: FEAT-[X] dev handoff" && git push -q
 ```
 
 Sage: "Implementierung abgeschlossen. Handoff geschrieben. **Starte eine neue Session** und führe dort `/red:proto-qa FEAT-[ID]` aus. Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."

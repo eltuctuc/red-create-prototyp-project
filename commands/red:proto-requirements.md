@@ -236,8 +236,7 @@ echo "  → features/FEAT-[X]-[name].md – Spec finalisiert"
 echo "  → features/STATUS.md – Feature eingetragen"
 echo "  → project-config.md – Nächste ID aktualisiert"
 git add features/FEAT-[X]-*.md features/STATUS.md project-config.md
-git commit -m "docs: FEAT-[X] spec – [Feature Name]"
-git push
+git commit -q -m "docs: FEAT-[X] spec – [Feature Name]" && git push -q
 ```
 
 Sage dem User:

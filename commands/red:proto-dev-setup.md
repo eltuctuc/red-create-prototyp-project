@@ -428,7 +428,7 @@ Installiere nur was das PRD tatsächlich braucht – keine spekulativen Packages
 **Variante A – Nur Code versionieren:**
 ```bash
 cd [codedir]
-git init
+git init -q -b main
 cat > .gitignore << 'EOF'
 node_modules/
 .env
@@ -445,14 +445,13 @@ target/
 bin/
 obj/
 EOF
-git add .
-git commit -m "chore: initial scaffold ([Stack])"
+git add . && git commit -q -m "chore: initial scaffold ([Stack])"
 ```
 
 **Variante B – Alles versionieren (Code + Projektdokumentation):**
 ```bash
 # Im Projekt-Root:
-git init
+git init -q -b main
 cat > .gitignore << 'EOF'
 node_modules/
 .env
@@ -469,8 +468,7 @@ target/
 bin/
 obj/
 EOF
-git add .
-git commit -m "chore: project setup – PRD + [Stack] scaffold"
+git add . && git commit -q -m "chore: project setup – PRD + [Stack] scaffold"
 ```
 
 Danach in beiden Varianten: initialen Tag setzen:
@@ -495,8 +493,7 @@ gh repo create [repo-name] \
   --description "[Vision-Satz aus prd.md]"
 
 # Erst pushen, dann Tags:
-git push -u origin main
-git push origin --tags
+git push -q -u origin main && git push -q origin --tags
 ```
 
 Zeige dem User die Repository-URL.

@@ -203,8 +203,7 @@ echo "Ich committe jetzt:"
 echo "  → features/FEAT-[X]-[name].md – UX Entscheidungen finalisiert"
 echo "  → features/STATUS.md – UX-Status aktualisiert"
 git add features/FEAT-[X]-*.md flows/product-flows.md features/STATUS.md 2>/dev/null
-git commit -m "docs: FEAT-[X] ux design – [Feature Name]"
-git push
+git commit -q -m "docs: FEAT-[X] ux design – [Feature Name]" && git push -q
 ```
 
 ## Routing nach Approval
