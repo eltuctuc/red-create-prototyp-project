@@ -100,6 +100,28 @@ Faustregel: Kann es unabhängig getestet werden? Hat es eine andere User-Rolle? 
 
 Bei Zweifel: aufteilen und begründen.
 
+**Wenn mehrere Features erkannt werden:**
+
+Zeige zuerst die vollständige Liste mit kurzer Beschreibung im Chat und frage:
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Ich habe [N] Features erkannt. Stimmt die Aufteilung so?",
+      header: "Feature-Aufteilung prüfen",
+      options: [
+        { label: "Ja, passt so – alle anlegen", description: "Ich gehe sie nacheinander durch, du bestätigst jede einzeln" },
+        { label: "Nein, ich möchte die Aufteilung anpassen", description: "Feedback im Chat" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
+Nach Bestätigung: **Features einzeln nacheinander verarbeiten.** Erst wenn ein Feature gespeichert und freigegeben ist, das nächste starten. Nicht alle auf einmal zeigen.
+
 ## Phase 4: Spec autonom erstellen
 
 Leite aus PRD, Research und Feature-Beschreibung selbstständig ab:
@@ -112,7 +134,7 @@ Leite aus PRD, Research und Feature-Beschreibung selbstständig ab:
 
 Nur nachfragen wenn etwas genuiner Klärungsbedarf hat der sich nicht aus den vorhandenen Artefakten ableiten lässt – das sollte die Ausnahme sein, nicht die Regel.
 
-Schreibe die vollständige Spec direkt. Zeige sie im Chat bevor du speicherst.
+Schreibe die vollständige Spec und speichere sie direkt als Draft-Datei auf die Festplatte. Nicht nur im Chat anzeigen.
 
 ## Phase 6: Feature Spec schreiben
 
@@ -175,16 +197,28 @@ Fix-Schwelle: [Critical | Critical, High | Critical, High, Medium]
 - [Was explizit NICHT Teil dieses Features ist]
 ```
 
-## Phase 7: Review
+## Phase 7: Freigabe einholen
+
+Zeige dem User:
+```
+📝 Draft gespeichert: features/FEAT-[X]-[name].md
+
+Öffne die Datei, prüfe sie und bearbeite sie direkt falls nötig.
+
+→ Schreib `weiter` wenn alles passt
+→ Oder sag mir direkt was geändert werden soll
+```
+
+Dann fragen:
 
 ```typescript
 AskUserQuestion({
   questions: [
     {
       question: "Ist die Feature Spec vollständig und korrekt?",
-      header: "Review",
+      header: "FEAT-[X] prüfen",
       options: [
-        { label: "Passt so – Spec ist fertig", description: "Nächstes Feature mit /red:proto-requirements oder alle Specs fertig → /red:proto-flows" },
+        { label: "Passt so – Spec freigeben", description: "Ich finalisiere und committe. Dann weiter zum nächsten Feature (falls vorhanden)" },
         { label: "Änderungen nötig", description: "Feedback im Chat" }
       ],
       multiSelect: false
@@ -193,11 +227,9 @@ AskUserQuestion({
 })
 ```
 
-Nach Approval: Feature-File als Draft speichern. `project-config.md` aktualisieren (Nächste freie ID um 1 erhöhen). User per CONVENTIONS.md §Resume Pattern informieren.
-
 ## Phase 7b: Finalisieren
 
-Nach `weiter` oder Korrekturen: Feature-File einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Freigegeben` setzen.
+Nach `weiter` oder nach "Passt so": Feature-File einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Freigegeben` setzen.
 
 **STATUS.md aktualisieren:** Lies `features/STATUS.md`. Wenn die Datei noch nicht existiert, erstelle sie mit diesem Header:
 

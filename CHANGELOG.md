@@ -5,6 +5,15 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.13.7 — 5. April 2026
+
+### Fixes
+
+- **Feature Specs landen auf der Festplatte:** `/red:proto-requirements` hat Specs bisher nur im Chat angezeigt und erst nach Freigabe gespeichert. Jetzt wird die Draft-Datei direkt geschrieben – dann Freigabe einholen.
+- **Mehrere Features einzeln durcharbeiten:** Wenn mehrere Features erkannt werden, wird zuerst die Aufteilung bestätigt – dann jedes Feature einzeln nacheinander angelegt und freigegeben. Nicht mehr alle auf einmal im Chat.
+
+---
+
 ## v0.13.6 — 5. April 2026
 
 ### Verbesserungen
