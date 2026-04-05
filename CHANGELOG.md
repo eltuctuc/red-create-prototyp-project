@@ -5,6 +5,14 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.13.8 — 5. April 2026
+
+### Verbesserungen
+
+- **Contributor Guidelines erweitert:** `CLAUDE.md` enthält jetzt verbindliche Regeln für Changelog und Release Notes – Pflicht bei jedem Push, Struktur pro Version, Sprache und was nicht erlaubt ist.
+
+---
+
 ## v0.13.7 — 5. April 2026
 
 ### Fixes
