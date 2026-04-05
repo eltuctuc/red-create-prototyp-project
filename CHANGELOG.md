@@ -5,6 +5,14 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.14.3 — 5. April 2026
+
+### Fixes
+
+- **Templates werden jetzt tatsächlich mitgeliefert:** Die `docs/`-Ordner (Templates + SCAFFOLDING.md + CONVENTIONS.md) fehlten beim npm-Publish und beim Install-Script – ein stiller Bruch der durch die Token-Optimierung in v0.14.1 entstanden ist. Ab jetzt werden Templates bei der Installation ins Zielprojekt kopiert, sind im npm-Package enthalten, und werden auch beim manuellen `/red:proto`-Setup übertragen. Entschuldigung für den Fehler.
+
+---
+
 ## v0.14.2 — 5. April 2026
 
 ### Verbesserungen

@@ -301,7 +301,7 @@ async function installFiles(claudeBase, isGlobal, noClobber) {
     copied++;
   }
 
-  // If local install: also set up project structure + design system
+  // If local install: also set up project structure + design system + docs
   if (!isGlobal) {
     const dirs = ['research', 'features', 'flows', 'bugs', 'docs', 'projekt',
                   'design-system/tokens', 'design-system/components',
@@ -311,6 +311,10 @@ async function installFiles(claudeBase, isGlobal, noClobber) {
     }
     const srcDS = join(PACKAGE_ROOT, 'design-system');
     await cp(srcDS, join(projectRoot, 'design-system'), { recursive: true, force: !noClobber, errorOnExist: false });
+
+    // Copy docs/ (templates + SCAFFOLDING.md + CONVENTIONS.md)
+    const srcDocs = join(PACKAGE_ROOT, 'docs');
+    await cp(srcDocs, join(projectRoot, 'docs'), { recursive: true, force: !noClobber, errorOnExist: false });
   }
 
   console.log('');
