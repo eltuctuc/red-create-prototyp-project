@@ -171,7 +171,7 @@ Hex-Werte aus tokens/colors.md. Grenzwerte: 4.5:1 Normaltext, 3:1 großer Text/U
 
 ```typescript
 AskUserQuestion({ questions: [{ question: "UX-Entscheidungen vollständig?", header: "Review", options: [
-  { label: "Approved – weiter zu /red:proto-architect", description: "" },
+  { label: "Passt so – weiter zu /red:proto-architect", description: "" },
   { label: "Änderungen nötig", description: "Feedback im Chat" }
 ], multiSelect: false }] })
 ```
@@ -180,7 +180,7 @@ Nach Approval: FEAT-[X].md um Abschnitt `## 2. UX Entscheidungen` erweitern, YAM
 
 ## Phase 7b: Finalisieren
 
-Nach `weiter` oder Korrekturen: FEAT-[X].md einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Approved, Aktueller Schritt: UX` setzen. STATUS.md (UX-Spalte ✓).
+Nach `weiter` oder Korrekturen: FEAT-[X].md einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Freigegeben, Aktueller Schritt: UX` setzen. STATUS.md (UX-Spalte ✓).
 
 ```bash
 echo "Ich committe jetzt:"

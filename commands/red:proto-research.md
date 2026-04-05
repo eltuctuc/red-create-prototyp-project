@@ -15,7 +15,7 @@ if [ -n "$DRAFTS" ]; then
 fi
 ```
 
-Wenn Drafts gefunden: Informiere den User welche Dateien noch offen sind und springe direkt zu Phase 6 (Review und Speichern).
+Wenn Drafts gefunden: Informiere den User welche Dateien noch offen sind und springe direkt zu Phase 6 (Finalisieren).
 
 Du bist ein erfahrener UX Researcher. Deine Aufgabe: aus dem PRD und vorhandenen Artefakten strukturierte Research-Grundlagen erstellen – Forschungsfragen, Problem Statement Map und Personas. Kein Bauchgefühl, keine Annahmen als Fakten verkauft.
 
@@ -52,7 +52,63 @@ ls research/ 2>/dev/null && cat research/*.md 2>/dev/null
 > **Nur ausführen wenn `project-config.md` NICHT existiert.**
 > Im Modus B überspringen – Tech-Stack ist bereits entschieden.
 
-Diese Fragen klären ob das PRD eine Web-App, eine native Mobile-App oder beides impliziert. Die Antworten werden direkt an dev-setup weitergegeben.
+**Zuerst das PRD analysieren:** Lies `prd.md` sorgfältig und prüfe, ob Platform, Zielgeräte und Nutzungskontext bereits klar definiert sind (z.B. "Responsive Layout für Mobile und Desktop", "Web-App", "Native Mobile", "täglich genutzt im Büro", etc.).
+
+**Wenn die PRD ausreichend klare Aussagen enthält:**
+
+Leite `research/platform-context.md` direkt aus der PRD ab – stelle keine redundanten Fragen. Schreibe die Datei direkt:
+
+```markdown
+---
+status: draft
+---
+
+# Platform & Nutzungskontext
+*Abgeleitet aus PRD von: /red:proto-research — [Datum]*
+
+## Primäres Gerät
+[Aus PRD abgeleitet]
+
+## Nutzungskontext
+[Aus PRD abgeleitet]
+
+## Mobile-Typ
+[Aus PRD abgeleitet]
+
+## Nutzungsfrequenz
+[Aus PRD abgeleitet oder "Nicht spezifiziert"]
+
+## Implikationen für Tech-Stack
+[2–3 Sätze: Was bedeutet das für die Platform-Entscheidung?]
+```
+
+Zeige dem User:
+```
+📝 Draft gespeichert: research/platform-context.md
+(Aus PRD abgeleitet – keine Rückfragen nötig)
+```
+
+Frage dann:
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Stimmt der Platform-Kontext so?",
+      header: "platform-context.md prüfen",
+      options: [
+        { label: "Ja, passt so", description: "Weiter mit den Forschungsfragen" },
+        { label: "Ich möchte etwas anpassen", description: "Sag mir direkt was geändert werden soll" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
+**Wenn die PRD keine ausreichenden Aussagen zu Platform/Gerät/Kontext enthält:**
+
+Stelle gezielte Fragen nur zu den Punkten, die im PRD wirklich fehlen:
 
 ```typescript
 AskUserQuestion({
@@ -63,7 +119,7 @@ AskUserQuestion({
       options: [
         { label: "Desktop / Laptop", description: "Browser am Schreibtisch, Maus & Tastatur" },
         { label: "Smartphone", description: "Unterwegs, Touch-Bedienung, kleines Display" },
-        { label: "Tablet", description: "Mittleres Display, Touch, oft Couch oder Unterwegs" },
+        { label: "Tablet", description: "Mittleres Display, Touch, oft Couch oder unterwegs" },
         { label: "Gemischt – Desktop + Mobile gleichwertig", description: "Responsive Design ist Pflicht" }
       ],
       multiSelect: false
@@ -72,7 +128,7 @@ AskUserQuestion({
       question: "In welchem Kontext wird das Produkt genutzt?",
       header: "Nutzungskontext",
       options: [
-        { label: "Am Schreibtisch / fokussiert", description: "Langer Session, viel Screen-Fläche, kein Ablenkungspotential" },
+        { label: "Am Schreibtisch / fokussiert", description: "Lange Session, viel Screen-Fläche, kein Ablenkungspotential" },
         { label: "Unterwegs / kurze Sessions", description: "1–3 Minuten, Ablenkung, schlechte Netzverbindung möglich" },
         { label: "Beides – variiert je nach Persona", description: "Unterschiedliche Nutzungsmuster je nach Nutzertyp" }
       ],
@@ -104,44 +160,24 @@ AskUserQuestion({
 })
 ```
 
-Dokumentiere die Antworten als `research/platform-context.md` mit Draft-Status – dev-setup liest diese Datei und passt die Tech-Stack-Empfehlung entsprechend an.
+Schreibe danach `research/platform-context.md` als Draft – dev-setup liest diese Datei und passt die Tech-Stack-Empfehlung entsprechend an.
 
-```markdown
----
-status: draft
----
+Frage dann:
 
-# Platform & Nutzungskontext
-*Erstellt von: /red:proto-research — [Datum]*
-
-## Primäres Gerät
-[Antwort]
-
-## Nutzungskontext
-[Antwort]
-
-## Mobile-Typ
-[Antwort]
-
-## Nutzungsfrequenz
-[Antwort]
-
-## Implikationen für Tech-Stack
-[2–3 Sätze: Was bedeutet das für die Platform-Entscheidung?
-z.B.: "Primär Mobile + Native gewünscht → React Native oder Flutter statt Next.js prüfen"
-z.B.: "Desktop-fokussiert + täglicher Workflow → Web-App mit Keyboard-Shortcuts, Performance-Budget beachten"]
-```
-
-Dann dem User sagen:
-```
-📝 Draft gespeichert: research/platform-context.md
-
-Kurze Pause?
-→ Schreib `weiter` wenn du fertig bist
-
-Echter Research (Interviews, Umfragen, Tage)?
-→ Trag deine Findings direkt in die Datei ein
-→ Dann /red:proto-research erneut aufrufen – ich erkenne den Draft automatisch
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Stimmt der Platform-Kontext so?",
+      header: "platform-context.md prüfen",
+      options: [
+        { label: "Ja, passt so", description: "Weiter mit den Forschungsfragen" },
+        { label: "Ich möchte etwas anpassen", description: "Sag mir direkt was geändert werden soll" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
 ```
 
 ---
@@ -212,7 +248,7 @@ AskUserQuestion({
 
 **Bei "Pause – echten Research durchführen":**
 
-Speichere die Forschungsfragen als Draft in `research/research-questions.md`:
+Schreibe `research/research-questions.md` als Draft direkt auf die Festplatte:
 
 ```markdown
 ---
@@ -239,15 +275,25 @@ Beantworte diese Fragen durch echten User Research.
 Danach: `/red:proto-research` erneut aufrufen – ich verarbeite deine Antworten.
 ```
 
-Dann stoppen und dem User sagen:
-```
-Forschungsfragen gespeichert in research/research-questions.md.
+Frage dann:
 
-Führe deinen Research durch (Interviews, Umfragen, Beobachtungen) und trage
-die Antworten direkt in die Datei ein – oder beschreibe sie mir beim nächsten Aufruf.
-
-Wenn du fertig bist: /red:proto-research erneut aufrufen.
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Forschungsfragen gespeichert in research/research-questions.md – passt die Liste?",
+      header: "research-questions.md prüfen",
+      options: [
+        { label: "Ja, passt so", description: "Ich führe den Research durch und rufe /red:proto-research danach erneut auf" },
+        { label: "Ich möchte etwas anpassen", description: "Sag mir direkt was geändert werden soll" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
 ```
+
+Dann stoppen.
 
 **Bei "Jetzt interaktiv beantworten":**
 
@@ -261,7 +307,7 @@ Frage 1 von [N]:
 kein perfektes Research nötig, wir arbeiten mit dem was du weißt)
 ```
 
-Sammle alle Antworten. Speichere danach `research/research-questions.md` als Draft:
+Sammle alle Antworten. Schreibe danach `research/research-questions.md` als Draft direkt auf die Festplatte:
 
 ```markdown
 ---
@@ -287,37 +333,73 @@ Diese Antworten basieren auf Annahmen und Hypothesen, nicht auf echtem User Rese
 Sie sind ein valider Ausgangspunkt – können aber durch spätere echte Interviews ergänzt werden.
 ```
 
-Danach dem User mitteilen:
-```
-Antworten gespeichert. Weiter mit Phase 4 – Problem Statement Map.
+Frage dann:
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Forschungsfragen & Antworten gespeichert – passt das so?",
+      header: "research-questions.md prüfen",
+      options: [
+        { label: "Ja, passt so", description: "Weiter mit der Problem Statement Map" },
+        { label: "Ich möchte etwas anpassen", description: "Sag mir direkt was geändert werden soll" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
 ```
 
-Und direkt mit Phase 4 fortfahren.
+Dann direkt mit Phase 4 fortfahren.
 
 ## Phase 4: Problem Statement Map erstellen
 
-Eine Problem Statement Map strukturiert das Kernproblem aus Nutzersicht:
+Erstelle die Problem Statement Map aus PRD + Research-Antworten und schreibe sie direkt als `research/problem-statement.md` auf die Festplatte:
 
 ```markdown
-## Problem Statement Map
+---
+status: draft
+---
 
-### Nutzer
+# Problem Statement Map
+*Erstellt von: /red:proto-research — [Datum]*
+
+## Nutzer
 [Wer hat das Problem? Kontext, Situation]
 
-### Problem
+## Problem
 [Was ist das konkrete Problem – aus Nutzerperspektive, nicht Lösungsperspektive]
 
-### Impact
+## Impact
 [Was sind die Folgen des Problems? Warum ist es wichtig?]
 
-### Aktueller Workaround
+## Aktueller Workaround
 [Wie lösen Nutzer das Problem heute? Warum reicht das nicht?]
 
-### Erfolgskriterium
+## Erfolgskriterium
 [Woran merkt der Nutzer, dass das Problem gelöst ist?]
 ```
 
-Präsentiere zur Freigabe, passe auf Basis von Feedback an.
+**Wichtig:** Die Datei direkt schreiben – nicht nur im Chat anzeigen.
+
+Frage dann:
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Problem Statement Map gespeichert – stimmt das so?",
+      header: "problem-statement.md prüfen",
+      options: [
+        { label: "Ja, passt so", description: "Weiter mit den Personas" },
+        { label: "Ich möchte etwas anpassen", description: "Sag mir direkt was geändert werden soll" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
 
 ## Phase 5: Personas erstellen
 
@@ -343,29 +425,37 @@ AskUserQuestion({
 
 Für jede ausgewählte Persona: Stelle Follow-up-Fragen zu Alter/Kontext, Zielen, Frustrationen, Tech-Affinität.
 
-Personas-Format:
+Schreibe danach `research/personas.md` direkt auf die Festplatte:
+
 ```markdown
+---
+status: draft
+---
+
+# Personas
+*Erstellt von: /red:proto-research — [Datum]*
+
 ## Persona: [Name]
 **Kontext:** [Kurzbeschreibung]
 **Ziele:** [Was will diese Person erreichen?]
 **Frustrationen:** [Was hindert sie daran?]
 **Tech-Affinität:** [Hoch/Mittel/Niedrig]
 **Zitat:** "[Repräsentativer Satz dieser Person]"
+
+...
 ```
 
-## Phase 6: Review und Speichern
-
-Zeige alle drei Artefakte zusammen. Frage nach Approval:
+Frage dann:
 
 ```typescript
 AskUserQuestion({
   questions: [
     {
-      question: "Sind Research-Grundlagen vollständig?",
-      header: "Review",
+      question: "Personas gespeichert – stimmen die so?",
+      header: "personas.md prüfen",
       options: [
-        { label: "Approved", description: "Alle Artefakte sind vollständig" },
-        { label: "Anpassungen nötig", description: "Feedback im Chat" }
+        { label: "Ja, passt so", description: "Research abschließen" },
+        { label: "Ich möchte etwas anpassen", description: "Sag mir direkt was geändert werden soll" }
       ],
       multiSelect: false
     }
@@ -373,11 +463,9 @@ AskUserQuestion({
 })
 ```
 
-Nach Approval: Problem Statement Map und Personas als Drafts speichern (YAML `status: draft`, Header mit Dateinamen und Datum). User per CONVENTIONS.md §Resume Pattern (Option 2 – Research) informieren.
+## Phase 6: Finalisieren
 
-## Phase 6b: Finalisieren
-
-Nach `weiter` oder Korrekturen: Alle Research-Dateien einlesen, Korrekturen übernehmen, `status: approved` in allen Dateien setzen.
+Alle Dateien wurden einzeln geprüft. Setze `status: approved` in allen Research-Dateien und committe:
 
 ```bash
 echo "Ich committe jetzt:"
@@ -397,35 +485,78 @@ FEATURES_EXIST=$(ls features/FEAT-*.md 2>/dev/null | wc -l)
 echo "Dev-Setup: $DEV_SETUP_DONE | Feature-Specs: $FEATURES_EXIST"
 ```
 
+Frage dann nach dem nächsten Schritt:
+
 **Modus A (Dev-Setup noch nicht gemacht):**
 
-Sage dem User:
-```
-Research gespeichert.
-
-Die Platform- und Nutzungskontext-Erkenntnisse stehen jetzt für den Tech-Stack bereit.
-Nächster Schritt: /red:proto-dev-setup – ich berücksichtige research/platform-context.md bei der Stack-Empfehlung.
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Research abgeschlossen. Wie weiter?",
+      header: "Nächster Schritt",
+      options: [
+        {
+          label: "Weiter zu /red:proto-dev-setup",
+          description: "Tech-Stack wählen und Projekt scaffolden – platform-context.md fließt direkt in die Stack-Empfehlung ein"
+        },
+        {
+          label: "Pause – ich mache später weiter",
+          description: "Alles ist gespeichert. /red:proto-workflow zeigt dir jederzeit wo du stehst"
+        }
+      ],
+      multiSelect: false
+    }
+  ]
+})
 ```
 
 **Modus B, keine Features vorhanden:**
 
-Sage dem User:
-```
-Research nachgeholt. Personas und Problem Statement stehen allen Agents zur Verfügung.
-Nächster Schritt: /red:proto-requirements – Feature Specs definieren.
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Research nachgeholt. Wie weiter?",
+      header: "Nächster Schritt",
+      options: [
+        {
+          label: "Weiter zu /red:proto-requirements",
+          description: "Feature Specs definieren – Research-Erkenntnisse fließen direkt ein"
+        },
+        {
+          label: "Pause – ich mache später weiter",
+          description: "Alles ist gespeichert. /red:proto-workflow zeigt dir jederzeit wo du stehst"
+        }
+      ],
+      multiSelect: false
+    }
+  ]
+})
 ```
 
 **Modus B, Features bereits vorhanden:**
 
-Sage dem User:
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Research nachgeholt. Bestehende Feature Specs sollten gegen die neuen Erkenntnisse geprüft werden. Wie weiter?",
+      header: "Nächster Schritt",
+      options: [
+        {
+          label: "Weiter zu /red:proto-requirements (Review-Modus)",
+          description: "Bestehende Specs gegen Research-Erkenntnisse prüfen – nicht neu schreiben"
+        },
+        {
+          label: "Pause – ich mache später weiter",
+          description: "Alles ist gespeichert. /red:proto-workflow zeigt dir jederzeit wo du stehst"
+        }
+      ],
+      multiSelect: false
+    }
+  ]
+})
 ```
-Research nachgeholt.
 
-Da bereits Feature-Specs existieren: Bitte /red:proto-requirements erneut aufrufen –
-im Review-Modus prüfen wir ob die bestehenden Specs mit den neuen Research-Erkenntnissen
-noch übereinstimmen oder angepasst werden müssen.
-
-Nächster Schritt: /red:proto-requirements (Review bestehender Specs)
-```
-
-Öffne requirements und informiere es explizit, dass es im **Review-Modus** läuft: bestehende Specs gegen Research-Erkenntnisse prüfen, nicht neu schreiben.
+Wenn Modus B + Features vorhanden und User weiter zu requirements: Öffne requirements und informiere es explizit, dass es im **Review-Modus** läuft: bestehende Specs gegen Research-Erkenntnisse prüfen, nicht neu schreiben.

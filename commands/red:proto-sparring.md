@@ -100,7 +100,7 @@ AskUserQuestion({
       question: "Wie ist das PRD?",
       header: "Review",
       options: [
-        { label: "Approved – weiter zu /red:proto-research", description: "PRD ist korrekt und vollständig" },
+        { label: "Passt so – weiter zu /red:proto-research", description: "PRD ist korrekt und vollständig" },
         { label: "Kleine Anpassungen nötig", description: "Ich gebe Feedback im Chat" },
         { label: "Nochmal von vorn", description: "Grundlegendes Missverständnis" }
       ],

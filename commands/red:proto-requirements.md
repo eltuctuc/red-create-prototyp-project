@@ -184,7 +184,7 @@ AskUserQuestion({
       question: "Ist die Feature Spec vollständig und korrekt?",
       header: "Review",
       options: [
-        { label: "Approved – spec ist ready", description: "Nächstes Feature mit /red:proto-requirements oder alle Specs fertig → /red:proto-flows" },
+        { label: "Passt so – Spec ist fertig", description: "Nächstes Feature mit /red:proto-requirements oder alle Specs fertig → /red:proto-flows" },
         { label: "Änderungen nötig", description: "Feedback im Chat" }
       ],
       multiSelect: false
@@ -197,7 +197,7 @@ Nach Approval: Feature-File als Draft speichern. `project-config.md` aktualisier
 
 ## Phase 7b: Finalisieren
 
-Nach `weiter` oder Korrekturen: Feature-File einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Approved` setzen.
+Nach `weiter` oder Korrekturen: Feature-File einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Freigegeben` setzen.
 
 **STATUS.md aktualisieren:** Lies `features/STATUS.md`. Wenn die Datei noch nicht existiert, erstelle sie mit diesem Header:
 
@@ -259,4 +259,4 @@ Falls ein Feature während der Spec-Phase gecancelt oder als nicht-realisierbar 
 - [ ] "Nicht im Scope" explizit dokumentiert
 - [ ] FEAT-X ID vergeben, kein Duplikat
 - [ ] Status auf "Spec" gesetzt
-- [ ] User hat approved
+- [ ] User hat freigegeben

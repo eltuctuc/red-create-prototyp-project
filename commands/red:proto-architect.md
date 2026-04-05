@@ -129,7 +129,7 @@ Gespeichert in: [localStorage / DB-Tabelle / API-State]
 
 ```typescript
 AskUserQuestion({ questions: [{ question: "Passt das technische Design?", header: "Review", options: [
-  { label: "Approved – weiter zu /red:proto-dev", description: "Design klar und vollständig" },
+  { label: "Passt so – weiter zu /red:proto-dev", description: "Design klar und vollständig" },
   { label: "Fragen / Änderungen", description: "Feedback im Chat" }
 ], multiSelect: false }] })
 ```
@@ -138,7 +138,7 @@ Nach Approval: FEAT-[X].md um Abschnitt `## 3. Technisches Design` erweitern, YA
 
 ## Phase 4b: Finalisieren
 
-Nach `weiter` oder Korrekturen: FEAT-[X].md einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Approved, Aktueller Schritt: Tech` setzen. STATUS.md (Tech-Spalte ✓).
+Nach `weiter` oder Korrekturen: FEAT-[X].md einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Freigegeben, Aktueller Schritt: Tech` setzen. STATUS.md (Tech-Spalte ✓).
 
 ```bash
 echo "Ich committe jetzt:"
@@ -169,4 +169,4 @@ Bei "Weiter mit Feature X": direkt Phase 0 für nächstes Feature starten.
 - [ ] State-Komplexität geprüft
 - [ ] Externe Daten: Validation-Strategie definiert
 - [ ] Dependencies aufgelistet
-- [ ] User approved
+- [ ] User hat freigegeben

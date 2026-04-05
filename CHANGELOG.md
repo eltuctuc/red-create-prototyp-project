@@ -5,6 +5,23 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.13.5 — 5. April 2026
+
+Intelligenteres Research, weniger Rückfragen, volle Kontrolle Schritt für Schritt.
+
+### Neue Features
+
+- **Dynamischer Platform-Kontext:** `/red:proto-research` liest jetzt die PRD und stellt keine Fragen mehr, wenn Platform und Gerät bereits dort definiert sind. `platform-context.md` wird direkt aus der PRD abgeleitet – nur bei echten Lücken wird nachgefragt.
+- **Einzelne Freigabe pro Datei:** Jede Research-Datei (`platform-context.md`, `research-questions.md`, `problem-statement.md`, `personas.md`) wird direkt nach dem Schreiben zur Freigabe vorgelegt – nicht erst am Ende alles auf einmal.
+- **Alle Dateien landen auf der Festplatte:** `problem-statement.md` wurde bisher nur im Chat angezeigt. Alle Research-Artefakte werden jetzt sofort als Datei geschrieben.
+- **Interaktive Abschlussfrage:** Der nächste Schritt wird jetzt als AskUserQuestion gestellt statt als Textblock.
+
+### Fixes
+
+- **Kein Englisch mehr:** Alle nutzer-sichtbaren "Approved"-Labels durch deutsche Alternativen ersetzt ("Passt so", "Freigegeben") – gilt für das gesamte Framework.
+
+---
+
 ## v0.13.4 — 5. April 2026
 
 Die `prd.md` landet jetzt wirklich auf der Festplatte – nicht nur im Chat.

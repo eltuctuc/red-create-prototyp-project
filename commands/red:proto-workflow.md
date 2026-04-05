@@ -52,7 +52,7 @@ OFFENE DRAFTS  ⚠️
   [Liste offener Draft-Dateien oder: Keine – alles finalisiert ✅]
 
 FEATURES
-  FEAT-1: [Name] ──── Schritt: [Spec|UX|Tech|Dev|QA|Done]  Status: [Draft|Approved]
+  FEAT-1: [Name] ──── Schritt: [Spec|UX|Tech|Dev|QA|Done]  Status: [Draft|Freigegeben]
   FEAT-2: [Name] ──── Schritt: [...]  Status: [...]
   ...
 
@@ -88,16 +88,16 @@ generated: true
 
 | Artefakt | Datei | Status |
 |---|---|---|
-| PRD | prd.md | [✅ Approved / ⚠️ Draft / ❌ Fehlt] |
+| PRD | prd.md | [✅ Freigegeben / ⚠️ Draft / ❌ Fehlt] |
 | Dev Setup | project-config.md | [✅ Vorhanden / ❌ Fehlt] |
-| User Research | research/ | [✅ Approved / ⚠️ Draft / ❌ Fehlt] |
-| Flows | flows/product-flows.md | [✅ Approved / ⚠️ Draft / ❌ Fehlt] |
+| User Research | research/ | [✅ Freigegeben / ⚠️ Draft / ❌ Fehlt] |
+| Flows | flows/product-flows.md | [✅ Freigegeben / ⚠️ Draft / ❌ Fehlt] |
 
 ## Features
 
 | ID | Feature | Schritt | Status |
 |---|---|---|---|
-| FEAT-[X] | [Name] | [Spec\|UX\|Tech\|Dev\|QA\|Done] | [✅ Approved / ⚠️ Draft] |
+| FEAT-[X] | [Name] | [Spec\|UX\|Tech\|Dev\|QA\|Done] | [✅ Freigegeben / ⚠️ Draft] |
 
 ## Offene Drafts
 
@@ -106,7 +106,7 @@ generated: true
 
 Status-Werte aus den Dateien lesen:
 - YAML-Frontmatter `status: draft` → ⚠️ Draft
-- YAML-Frontmatter `status: approved` → ✅ Approved
+- YAML-Frontmatter `status: approved` → ✅ Freigegeben
 - Datei fehlt → ❌ Fehlt
 
 ## Phase 3: Nächsten Schritt exakt benennen

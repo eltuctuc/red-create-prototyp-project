@@ -215,7 +215,7 @@ AskUserQuestion({
       question: "Sind alle Screens und Transitions vollständig und korrekt?",
       header: "Flows Review",
       options: [
-        { label: "Approved – Flows sind vollständig", description: "Weiter zu /red:proto-ux für einzelne Features" },
+        { label: "Passt so – Flows sind vollständig", description: "Weiter zu /red:proto-ux für einzelne Features" },
         { label: "Änderungen nötig", description: "Feedback im Chat" }
       ],
       multiSelect: false
