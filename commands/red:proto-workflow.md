@@ -43,17 +43,24 @@ Zeige eine präzise Übersicht – alles aus den echten Dateiinhalten:
   PROJEKTSTATUS: [Projektname aus prd.md]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+LEGENDE
+  ⬜  Noch nicht begonnen
+  🔄  In Bearbeitung / In Prüfung (z.B. Draft, offene Bugs)
+  ✅  Abgenommen / Freigegeben
+  ✅⚠️ Abgenommen mit Known Issues
+
 VORBEREITUNG
-  [✅/⬜] PRD               prd.md
-  [✅/⬜] Dev Setup          project-config.md
-  [✅/⬜] User Research      research/
+  [✅/🔄/⬜] PRD               prd.md
+  [✅/🔄/⬜] Dev Setup          project-config.md
+  [✅/🔄/⬜] User Research      research/
 
 OFFENE DRAFTS  ⚠️
   [Liste offener Draft-Dateien oder: Keine – alles finalisiert ✅]
 
 FEATURES
-  FEAT-1: [Name] ──── Schritt: [Spec|UX|Tech|Dev|QA|Done]  Status: [Draft|Freigegeben]
-  FEAT-2: [Name] ──── Schritt: [...]  Status: [...]
+  ID       Name          Spec  UX    Tech  Dev   QA
+  FEAT-1   [Name]        ✅    ✅    ✅    ✅    🔄 2 High, 1 Medium offen
+  FEAT-2   [Name]        ✅    🔄    ⬜    ⬜    ⬜
   ...
 
 OFFENE BUGS
@@ -84,20 +91,33 @@ generated: true
 > ⚠️ Automatisch generiert via /red:proto-workflow — [Datum + Uhrzeit]
 > Nicht manuell bearbeiten. Immer /red:proto-workflow aufrufen um zu aktualisieren.
 
+## Legende
+
+| Symbol | Bedeutung |
+|---|---|
+| ⬜ | Noch nicht begonnen |
+| 🔄 | In Bearbeitung / In Prüfung (Draft oder offene Bugs) |
+| ✅ | Abgenommen / Freigegeben |
+| ✅⚠️ | Abgenommen mit Known Issues (offene Low-Bugs akzeptiert) |
+| ❌ | Fehlt / Blockiert |
+
 ## Vorbereitung
 
 | Artefakt | Datei | Status |
 |---|---|---|
-| PRD | prd.md | [✅ Freigegeben / ⚠️ Draft / ❌ Fehlt] |
-| Dev Setup | project-config.md | [✅ Vorhanden / ❌ Fehlt] |
-| User Research | research/ | [✅ Freigegeben / ⚠️ Draft / ❌ Fehlt] |
-| Flows | flows/product-flows.md | [✅ Freigegeben / ⚠️ Draft / ❌ Fehlt] |
+| PRD | prd.md | [✅ / 🔄 Draft / ❌ Fehlt] |
+| Dev Setup | project-config.md | [✅ / ❌ Fehlt] |
+| User Research | research/ | [✅ / 🔄 Draft / ❌ Fehlt] |
+| Flows | flows/product-flows.md | [✅ / 🔄 Draft / ❌ Fehlt] |
 
 ## Features
 
-| ID | Feature | Schritt | Status |
-|---|---|---|---|
-| FEAT-[X] | [Name] | [Spec\|UX\|Tech\|Dev\|QA\|Done] | [✅ Freigegeben / ⚠️ Draft] |
+| ID | Feature | Spec | UX | Tech | Dev | QA |
+|---|---|---|---|---|---|---|
+| FEAT-[X] | [Name] | [⬜/🔄/✅] | [⬜/🔄/✅] | [⬜/🔄/✅] | [⬜/🔄/✅] | [⬜ / 🔄 N Bugs offen / ✅ / ✅⚠️ N Known Issues] |
+
+> **QA-Spalte im Detail:**
+> `⬜` = noch nicht geprüft · `🔄 2 Critical, 1 High offen` = Dev-Loop läuft · `✅` = abgenommen · `✅⚠️ 3 Low offen` = abgenommen mit Known Issues
 
 ## Offene Drafts
 
@@ -105,9 +125,11 @@ generated: true
 ```
 
 Status-Werte aus den Dateien lesen:
-- YAML-Frontmatter `status: draft` → ⚠️ Draft
+- YAML-Frontmatter `status: draft` → 🔄 In Bearbeitung
 - YAML-Frontmatter `status: approved` → ✅ Freigegeben
-- Datei fehlt → ❌ Fehlt
+- YAML-Frontmatter `qa_status: "🔄 ..."` → 🔄 mit Bug-Detail aus qa_status
+- YAML-Frontmatter `qa_status: "✅ ..."` → ✅ oder ✅⚠️ je nach Inhalt
+- Datei fehlt → ⬜ (noch nicht begonnen) oder ❌ (erwartet aber fehlend)
 
 ## Phase 3: Nächsten Schritt exakt benennen
 
@@ -140,11 +162,11 @@ Wende diese Entscheidungslogik an – in dieser Reihenfolge:
 **9. Features mit Status "Dev", aber noch kein QA?**
 → `Führe /red:proto-qa für FEAT-[X] aus`
 
-**10. Features mit Status "QA" und offenen Bugs?**
-→ `FEAT-[X] hat [N] offene Bugs. Führe /red:proto-dev für FEAT-[X] aus, dann erneut /red:proto-qa`
+**10. Features mit `qa_status: 🔄` (offene Bugs, Dev-Loop läuft)?**
+→ `FEAT-[X] hat offene Bugs (qa_status: [Detail]). Führe /red:proto-dev für FEAT-[X] aus, dann erneut /red:proto-qa`
 
-**11. Alle Features "Done", keine offenen Bugs?**
-→ `Alle Features Production-Ready ✅. Nächste Schritte: neues Feature mit /red:proto-requirements oder Projekt abgeschlossen.`
+**11. Features mit `qa_status: ✅` oder `✅⚠️` → alle Done?**
+→ `Alle Features abgenommen ✅. Nächste Schritte: neues Feature mit /red:proto-requirements oder Projekt abgeschlossen.`
 
 Gib immer **einen** konkreten nächsten Schritt – nicht mehrere gleichwertige Optionen. Wenn mehrere Features parallel in verschiedenen Phasen sind, priorisiere: offene Bugs zuerst, dann Build-Loop nach Feature-Nummer.
 
@@ -177,7 +199,8 @@ Die Pipeline im Überblick:
 
   Dann pro Feature (Build-Loop):
   7. /red:proto-architect → 8. /red:proto-dev → 9. /red:proto-qa
-     └── Bei Bugs: zurück zu /red:proto-dev → /red:proto-qa
+     └── Bei Bugs (🔄): zurück zu /red:proto-dev → /red:proto-qa
+     └── QA-Abnahme: ✅ Abgenommen | ✅⚠️ Abgenommen mit Known Issues
 
 Starte mit: /red:proto-sparring
 ```

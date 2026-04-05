@@ -80,17 +80,20 @@ Schwelle in Feature-File aktualisieren + `Fix-Schwelle bestätigt: [Datum]` anh�
 **Folge-Run** (`FOLGE_RUN` > 0) – offene Bugs über Schwelle auflisten, dann:
 ```typescript
 AskUserQuestion({ questions: [{ question: `Offene Bugs über Schwelle (${SCHWELLE}). Wie weiter?`, header: "Dev-QA-Loop", options: [
-  { label: "Dev-Loop fortsetzen", description: "→ /red:proto-dev fixt Bugs" },
-  { label: "Schwelle anpassen", description: "" },
-  { label: "Loop beenden – als Known Issues dokumentieren", description: "" }
+  { label: "Dev-Loop fortsetzen", description: "→ /red:proto-dev fixt die offenen Bugs" },
+  { label: "Schwelle anpassen", description: "Neue Schwelle festlegen, z.B. nur Critical/High" },
+  { label: "Als abgenommen markieren", description: "Feature trotz offener Bugs als Done deklarieren – Bugs werden als Known Issues dokumentiert" }
 ], multiSelect: false }] })
 ```
 
-**Loop beenden → Known Issues** in Feature-File + `docs/releases.md` dokumentieren. Dann direkt Phase 7.
+**Dev-Loop fortsetzen** → `qa_status: 🔄 [N Critical, N High, N Medium, N Low offen]` ins Feature-File schreiben. Dann zu Phase 6 springen (kein ✅ setzen).
+
+**Als abgenommen markieren → Known Issues** in Feature-File + `docs/releases.md` dokumentieren. `qa_status: ✅ Abgenommen mit Known Issues – [N] [Severity] offen` setzen. Dann direkt Phase 7.
 
 ## Phase 6: Feature-File aktualisieren
 
-Abschnitt `## 5. QA Ergebnisse` ergänzen:
+Abschnitt `## 5. QA Ergebnisse` ergänzen und `qa_status` im YAML-Frontmatter aktualisieren:
+
 ```markdown
 ## 5. QA Ergebnisse
 *[Datum]*
@@ -106,25 +109,30 @@ Abschnitt `## 5. QA Ergebnisse` ergänzen:
 ### Summary
 - ✅ X ACs passed | ❌ X Bugs (X Critical, X High, X Medium, X Low)
 
-### Production-Ready
-✅ Ready | ⚠️ Ready with Known Issues | ❌ NOT Ready – [Begründung]
+### QA-Entscheidung
+✅ Abgenommen | ✅ Abgenommen mit Known Issues – [Detail] | 🔄 In Prüfung – [N Bugs offen, Dev-Loop läuft]
 ```
+
+**`qa_status` im YAML-Frontmatter** immer nach jedem QA-Run aktualisieren:
+- Bugs über Schwelle offen → `qa_status: "🔄 [N Critical, N High offen]"`
+- Keine Bugs über Schwelle → `qa_status: "✅ Abgenommen"`
+- User bricht mit Known Issues ab → `qa_status: "✅ Abgenommen mit Known Issues – [N Low offen]"`
 
 ## Bug-Loop
 
 1. `/red:proto-dev` → fixt bis Fix-Schwelle → `*-fixed.md`
 2. `/red:proto-qa` erneut → Regression + Retest der -fixed Bugs
-3. Loop endet wenn keine Bugs über Schwelle oder User bricht bewusst ab
+3. Loop endet wenn keine Bugs über Schwelle oder User entscheidet "Als abgenommen markieren"
 
-## Phase 7: Docs (bei ✅ oder ⚠️)
+Solange der Loop läuft: `qa_status` bleibt `🔄` – **kein ✅ setzen**.
+
+## Phase 7: Docs (bei ✅ Abgenommen oder ✅ Abgenommen mit Known Issues)
 
 `docs/produktfähigkeiten.md` → neues Kapitel: `## [Name] *(FEAT-[X], [Datum])*` + 2-4 Sätze. Falls nicht vorhanden: anlegen.
 
-`docs/releases.md` → neuen Eintrag oben: Neue Features + Bug Fixes. Falls nicht vorhanden: anlegen.
+`docs/releases.md` → neuen Eintrag oben: Neue Features + Bug Fixes (inkl. Known Issues falls vorhanden). Falls nicht vorhanden: anlegen.
 
-Status auf "Done" setzen.
-
-## Phase 8: Versionierung (nur bei ✅ Production-Ready)
+## Phase 8: Versionierung und Abschluss (nur bei ✅)
 
 Version aus `project-config.md` → `Aktuelle Version`. Logik: Neues Feature → MINOR bump, Bug-Fix-Runde → PATCH bump.
 
@@ -133,12 +141,12 @@ npm version [patch|minor] --no-git-tag-version 2>/dev/null || true
 # Version in project-config.md manuell aktualisieren
 ```
 
-STATUS.md: QA-Wert auf `✓`.
+STATUS.md via `/red:proto-workflow` aktualisieren – QA-Spalte zeigt jetzt `✅` oder `✅⚠️`.
 
 ```bash
-git add . features/STATUS.md
+git add . features/FEAT-[ID].md
 git commit -q -m "release: v[X.Y.Z] – FEAT-[X] [Feature Name]"
 git tag v[X.Y.Z] && git push -q && git push -q origin --tags
 ```
 
-Sage: "v[X.Y.Z] getaggt. FEAT-[X] ist Production-Ready. Nächstes Feature: `/red:proto-requirements`. Nach Pause: `/red:proto-workflow`."
+Sage: "v[X.Y.Z] getaggt. FEAT-[X] ist abgenommen. Nächstes Feature: `/red:proto-requirements`. Nach Pause: `/red:proto-workflow`."

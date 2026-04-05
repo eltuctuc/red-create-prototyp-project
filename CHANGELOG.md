@@ -5,6 +5,24 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.16.0 — 5. April 2026
+
+Endlich weiß man, ob ein Feature wirklich abgenommen ist – oder ob QA gerade noch kämpft.
+
+### Neue Features
+
+- **QA-Status mit 3 Zuständen:** ⬜ nicht geprüft · 🔄 Dev-Loop läuft (inkl. Anzahl offener Bugs nach Severity) · ✅ abgenommen. Der Haken kommt jetzt nur noch durch explizite Nutzer-Entscheidung – kein automatisches ✅ solange Bugs über der Schwelle offen sind.
+- **"Abgenommen mit Known Issues":** Nutzer können ein Feature trotz offener Bugs bewusst als fertig deklarieren. Der Status zeigt dann `✅⚠️ N Low offen` – transparent, kein stilles Wegignorieren.
+- **Feature-Tabelle in STATUS.md mit Einzelspalten:** Jede Phase (Spec, UX, Tech, Dev, QA) hat jetzt eine eigene Spalte mit dem jeweiligen Symbol. Auf einen Blick sichtbar, wo jedes Feature im Build-Loop steht.
+- **Legende in STATUS.md und Workflow-Ausgabe:** ⬜/🔄/✅/✅⚠️/❌ sind jetzt überall erklärt – kein Rätselraten mehr was ein Symbol bedeutet.
+
+### Verbesserungen
+
+- **`qa_status` im Feature-File Frontmatter:** QA schreibt nach jedem Run den genauen Zustand ins Feature-File. `/red:proto-workflow` liest daraus – der Entscheidungsbaum in Phase 3 nutzt `qa_status` direkt statt Status-Heuristiken.
+- **Folge-Run-Frage klarer:** Die dritte Option heißt jetzt explizit "Als abgenommen markieren" mit erklärender Beschreibung – statt dem vagen "Loop beenden".
+
+---
+
 ## v0.15.1 — 5. April 2026
 
 ### Fixes
