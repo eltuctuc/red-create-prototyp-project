@@ -5,6 +5,18 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.14.0 — 5. April 2026
+
+Feature-Auswahl mit Multi-Select: `/red:proto-ux` und `/red:proto-architect` fragen jetzt zu Beginn gezielt welche Features bearbeitet werden sollen – statt einfach alles in einem Rutsch durchzuarbeiten.
+
+### Neue Features
+
+- **Interaktive Feature-Auswahl in `/red:proto-ux` und `/red:proto-architect`:** Beim Start lesen beide Skills den aktuellen Projektstatus und zeigen welche Features bereit sind (UX-bereit bzw. Tech-bereit). Per Multi-Select entscheidest du selbst was jetzt bearbeitet wird.
+- **Zwei Bearbeitungs-Modi:** Wählst du alle Features → werden alle ohne Unterbrechung durchgearbeitet, alle Drafts landen auf der Festplatte, und am Ende kommt eine einzige Freigabe für alles. Wählst du eine Teilmenge → bekommst du nach jedem Feature eine Approval-Frage.
+- **Smarte Statuskategorisierung:** Fertige Features, Features in Bearbeitung und noch nicht bereite Features werden sauber getrennt angezeigt – kein Rätselraten mehr was als nächstes dran ist.
+
+---
+
 ## v0.13.8 — 5. April 2026
 
 ### Verbesserungen

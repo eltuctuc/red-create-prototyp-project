@@ -7,9 +7,46 @@ description: Erweitert Feature Specs um exakte UX-Entscheidungen – DS-konforme
 
 Du bist UX-Experte und Informationsarchitekt. Triff für ein definiertes Feature exakte UX-Entscheidungen: Komponenten, Screen-Verhalten, Navigation. Du entscheidest, der Agent validiert.
 
-## Phase 0: Feature-ID
+## Phase 0: Projektstatus lesen und Feature wählen
 
-Keine ID in der Anfrage → `ls features/` → nachfragen.
+```bash
+cat features/STATUS.md 2>/dev/null
+ls features/FEAT-*.md 2>/dev/null
+```
+
+Lies STATUS.md vollständig. Kategorisiere alle Features:
+
+- **UX-bereit** (für diesen Skill relevant): Req ✓, UX noch `–`
+- **In Bearbeitung**: UX begonnen (status: draft), noch nicht approved
+- **UX fertig**: UX ✓ – überspringen
+- **Noch nicht ready**: Req fehlt – überspringen
+
+Zeige eine kurze Übersicht im Chat, z.B.:
+```
+UX-bereit (3):    FEAT-02 Nutzerprofil, FEAT-04 Benachrichtigungen, FEAT-05 Export
+In Bearbeitung:   FEAT-03 Dashboard (draft)
+Bereits fertig:   FEAT-01 Login
+Noch nicht ready: FEAT-06 (Req fehlt)
+```
+
+**Wenn genau eine Feature-ID in der Anfrage angegeben** → direkt mit dieser starten, kein Multi-Select nötig. `MODUS = einzeln`.
+
+**Wenn keine ID angegeben:** Multi-Select-Frage mit allen UX-bereiten Features. Erste Option ist immer "Alle":
+
+```typescript
+AskUserQuestion({ questions: [{ question: "Welche Features sollen jetzt bearbeitet werden?", header: "Feature-Auswahl", options: [
+  { label: "Alle: FEAT-[ID], FEAT-[ID], FEAT-[ID]", description: "Alle in einem Durchlauf – eine Freigabe am Ende" },
+  { label: "FEAT-[ID] [Name]", description: "" },
+  { label: "FEAT-[ID] [Name]", description: "" }
+], multiSelect: true }] })
+```
+
+*(Optionen dynamisch aus STATUS.md befüllen. "Alle"-Option konkrete IDs in label nennen.)*
+
+**MODUS bestimmen:**
+- "Alle" ausgewählt → `MODUS = alle`
+- Teilmenge ausgewählt → `MODUS = einzeln`
+- Bearbeitungsreihenfolge: ausgewählte Features in ID-Reihenfolge als `QUEUE` merken.
 
 ## Phase 1: Kontext lesen
 
@@ -167,34 +204,60 @@ Hex-Werte aus tokens/colors.md. Grenzwerte: 4.5:1 Normaltext, 3:1 großer Text/U
 - [...]
 ```
 
-## Phase 7: Review
+## Phase 6b: Draft auf Disk schreiben
+
+Unabhängig vom MODUS: FEAT-[X].md jetzt mit `## 2. UX Entscheidungen` ergänzen und `status: draft` setzen. Datei auf Disk schreiben – noch kein Commit.
+
+---
+
+## Phase 7: Review (nur MODUS = einzeln)
+
+*Wenn MODUS = `alle`: diesen Abschnitt überspringen. Weiter zum nächsten Feature in QUEUE (Phase 1). Wenn QUEUE leer: zu „Finale Freigabe (MODUS = alle)".*
 
 ```typescript
-AskUserQuestion({ questions: [{ question: "UX-Entscheidungen vollständig?", header: "Review", options: [
-  { label: "Passt so – weiter zu /red:proto-architect", description: "" },
+AskUserQuestion({ questions: [{ question: "UX-Entscheidungen für FEAT-[X] [Name] vollständig?", header: "Review", options: [
+  { label: "Passt – weiter mit nächstem Feature", description: "" },
+  { label: "Passt – das war das letzte, weiter zu /red:proto-architect", description: "" },
   { label: "Änderungen nötig", description: "Feedback im Chat" }
 ], multiSelect: false }] })
 ```
 
-Nach Approval: FEAT-[X].md um Abschnitt `## 2. UX Entscheidungen` erweitern, YAML `status: draft` setzen. User per CONVENTIONS.md §Resume Pattern informieren.
+## Phase 7b: Finalisieren (nur MODUS = einzeln)
 
-## Phase 7b: Finalisieren
-
-Nach `weiter` oder Korrekturen: FEAT-[X].md einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Freigegeben, Aktueller Schritt: UX` setzen. STATUS.md (UX-Spalte ✓).
+Korrekturen übernehmen (falls nötig), `status: approved` + `## Fortschritt → Status: Freigegeben, Aktueller Schritt: UX` setzen. STATUS.md (UX-Spalte ✓).
 
 ```bash
-echo "Ich committe jetzt:"
-echo "  → features/FEAT-[X]-[name].md – UX Entscheidungen finalisiert"
-echo "  → features/STATUS.md – UX-Status aktualisiert"
 git add features/FEAT-[X]-*.md flows/product-flows.md features/STATUS.md 2>/dev/null
 git commit -q -m "docs: FEAT-[X] ux design – [Feature Name]" && git push -q
 ```
 
-## Routing nach Approval
+Nächstes Feature in QUEUE → Phase 1. Wenn QUEUE leer: abschließen.
 
-Lies STATUS.md und biete an:
-- Features mit UX noch `–` → "Weiter mit FEAT-[ID] (UX fehlt noch)"
-- "Alle Features abgedeckt – weiter zu /red:proto-architect"
-- "Direkt zu /red:proto-architect für FEAT-[X]"
+---
 
-Bei "Weiter mit Feature X": direkt Phase 0 starten.
+## Finale Freigabe (nur MODUS = alle)
+
+Alle Features in QUEUE wurden als Draft auf Disk geschrieben. Zeige eine Zusammenfassung:
+
+```
+Fertig als Draft:
+  ✓ FEAT-02 Nutzerprofil    → features/FEAT-02-nutzerprofil.md
+  ✓ FEAT-04 Benachrichtigungen → features/FEAT-04-benachrichtigungen.md
+  ✓ FEAT-05 Export          → features/FEAT-05-export.md
+```
+
+```typescript
+AskUserQuestion({ questions: [{ question: "Alle UX-Designs sehen gut aus?", header: "Finale Freigabe", options: [
+  { label: "Alles freigeben und committen", description: "Alle Features auf approved setzen, ein Commit" },
+  { label: "Änderungen nötig", description: "Welches Feature – Feedback im Chat" }
+], multiSelect: false }] })
+```
+
+Nach Freigabe: alle Draft-Dateien auf `status: approved` setzen, `## Fortschritt` aktualisieren, STATUS.md (UX-Spalte ✓) für alle Features. Dann ein einziger Commit:
+
+```bash
+git add features/FEAT-*.md flows/product-flows.md features/STATUS.md 2>/dev/null
+git commit -q -m "docs: ux design – FEAT-[ID], FEAT-[ID], FEAT-[ID]" && git push -q
+```
+
+Abschluss: "Alle UX-Designs freigegeben. Weiter mit `/red:proto-architect`."

@@ -7,9 +7,47 @@ description: Übersetzt Feature Specs in technisches Design – Component-Strukt
 
 Du bist Solution Architect. Du übersetzt Feature Specs in ein klares technisches Design. Kein Code, kein SQL, keine TypeScript-Interfaces – nur **WAS** gebaut wird, nicht **WIE** im Detail.
 
-## Phase 0: Feature-ID
+## Phase 0: Projektstatus lesen und Feature wählen
 
-Keine ID in der Anfrage → `ls features/` → nachfragen.
+```bash
+cat features/STATUS.md 2>/dev/null
+ls features/FEAT-*.md 2>/dev/null
+```
+
+Lies STATUS.md vollständig. Kategorisiere alle Features:
+
+- **Tech-bereit** (für diesen Skill relevant): UX ✓, Tech noch `–`
+- **In Bearbeitung**: Tech begonnen (status: draft), noch nicht approved
+- **Tech fertig**: Tech ✓ – überspringen
+- **UX fehlt noch**: UX `–` – überspringen, kurz erwähnen (erst /red:proto-ux nötig)
+- **Noch nicht ready**: Req fehlt – überspringen
+
+Zeige eine kurze Übersicht im Chat, z.B.:
+```
+Tech-bereit (2):  FEAT-01 Login, FEAT-03 Dashboard
+In Bearbeitung:   FEAT-02 Nutzerprofil (draft)
+Bereits fertig:   –
+UX fehlt noch:    FEAT-04 Benachrichtigungen, FEAT-05 Export (erst /red:proto-ux)
+```
+
+**Wenn genau eine Feature-ID in der Anfrage angegeben** → direkt mit dieser starten, kein Multi-Select nötig. `MODUS = einzeln`.
+
+**Wenn keine ID angegeben:** Multi-Select-Frage mit allen Tech-bereiten Features. Erste Option ist immer "Alle":
+
+```typescript
+AskUserQuestion({ questions: [{ question: "Welche Features sollen jetzt bearbeitet werden?", header: "Feature-Auswahl", options: [
+  { label: "Alle: FEAT-[ID], FEAT-[ID]", description: "Alle in einem Durchlauf – eine Freigabe am Ende" },
+  { label: "FEAT-[ID] [Name]", description: "" },
+  { label: "FEAT-[ID] [Name]", description: "" }
+], multiSelect: true }] })
+```
+
+*(Optionen dynamisch aus STATUS.md befüllen. "Alle"-Option konkrete IDs in label nennen.)*
+
+**MODUS bestimmen:**
+- "Alle" ausgewählt → `MODUS = alle`
+- Teilmenge ausgewählt → `MODUS = einzeln`
+- Bearbeitungsreihenfolge: ausgewählte Features in ID-Reihenfolge als `QUEUE` merken.
 
 ## Phase 1: Kontext lesen
 
@@ -125,37 +163,62 @@ Gespeichert in: [localStorage / DB-Tabelle / API-State]
 - Fallstricke: [z.B. "localStorage in happy-dom braucht Stub"]
 ```
 
-## Phase 4: Review und Handoff
+## Phase 3b: Draft auf Disk schreiben
+
+Unabhängig vom MODUS: FEAT-[X].md jetzt mit `## 3. Technisches Design` ergänzen und `status: draft` setzen. Datei auf Disk schreiben – noch kein Commit.
+
+---
+
+## Phase 4: Review (nur MODUS = einzeln)
+
+*Wenn MODUS = `alle`: diesen Abschnitt überspringen. Weiter zum nächsten Feature in QUEUE (Phase 1). Wenn QUEUE leer: zu „Finale Freigabe (MODUS = alle)".*
 
 ```typescript
-AskUserQuestion({ questions: [{ question: "Passt das technische Design?", header: "Review", options: [
-  { label: "Passt so – weiter zu /red:proto-dev", description: "Design klar und vollständig" },
+AskUserQuestion({ questions: [{ question: "Passt das technische Design für FEAT-[X] [Name]?", header: "Review", options: [
+  { label: "Passt – weiter mit nächstem Feature", description: "" },
+  { label: "Passt – das war das letzte, weiter zu /red:proto-dev", description: "" },
   { label: "Fragen / Änderungen", description: "Feedback im Chat" }
 ], multiSelect: false }] })
 ```
 
-Nach Approval: FEAT-[X].md um Abschnitt `## 3. Technisches Design` erweitern, YAML `status: draft` setzen. User per CONVENTIONS.md §Resume Pattern informieren.
+## Phase 4b: Finalisieren (nur MODUS = einzeln)
 
-## Phase 4b: Finalisieren
-
-Nach `weiter` oder Korrekturen: FEAT-[X].md einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Freigegeben, Aktueller Schritt: Tech` setzen. STATUS.md (Tech-Spalte ✓).
+Korrekturen übernehmen (falls nötig), `status: approved` + `## Fortschritt → Status: Freigegeben, Aktueller Schritt: Tech` setzen. STATUS.md (Tech-Spalte ✓).
 
 ```bash
-echo "Ich committe jetzt:"
-echo "  → features/FEAT-[X]-[name].md – Tech Design finalisiert"
-echo "  → features/STATUS.md – Tech-Status aktualisiert"
 git add features/FEAT-[X]-*.md features/STATUS.md
 git commit -q -m "docs: FEAT-[X] tech design – [Feature Name]" && git push -q
 ```
 
-## Routing nach Approval
+Nächstes Feature in QUEUE → Phase 1. Wenn QUEUE leer: abschließen.
 
-Lies STATUS.md und biete an:
-- Features mit UX ✓ aber Tech noch `–` → "Weiter mit FEAT-[ID] (Tech fehlt noch)"
-- "Alle Features abgedeckt – weiter zu /red:proto-dev"
-- "Direkt zu /red:proto-dev für FEAT-[X]"
+---
 
-Bei "Weiter mit Feature X": direkt Phase 0 für nächstes Feature starten.
+## Finale Freigabe (nur MODUS = alle)
+
+Alle Features in QUEUE wurden als Draft auf Disk geschrieben. Zeige eine Zusammenfassung:
+
+```
+Fertig als Draft:
+  ✓ FEAT-01 Login          → features/FEAT-01-login.md
+  ✓ FEAT-03 Dashboard      → features/FEAT-03-dashboard.md
+```
+
+```typescript
+AskUserQuestion({ questions: [{ question: "Alle Tech-Designs sehen gut aus?", header: "Finale Freigabe", options: [
+  { label: "Alles freigeben und committen", description: "Alle Features auf approved setzen, ein Commit" },
+  { label: "Änderungen nötig", description: "Welches Feature – Feedback im Chat" }
+], multiSelect: false }] })
+```
+
+Nach Freigabe: alle Draft-Dateien auf `status: approved` setzen, `## Fortschritt` aktualisieren, STATUS.md (Tech-Spalte ✓) für alle Features. Dann ein einziger Commit:
+
+```bash
+git add features/FEAT-*.md features/STATUS.md
+git commit -q -m "docs: tech design – FEAT-[ID], FEAT-[ID]" && git push -q
+```
+
+Abschluss: "Alle Tech-Designs freigegeben. Weiter mit `/red:proto-dev`."
 
 ## Checklist vor Abschluss
 
