@@ -5,6 +5,14 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.15.1 — 5. April 2026
+
+### Fixes
+
+- **Widerspruch in `.npmignore` behoben:** `docs/` war fälschlicherweise ausgeschlossen, obwohl `package.json` es explizit einschließt. Das `files`-Feld hatte zwar Vorrang, aber die irreführende Zeile ist jetzt entfernt.
+
+---
+
 ## v0.15.0 — 5. April 2026
 
 ### Verbesserungen
