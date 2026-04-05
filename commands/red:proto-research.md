@@ -485,9 +485,11 @@ FEATURES_EXIST=$(ls features/FEAT-*.md 2>/dev/null | wc -l)
 echo "Dev-Setup: $DEV_SETUP_DONE | Feature-Specs: $FEATURES_EXIST"
 ```
 
-Frage dann nach dem nächsten Schritt:
+Frage dann nach dem nächsten Schritt. Leite die passende Option dynamisch ab:
 
-**Modus A (Dev-Setup noch nicht gemacht):**
+- **Kein `project-config.md`** (Modus A) → nächster Schritt ist `/red:proto-dev-setup`
+- **`project-config.md` vorhanden, keine Features** → nächster Schritt ist `/red:proto-requirements`
+- **`project-config.md` vorhanden, Features existieren** → nächster Schritt ist `/red:proto-requirements` im Review-Modus
 
 ```typescript
 AskUserQuestion({
@@ -497,8 +499,8 @@ AskUserQuestion({
       header: "Nächster Schritt",
       options: [
         {
-          label: "Weiter zu /red:proto-dev-setup",
-          description: "Tech-Stack wählen und Projekt scaffolden – platform-context.md fließt direkt in die Stack-Empfehlung ein"
+          label: "[Dynamisch: /red:proto-dev-setup | /red:proto-requirements | /red:proto-requirements (Review-Modus)]",
+          description: "[Dynamisch: passende Beschreibung je nach Modus]"
         },
         {
           label: "Pause – ich mache später weiter",
@@ -511,52 +513,4 @@ AskUserQuestion({
 })
 ```
 
-**Modus B, keine Features vorhanden:**
-
-```typescript
-AskUserQuestion({
-  questions: [
-    {
-      question: "Research nachgeholt. Wie weiter?",
-      header: "Nächster Schritt",
-      options: [
-        {
-          label: "Weiter zu /red:proto-requirements",
-          description: "Feature Specs definieren – Research-Erkenntnisse fließen direkt ein"
-        },
-        {
-          label: "Pause – ich mache später weiter",
-          description: "Alles ist gespeichert. /red:proto-workflow zeigt dir jederzeit wo du stehst"
-        }
-      ],
-      multiSelect: false
-    }
-  ]
-})
-```
-
-**Modus B, Features bereits vorhanden:**
-
-```typescript
-AskUserQuestion({
-  questions: [
-    {
-      question: "Research nachgeholt. Bestehende Feature Specs sollten gegen die neuen Erkenntnisse geprüft werden. Wie weiter?",
-      header: "Nächster Schritt",
-      options: [
-        {
-          label: "Weiter zu /red:proto-requirements (Review-Modus)",
-          description: "Bestehende Specs gegen Research-Erkenntnisse prüfen – nicht neu schreiben"
-        },
-        {
-          label: "Pause – ich mache später weiter",
-          description: "Alles ist gespeichert. /red:proto-workflow zeigt dir jederzeit wo du stehst"
-        }
-      ],
-      multiSelect: false
-    }
-  ]
-})
-```
-
-Wenn Modus B + Features vorhanden und User weiter zu requirements: Öffne requirements und informiere es explizit, dass es im **Review-Modus** läuft: bestehende Specs gegen Research-Erkenntnisse prüfen, nicht neu schreiben.
+Bei Modus B + Features vorhanden: informiere `/red:proto-requirements` explizit dass es im **Review-Modus** läuft.

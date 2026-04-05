@@ -166,25 +166,11 @@ git commit -q -m "feat: implement FEAT-[X] – [Feature Name]" && git push -q
 
 Schreibe `context/FEAT-[ID]-dev-handoff.md` (legt Kontext für `/red:proto-qa` in neuer Session):
 
-```markdown
-# Dev Handoff – FEAT-[ID]: [Feature Name]
-*[Datum]*
-
-## Was gebaut wurde
-- [Komponenten/Dateien mit kurzem Zweck]
-
-## Entscheidungen getroffen
-- [Wichtige Implementierungsentscheidungen und Begründungen]
-
-## DS-Abweichungen
-- [Tokens-Build oder Hypothesentest-Komponenten, falls vorhanden]
-
-## Offene Punkte
-- [Was nicht implementiert wurde und warum]
-
-## Für QA relevant
-- [Bekannte Edge Cases, Stolperstellen, was besonders getestet werden sollte]
+```bash
+cat docs/templates/dev-handoff.md
 ```
+
+Fülle alle Platzhalter mit konkreten Inhalten der Implementierung.
 
 ```bash
 mkdir -p context

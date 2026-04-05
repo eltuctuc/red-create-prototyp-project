@@ -5,6 +5,16 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.14.1 — 5. April 2026
+
+### Verbesserungen
+
+- **Token-Optimierung – Templates ausgelagert:** Die langen Markdown-Vorlagen für Feature Specs, UX-Entscheidungen, Tech-Design, Bug-Reports und Dev-Handoffs liegen jetzt in `docs/templates/`. Die Commands laden sie nur noch wenn sie wirklich gebraucht werden – statt bei jedem Aufruf im Kontext zu stehen.
+- **Scaffold-Befehle ausgelagert:** Die 15+ Framework-Scaffold-Befehle (Next.js, Django, Rails, etc.) wurden aus `/red:proto-dev-setup` in `docs/SCAFFOLDING.md` verschoben. Der Command ist damit deutlich schlanker.
+- **Research-Abschluss kompakter:** Die drei fast-identischen AskUserQuestion-Blöcke am Ende von `/red:proto-research` wurden zu einem einzigen dynamischen Block zusammengeführt.
+
+---
+
 ## v0.14.0 — 5. April 2026
 
 Feature-Auswahl mit Multi-Select: `/red:proto-ux` und `/red:proto-architect` fragen jetzt zu Beginn gezielt welche Features bearbeitet werden sollen – statt einfach alles in einem Rutsch durchzuarbeiten.

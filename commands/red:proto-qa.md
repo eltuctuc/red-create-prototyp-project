@@ -46,17 +46,8 @@ Agent("ux-reviewer", {
 
 Naming: `BUG-FEAT[X]-QA-[NNN].md` / `BUG-FEAT[X]-UX-[NNN].md`
 
-```markdown
-# BUG-FEAT[X]-[NNN]: [Kurztitel]
-- **Severity:** Critical | High | Medium | Low
-- **Bereich:** Functional | Security | A11y | Performance | UX
-- **Status:** Open
-
-## Steps to Reproduce
-1. ... 2. ... Expected: [...] Actual: [...]
-
-## Priority
-Fix now | Fix before release | Nice-to-have
+```bash
+cat docs/templates/bug-report.md
 ```
 
 Severity: Critical = Datenverlust/App unnutzbar, High = Kernfunktion kaputt, Medium = A11y/Flow-Bruch, Low = Optik/Edge-Case. Im Feature-File nur Bug-IDs referenzieren.
