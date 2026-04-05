@@ -231,8 +231,6 @@ Nach Approval: `flows/product-flows.md` ist bereits als Draft gespeichert (Phase
 Nach `weiter` oder Korrekturen: `flows/product-flows.md` einlesen, Korrekturen übernehmen, `status: approved` setzen.
 
 ```bash
-echo "Ich committe jetzt:"
-echo "  → flows/product-flows.md – Screen-Inventar und Transitions finalisiert"
 git add flows/
 git commit -q -m "docs: product flows – screen inventory + transitions" && git push -q
 ```

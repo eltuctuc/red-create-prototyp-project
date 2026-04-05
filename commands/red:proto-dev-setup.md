@@ -138,7 +138,7 @@ AskUserQuestion({
 Falls "Erkläre mir mehr": Beantworte die Fragen in einfacher Sprache. Keine Annahme von Vorwissen.
 Falls "Andere Präferenz": Nimm den genannten Stack, passe Phase 4 entsprechend an.
 
-Danach noch fragen:
+Danach fragen (Verzeichnis + GitHub in einem Block):
 
 ```typescript
 AskUserQuestion({
@@ -153,16 +153,7 @@ AskUserQuestion({
         { label: "Anderer Name – ich nenne ihn im Chat", description: "Beliebiger Verzeichnisname" }
       ],
       multiSelect: false
-    }
-  ]
-})
-```
-
-Warte auf Antwort. Falls "Anderer Name": nachfragen im Chat.
-
-```typescript
-AskUserQuestion({
-  questions: [
+    },
     {
       question: "Soll ein GitHub-Repository angelegt werden?",
       header: "GitHub Repository",
@@ -177,7 +168,7 @@ AskUserQuestion({
 })
 ```
 
-Falls GitHub gewünscht:
+Falls "Anderer Name" bei Verzeichnis: nachfragen im Chat. Falls GitHub gewünscht:
 
 ```typescript
 AskUserQuestion({
@@ -190,36 +181,21 @@ AskUserQuestion({
         { label: "Anderer Name – ich nenne ihn im Chat", description: "Eigener Name, keine Leerzeichen, Bindestriche statt Unterstriche" }
       ],
       multiSelect: false
-    }
-  ]
-})
-```
-
-Warte auf Antwort. Falls "Anderer Name": nachfragen im Chat.
-
-Falls GitHub Ja:
-
-```typescript
-AskUserQuestion({
-  questions: [
+    },
     {
       question: "Was soll ins GitHub-Repository?",
       header: "Repository-Inhalt",
       options: [
-        {
-          label: "Nur der Programm-Code",
-          description: "Nur das Code-Verzeichnis – Projektdokumentation (features/, docs/, research/) bleibt lokal"
-        },
-        {
-          label: "Alles – Code + Projektdokumentation",
-          description: "PRD, Feature-Specs, Docs und Code in einem Repository"
-        }
+        { label: "Nur der Programm-Code", description: "Nur das Code-Verzeichnis – Projektdokumentation (features/, docs/, research/) bleibt lokal" },
+        { label: "Alles – Code + Projektdokumentation", description: "PRD, Feature-Specs, Docs und Code in einem Repository" }
       ],
       multiSelect: false
     }
   ]
 })
 ```
+
+Falls "Anderer Name" bei Repo: nachfragen im Chat.
 
 ## Phase 5: Projekt scaffolden
 

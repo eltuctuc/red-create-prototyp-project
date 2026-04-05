@@ -468,11 +468,6 @@ AskUserQuestion({
 Alle Dateien wurden einzeln geprüft. Setze `status: approved` in allen Research-Dateien und committe:
 
 ```bash
-echo "Ich committe jetzt:"
-echo "  → research/platform-context.md – Platform & Nutzungskontext"
-echo "  → research/research-questions.md – Forschungsfragen & Antworten"
-echo "  → research/problem-statement.md – Problem Statement Map"
-echo "  → research/personas.md – Personas"
 git add research/
 git commit -q -m "docs: add user research, personas and problem statement" && git push -q
 ```

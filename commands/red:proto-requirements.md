@@ -210,10 +210,6 @@ Füge eine neue Zeile für dieses Feature ein (oder aktualisiere die bestehende)
 4. Commit-Zusammenfassung zeigen und committen:
 
 ```bash
-echo "Ich committe jetzt:"
-echo "  → features/FEAT-[X]-[name].md – Spec finalisiert"
-echo "  → features/STATUS.md – Feature eingetragen"
-echo "  → project-config.md – Nächste ID aktualisiert"
 git add features/FEAT-[X]-*.md features/STATUS.md project-config.md
 git commit -q -m "docs: FEAT-[X] spec – [Feature Name]" && git push -q
 ```

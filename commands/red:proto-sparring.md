@@ -116,8 +116,6 @@ Nach `weiter` oder Korrekturen: `prd.md` einlesen, Korrekturen übernehmen, `sta
 
 ```bash
 if git rev-parse --git-dir > /dev/null 2>&1; then
-  echo "Ich committe jetzt:"
-  echo "  → prd.md – PRD finalisiert"
   git add prd.md && git commit -q -m "docs: add/update PRD" && git push -q
 else
   echo "Kein Git-Repository – prd.md gespeichert. /red:proto-dev-setup macht den ersten Commit."

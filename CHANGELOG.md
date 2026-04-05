@@ -5,6 +5,15 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.14.2 — 5. April 2026
+
+### Verbesserungen
+
+- **Weniger Klicks beim Dev-Setup:** Die fünf aufeinanderfolgenden Rückfragen in `/red:proto-dev-setup` (Stack, Verzeichnis, GitHub, Repo-Name, Repo-Inhalt) wurden auf drei Blöcke reduziert – Verzeichnis und GitHub landen jetzt in einem Schritt, Repo-Name und Inhalt ebenfalls.
+- **Commit-Ankündigungen entfernt:** Die `echo`-Zeilen vor jedem `git add` in `/red:proto-requirements`, `/red:proto-research`, `/red:proto-flows` und `/red:proto-sparring` waren redundant – der Agent kommuniziert im Chat was er tut.
+
+---
+
 ## v0.14.1 — 5. April 2026
 
 ### Verbesserungen
