@@ -5,6 +5,14 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.13.6 — 5. April 2026
+
+### Verbesserungen
+
+- **Contributor Guidelines:** `CLAUDE.md` im Repo-Root eingeführt. Wer am Framework selbst arbeitet, bekommt die Spielregeln direkt in Claude Code – Endnutzer des Frameworks sehen die Datei nicht.
+
+---
+
 ## v0.13.5 — 5. April 2026
 
 Intelligenteres Research, weniger Rückfragen, volle Kontrolle Schritt für Schritt.
