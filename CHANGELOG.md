@@ -5,6 +5,14 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.15.0 — 5. April 2026
+
+### Verbesserungen
+
+- **Projektroot bleibt sauber:** Framework-Dateien (Templates, SCAFFOLDING, CONVENTIONS) landen jetzt in `.claude/red-proto/` statt im `docs/`-Ordner des Projekts. Der Projektroot zeigt nur noch eigene Projektdateien – kein Framework-Overhead mehr sichtbar.
+
+---
+
 ## v0.14.3 — 5. April 2026
 
 ### Fixes

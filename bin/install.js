@@ -312,9 +312,10 @@ async function installFiles(claudeBase, isGlobal, noClobber) {
     const srcDS = join(PACKAGE_ROOT, 'design-system');
     await cp(srcDS, join(projectRoot, 'design-system'), { recursive: true, force: !noClobber, errorOnExist: false });
 
-    // Copy docs/ (templates + SCAFFOLDING.md + CONVENTIONS.md)
+    // Copy framework docs to .claude/red-proto/ (templates, SCAFFOLDING, CONVENTIONS)
     const srcDocs = join(PACKAGE_ROOT, 'docs');
-    await cp(srcDocs, join(projectRoot, 'docs'), { recursive: true, force: !noClobber, errorOnExist: false });
+    await mkdir(join(projectRoot, '.claude', 'red-proto'), { recursive: true });
+    await cp(srcDocs, join(projectRoot, '.claude', 'red-proto'), { recursive: true, force: !noClobber, errorOnExist: false });
   }
 
   console.log('');

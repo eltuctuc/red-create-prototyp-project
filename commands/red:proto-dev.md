@@ -167,7 +167,7 @@ git commit -q -m "feat: implement FEAT-[X] – [Feature Name]" && git push -q
 Schreibe `context/FEAT-[ID]-dev-handoff.md` (legt Kontext für `/red:proto-qa` in neuer Session):
 
 ```bash
-cat docs/templates/dev-handoff.md
+cat .claude/red-proto/templates/dev-handoff.md
 ```
 
 Fülle alle Platzhalter mit konkreten Inhalten der Implementierung.

@@ -132,8 +132,9 @@ cp -n ~/.claude/templates/red-create-prototyp-project/agents/ux-reviewer.md .cla
 # Design System Templates kopieren (nur wenn noch nicht vorhanden)
 cp -rn ~/.claude/templates/red-create-prototyp-project/design-system/ ./
 
-# docs/ kopieren (Templates + SCAFFOLDING.md + CONVENTIONS.md)
-cp -rn ~/.claude/templates/red-create-prototyp-project/docs/ ./
+# Framework-Docs kopieren (Templates, SCAFFOLDING, CONVENTIONS) – ins .claude/red-proto/ Verzeichnis
+mkdir -p .claude/red-proto
+cp -rn ~/.claude/templates/red-create-prototyp-project/docs/ .claude/red-proto/
 ```
 
 Zeige danach welche Dateien bereits existiert haben (übersprungen) und welche neu hinzugefügt wurden:
@@ -167,8 +168,9 @@ cp ~/.claude/templates/red-create-prototyp-project/agents/ux-reviewer.md .claude
 # Design System Templates aktualisieren
 cp -r ~/.claude/templates/red-create-prototyp-project/design-system/ ./
 
-# docs/ aktualisieren (Templates + SCAFFOLDING.md + CONVENTIONS.md)
-cp -r ~/.claude/templates/red-create-prototyp-project/docs/ ./
+# Framework-Docs aktualisieren (Templates, SCAFFOLDING, CONVENTIONS)
+mkdir -p .claude/red-proto
+cp -r ~/.claude/templates/red-create-prototyp-project/docs/ .claude/red-proto/
 ```
 
 **Schritt 4 – Empfohlene Skills prüfen:**

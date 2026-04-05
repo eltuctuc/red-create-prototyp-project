@@ -17,6 +17,10 @@ Gilt besonders wenn Commits und Pushes involviert sind – einmal gepusht ist sc
 
 ---
 
+## Vorschläge nicht direkt umsetzen
+Wenn "mach Vorschläge" oder ähnliches sagt wird, soll nur eine Liste zur Auswahl erstellt werden – keine direkte Umsetzung.
+
+
 ## Changelog und Release Notes
 
 ### Pflicht bei jedem Push

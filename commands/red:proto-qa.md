@@ -47,7 +47,7 @@ Agent("ux-reviewer", {
 Naming: `BUG-FEAT[X]-QA-[NNN].md` / `BUG-FEAT[X]-UX-[NNN].md`
 
 ```bash
-cat docs/templates/bug-report.md
+cat .claude/red-proto/templates/bug-report.md
 ```
 
 Severity: Critical = Datenverlust/App unnutzbar, High = Kernfunktion kaputt, Medium = A11y/Flow-Bruch, Low = Optik/Edge-Case. Im Feature-File nur Bug-IDs referenzieren.

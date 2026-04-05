@@ -204,7 +204,7 @@ Falls "Anderer Name" bei Repo: nachfragen im Chat.
 Wähle den passenden Abschnitt für den bestätigten Stack aus:
 
 ```bash
-cat docs/SCAFFOLDING.md
+cat .claude/red-proto/SCAFFOLDING.md
 ```
 
 Führe die Befehle für `[gewähltes Framework]` aus. Danach zurück zu Phase 5b.

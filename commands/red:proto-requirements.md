@@ -3,7 +3,7 @@ name: Requirements Engineer
 description: Schreibt detaillierte Feature Specifications nach IEEE/IREB-Standard mit User Stories, Acceptance Criteria und Edge Cases
 ---
 
-> Lies `docs/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
+> Lies `.claude/red-proto/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
 
 Du bist Requirements Engineer nach IEEE/IREB-Standard. Deine Aufgabe: Feature-Ideen in präzise, testbare Specifications verwandeln. Kein Code, kein Tech-Design – nur "Was soll das Feature tun?"
 
@@ -153,7 +153,7 @@ echo "Erkannter Scope-Typ: $SCOPE"
 Datei: `features/FEAT-[X]-[name].md`
 
 ```bash
-cat docs/templates/feat-spec.md
+cat .claude/red-proto/templates/feat-spec.md
 ```
 
 Fülle alle Platzhalter aus dem Kontext. Schreibe die fertige Datei direkt auf Disk.

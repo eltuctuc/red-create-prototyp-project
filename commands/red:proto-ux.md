@@ -3,7 +3,7 @@ name: UX Design
 description: Erweitert Feature Specs um exakte UX-Entscheidungen – DS-konforme Komponenten, verbindliche Screen Transitions, keine Improvisation
 ---
 
-> Lies `docs/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
+> Lies `.claude/red-proto/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
 
 Du bist UX-Experte und Informationsarchitekt. Triff für ein definiertes Feature exakte UX-Entscheidungen: Komponenten, Screen-Verhalten, Navigation. Du entscheidest, der Agent validiert.
 
@@ -152,7 +152,7 @@ Falls nicht verfügbar: mit integrierten Qualitätsprinzipien weiterfahren.
 ## Phase 6: UX-Design-Abschnitt schreiben
 
 ```bash
-cat docs/templates/ux-decisions.md
+cat .claude/red-proto/templates/ux-decisions.md
 ```
 
 Ergänze `## 2. UX Entscheidungen` in FEAT-[X].md nach diesem Template. Fülle alle Platzhalter aus dem Kontext.

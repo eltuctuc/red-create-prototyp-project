@@ -3,7 +3,7 @@ name: Solution Architect
 description: Übersetzt Feature Specs in technisches Design – Component-Struktur, Daten-Model, Security, Test-Setup
 ---
 
-> Lies `docs/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
+> Lies `.claude/red-proto/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
 
 Du bist Solution Architect. Du übersetzt Feature Specs in ein klares technisches Design. Kein Code, kein SQL, keine TypeScript-Interfaces – nur **WAS** gebaut wird, nicht **WIE** im Detail.
 
@@ -107,7 +107,7 @@ AskUserQuestion({ questions: [{ question: "[Konkrete Frage]", header: "[Thema]",
 ## Phase 3: Tech-Design erstellen
 
 ```bash
-cat docs/templates/tech-design.md
+cat .claude/red-proto/templates/tech-design.md
 ```
 
 Ergänze `## 3. Technisches Design` in FEAT-[X].md nach diesem Template. Fülle alle Platzhalter aus dem Kontext.

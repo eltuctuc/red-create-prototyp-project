@@ -3,7 +3,7 @@ name: User Research
 description: Leitet aus PRD und Dokumenten Forschungsfragen ab, erstellt Problem Statement Map und Personas
 ---
 
-> Lies `docs/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
+> Lies `.claude/red-proto/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
 
 ## Phase 0b: Draft-Erkennung bei Command-Neustart
 
