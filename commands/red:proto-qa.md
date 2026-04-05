@@ -23,6 +23,24 @@ ls features/ 2>/dev/null
 cat context/FEAT-[ID]-dev-handoff.md 2>/dev/null
 ```
 
+### Cross-Feature-Muster-Scan
+
+Bevor die Agents starten: Lies alle Bug-Files anderer Features und leite bekannte Muster ab.
+
+```bash
+# Bugs aus früheren Features lesen (nicht das aktuelle)
+ls bugs/ 2>/dev/null | grep -v "FEAT-[ID]"
+```
+
+Erstelle intern eine **Muster-Liste** – typische Wiederholungs-Bugs:
+- Prop nicht an Kindkomponente weitergegeben (z.B. searchQuery, onSelect)
+- Interaktionselement entspricht nicht dem Spec-Typ (Toggle statt Button, Emoji statt SVG)
+- Default-State weicht von Spec ab
+- Accessibility-Attribut fehlt (aria-label, role, scope)
+- Komponente implementiert Feature aus Spec nicht (Leerzustand, Tooltip, Animation)
+
+Diese Muster werden in Phase 2 explizit im aktuellen Code gesucht, unabhängig davon ob die Agents sie finden.
+
 ## Phase 2: Review-Agents parallel starten
 
 ```typescript
@@ -52,8 +70,29 @@ cat .claude/red-proto/templates/bug-report.md
 
 Severity: Critical = Datenverlust/App unnutzbar, High = Kernfunktion kaputt, Medium = A11y/Flow-Bruch, Low = Optik/Edge-Case. Im Feature-File nur Bug-IDs referenzieren.
 
-## Phase 4: Bugs zusammenführen
+## Phase 4: Bugs zusammenführen und deduplizieren
 
+Nachdem beide Agents fertig sind: Bug-Files lesen und bereinigen.
+
+```bash
+ls bugs/ | grep "FEAT-[ID]"
+```
+
+**Schritt 1 – Duplikate identifizieren:**
+Lies alle Bug-Files für dieses Feature (QA + UX). Zwei Bugs sind ein Duplikat wenn sie:
+- dieselbe Komponente betreffen, UND
+- denselben Defekt beschreiben (auch wenn der Titel anders formuliert ist)
+
+**Schritt 2 – Duplikate auflösen:**
+- Behalte das Bug-File mit der detaillierteren Beschreibung
+- Lösche das andere (`rm bugs/BUG-FEAT[ID]-[AGENT]-[NNN].md`)
+- Bei widersprüchlichen Severities: nehme immer die **höhere** Severity
+- Vermerke im beibehaltenen File: `> Zusammengeführt mit BUG-FEAT[ID]-[...]-[NNN]`
+
+**Schritt 3 – Muster-Check gegen Phase-1-Liste:**
+Prüfe ob Muster aus früheren Features im aktuellen Code vorkommen und von keinem Agent gefunden wurden. Falls ja: Bug-File anlegen mit Vermerk `Quelle: Cross-Feature-Muster aus FEAT-[X]`.
+
+**Schritt 4 – Tabelle ausgeben:**
 ```
 | ID | Titel | Severity | Bereich | Von |
 |----|-------|----------|---------|-----|

@@ -25,10 +25,14 @@ ls features/ 2>/dev/null
 
 ### 2a. Acceptance Criteria Tests
 
-Gehe **jeden AC** durch. Teste ihn. Dokumentiere Ergebnis.
+Gehe **jeden AC** durch. Teste ihn **wörtlich** – zitiere den exakten AC-Text und stelle ihn dem tatsächlichen Code gegenüber. Interpretationsspielraum ist nicht erlaubt.
 
-- ✅ Passed
-- ❌ Failed → Bug-File anlegen
+Beispiel:
+> AC-2.7: "Der Theme-Toggle-Button zeigt ein Mond-Icon im Dark-Mode und ein Sonnen-Icon im Light-Mode."
+> Code: Toggle-Switch mit Emoji. → ❌ Abweichung vom spezifizierten Interaktionsmuster → Bug.
+
+- ✅ Passed – AC-Text und Code stimmen überein
+- ❌ Failed → Bug-File anlegen, AC-Text im Bug zitieren
 
 ### 2b. Edge-Case-Compliance-Pass – PFLICHT, systematisch
 
@@ -75,13 +79,40 @@ Basierend auf OWASP Top 10 – prüfe was für dieses Feature relevant ist:
 - **Fehlerbehandlung:** Gibt der Server Stack-Traces oder interne Informationen zurück?
 - **CSRF:** Sind State-verändernde Requests abgesichert?
 
-### 2d. Responsive / Cross-Browser Tests
+### 2d. Integration-Point-Check – PFLICHT
+
+Prüfe systematisch ob die im Feature neu hinzugefügten oder veränderten Komponenten korrekt in ihre übergeordneten Komponenten eingebunden sind.
+
+**Schritt 1: Übergeordnete Komponenten identifizieren**
+```bash
+git diff --name-only HEAD~1 2>/dev/null   # geänderte Dateien
+# Für jede geänderte Komponente: wo wird sie gemountet?
+# Typisch: App.jsx, Layout.jsx, Page-Komponenten
+```
+
+**Schritt 2: Props-Vollständigkeits-Check**
+Für jede geänderte Komponente:
+1. Lies die Komponente: welche Props erwartet sie (Interface, PropTypes, Funktionsparameter)?
+2. Lies die Parent-Komponente: werden **alle** erwarteten Props tatsächlich übergeben?
+3. Gibt es State-Variablen in der Parent-Komponente die an diese Komponente weitergegeben werden sollten, aber fehlen?
+
+| Komponente | Erwartet | Wird übergeben | Befund |
+|---|---|---|---|
+| TransactionsTable | searchQuery | – | ❌ Bug |
+| GlassCard | hover | – | ❌ Bug |
+
+Jede fehlende Prop → Bug-File (Severity: High wenn es Kernfunktionalität betrifft).
+
+**Schritt 3: Konsistenz-Check gegen bekannte Muster**
+Hat es in früheren Features bereits Props-Übergabe-Bugs gegeben? Falls ja: prüfe explizit ob dasselbe Muster hier wiederholt wird.
+
+### 2e. Responsive / Cross-Browser Tests
 
 - Mobile (375px), Tablet (768px), Desktop (1440px)
 - Chrome, Firefox, Safari (mindestens)
 - Layout-Brüche, overflow, falsche Abstände
 
-### 2e. Regression Tests
+### 2f. Regression Tests
 
 ```bash
 git diff --name-only HEAD~1 2>/dev/null

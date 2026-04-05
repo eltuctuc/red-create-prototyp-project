@@ -10,7 +10,7 @@ Du richtest das Product Development Framework für dieses Projekt ein.
 **Schritt 1 – Prüfe ob das Framework schon installiert ist:**
 
 ```bash
-ls .claude/commands/ 2>/dev/null | grep -E "sparring|dev-setup|requirements|ux-design|solution-architect|developer|qa-engineer"
+ls .claude/commands/ 2>/dev/null | grep -E "red:proto-sparring|red:proto-dev-setup|red:proto-requirements|red:proto-ux|red:proto-architect|red:proto-dev|red:proto-qa"
 ls .claude/agents/ 2>/dev/null
 cat project-config.md 2>/dev/null | grep "Codeverzeichnis"
 ```
@@ -137,10 +137,26 @@ mkdir -p .claude/red-proto
 cp -rn ~/.claude/templates/red-create-prototyp-project/docs/ .claude/red-proto/
 ```
 
+Verifiziere nach dem Kopieren dass alle kritischen Dateien wirklich angekommen sind:
+```bash
+# Pflicht-Check: diese Dateien müssen existieren
+ls .claude/commands/red:proto-qa.md 2>/dev/null || echo "FEHLT: red:proto-qa.md"
+ls .claude/agents/qa-engineer.md 2>/dev/null || echo "FEHLT: qa-engineer.md"
+ls .claude/red-proto/templates/bug-report.md 2>/dev/null || echo "FEHLT: bug-report.md (Bug-Template)"
+ls .claude/red-proto/CONVENTIONS.md 2>/dev/null || echo "FEHLT: CONVENTIONS.md"
+ls design-system/INDEX.md 2>/dev/null || echo "FEHLT: design-system/"
+```
+
+Wenn eine Datei als FEHLT gemeldet wird:
+```
+⚠️  [Dateiname] konnte nicht kopiert werden.
+    Quelle: ~/.claude/templates/red-create-prototyp-project/ scheint unvollständig.
+    Lösung: Führe `npx red-proto` erneut aus um das Framework neu zu installieren.
+```
+
 Zeige danach welche Dateien bereits existiert haben (übersprungen) und welche neu hinzugefügt wurden:
 ```bash
-# Überprüfen welche Dateien tatsächlich existieren:
-ls .claude/commands/
+ls .claude/commands/ | grep "red:proto"
 ls .claude/agents/
 ```
 
@@ -171,6 +187,22 @@ cp -r ~/.claude/templates/red-create-prototyp-project/design-system/ ./
 # Framework-Docs aktualisieren (Templates, SCAFFOLDING, CONVENTIONS)
 mkdir -p .claude/red-proto
 cp -r ~/.claude/templates/red-create-prototyp-project/docs/ .claude/red-proto/
+```
+
+Verifiziere nach dem Kopieren:
+```bash
+ls .claude/commands/red:proto-qa.md 2>/dev/null || echo "FEHLT: red:proto-qa.md"
+ls .claude/agents/qa-engineer.md 2>/dev/null || echo "FEHLT: qa-engineer.md"
+ls .claude/red-proto/templates/bug-report.md 2>/dev/null || echo "FEHLT: bug-report.md (Bug-Template)"
+ls .claude/red-proto/CONVENTIONS.md 2>/dev/null || echo "FEHLT: CONVENTIONS.md"
+ls design-system/INDEX.md 2>/dev/null || echo "FEHLT: design-system/"
+```
+
+Wenn eine Datei als FEHLT gemeldet wird:
+```
+⚠️  [Dateiname] konnte nicht kopiert werden.
+    Quelle: ~/.claude/templates/red-create-prototyp-project/ scheint unvollständig.
+    Lösung: Führe `npx red-proto` erneut aus um das Framework neu zu installieren.
 ```
 
 **Schritt 4 – Empfohlene Skills prüfen:**

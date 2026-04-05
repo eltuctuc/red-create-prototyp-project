@@ -5,6 +5,16 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.16.1 — 5. April 2026
+
+### Fixes
+
+- **`/red:proto` findet jetzt alle Dateien die es kopieren soll:** Bei globalem Install (`npx red-proto`) wurden `docs/` und `design-system/` nicht in `~/.claude/templates/red-create-prototyp-project/` abgelegt – dadurch fehlten nach `/red:proto` Bug-Templates, CONVENTIONS.md und das Design System still und lautlos. Ab jetzt befüllt der globale Install diese Quelle vollständig.
+- **Veraltete Command-Namen im Installations-Check behoben:** `/red:proto` erkannte nicht mehr ob das Framework bereits installiert ist, weil es auf alte Namen (`ux-design`, `solution-architect`) statt auf aktuelle `red:proto-*` Namen prüfte.
+- **Explizite Verifikation nach dem Kopieren:** Wenn eine kritische Datei nach dem Install fehlt, erscheint jetzt eine klare Warnung mit Lösungshinweis – statt stillem Erfolg der erst beim nächsten QA-Run auffällt.
+
+---
+
 ## v0.16.0 — 5. April 2026
 
 Endlich weiß man, ob ein Feature wirklich abgenommen ist – oder ob QA gerade noch kämpft.

@@ -301,6 +301,31 @@ async function installFiles(claudeBase, isGlobal, noClobber) {
     copied++;
   }
 
+  if (isGlobal) {
+    // Global install: copy docs + design-system to ~/.claude/templates/red-create-prototyp-project/
+    // so that /red:proto can later copy them into any project
+    const templateBase = join(homedir(), '.claude', 'templates', 'red-create-prototyp-project');
+    const templateCmds = join(templateBase, 'commands');
+    const templateAgents = join(templateBase, 'agents');
+    await mkdir(templateCmds, { recursive: true });
+    await mkdir(templateAgents, { recursive: true });
+
+    // Keep template commands + agents in sync with installed versions
+    for (const file of COMMAND_FILES) {
+      await cp(join(PACKAGE_ROOT, 'commands', file), join(templateCmds, file), { force: true, errorOnExist: false });
+    }
+    for (const file of AGENT_FILES) {
+      await cp(join(PACKAGE_ROOT, 'agents', file), join(templateAgents, file), { force: true, errorOnExist: false });
+    }
+
+    // Copy docs (templates, SCAFFOLDING, CONVENTIONS) + design-system into templates/
+    const srcDocs = join(PACKAGE_ROOT, 'docs');
+    await cp(srcDocs, join(templateBase, 'docs'), { recursive: true, force: true, errorOnExist: false });
+
+    const srcDS = join(PACKAGE_ROOT, 'design-system');
+    await cp(srcDS, join(templateBase, 'design-system'), { recursive: true, force: true, errorOnExist: false });
+  }
+
   // If local install: also set up project structure + design system + docs
   if (!isGlobal) {
     const dirs = ['research', 'features', 'flows', 'bugs', 'docs', 'projekt',
