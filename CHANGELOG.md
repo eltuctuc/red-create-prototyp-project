@@ -5,6 +5,17 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.13.4 — 5. April 2026
+
+Die `prd.md` landet jetzt wirklich auf der Festplatte – nicht nur im Chat.
+
+### Fixes
+
+- **PRD wird als Datei geschrieben:** `/red:proto-sparring` hat das PRD bisher nur im Chat angezeigt und die eigentliche Datei nie erstellt. Das Framework arbeitet jetzt wie erwartet: `prd.md` wird direkt nach dem Schreiben als Draft gespeichert, inklusive YAML-Frontmatter und Scope-Typ.
+- **Research als klarer nächster Schritt:** Die Abschlussfrage in `/red:proto-sparring` stellt jetzt Research in den Vordergrund – dev-setup ist nur noch die explizite Ausweichoption für alle, die Research überspringen wollen.
+
+---
+
 ## v0.13.3 — 3. April 2026
 
 Kein neues Feature, aber ein sauberes Fundament: Diese Version räumt auf, was hinter den Kulissen nicht gestimmt hat.

@@ -41,13 +41,20 @@ AskUserQuestion({
 })
 ```
 
-## Phase 3: PRD schreiben
+## Phase 3: PRD schreiben und als Draft speichern
 
-Wenn du genug weißt, schreibe das PRD. Zeige es zuerst im Chat – noch nicht speichern.
+Wenn du genug weißt, schreibe das PRD. Erstelle die Datei `prd.md` direkt im Projektverzeichnis mit folgendem Inhalt (inkl. YAML-Frontmatter):
 
 ```markdown
+---
+status: draft
+---
+
 # Product Requirements Document
 *Erstellt: [Datum]*
+
+## Scope-Typ
+[Klickbarer Prototyp | Funktionierender Prototyp | Produktionsreifes MVP | Noch unklar]
 
 ## Vision
 [Ein Satz: Was ist das Produkt, für wen, warum jetzt?]
@@ -71,6 +78,19 @@ Wenn du genug weißt, schreibe das PRD. Zeige es zuerst im Chat – noch nicht s
 - [Was ist noch unklar und muss im User Research / Requirements geklärt werden]
 ```
 
+**Wichtig:** Schreibe die Datei `prd.md` mit dem Write-Tool direkt ins Projektverzeichnis. Nicht nur im Chat anzeigen – die Datei muss auf der Festplatte existieren.
+
+Zeige dem User danach:
+
+```
+📝 Draft gespeichert: prd.md
+
+Öffne die Datei, prüfe sie und bearbeite sie direkt falls nötig.
+
+→ Schreib `weiter` wenn alles passt
+→ Oder sag mir direkt was geändert werden soll
+```
+
 Frage dann:
 
 ```typescript
@@ -90,13 +110,7 @@ AskUserQuestion({
 })
 ```
 
-## Phase 4: Als Draft speichern
-
-> Lies `docs/CONVENTIONS.md` – Draft Convention + Resume Pattern (Option 1) gelten hier.
-
-Nach Approval: Speichere `prd.md` als Draft. YAML `status: draft`. Scope-Typ als Abschnitt `## Scope-Typ` ergänzen. User per CONVENTIONS.md §Resume Pattern informieren.
-
-## Phase 4b: Finalisieren
+## Phase 4: Finalisieren
 
 Nach `weiter` oder Korrekturen: `prd.md` einlesen, Korrekturen übernehmen, `status: approved` setzen.
 
@@ -136,16 +150,16 @@ Dann frage:
 AskUserQuestion({
   questions: [
     {
-      question: "Wie möchtest du weitermachen?",
+      question: "Weiter zu /red:proto-research?",
       header: "Nächster Schritt",
       options: [
         {
-          label: "Weiter zu /red:proto-research",
-          description: "Empfohlen – Research klärt Zielgruppe und Nutzungskontext, bevor der Tech-Stack gewählt wird"
+          label: "Ja – /red:proto-research starten",
+          description: "Zielgruppe, Personas und Nutzungskontext klären – informiert den Tech-Stack"
         },
         {
-          label: "Direkt zu /red:proto-dev-setup",
-          description: "Research überspringen – Tech-Stack jetzt wählen. Research kann später noch nachgeholt werden (ohne Einfluss auf Stack-Entscheidungen)"
+          label: "Research später – direkt zu /red:proto-dev-setup",
+          description: "Research überspringen und Tech-Stack jetzt wählen. Research kann jederzeit nachgeholt werden"
         }
       ],
       multiSelect: false
