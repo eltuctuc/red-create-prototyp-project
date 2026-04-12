@@ -64,7 +64,7 @@ User tippt `weiter` im Chat. Claude liest die Datei erneut vom Disk und finalisi
 ### Option 2 – Langer Research-Prozess (Stunden bis Tage)
 Geeignet für: research (wenn echter User Research durchgeführt wird)
 
-User trägt Findings in die Draft-Dateien ein, dann `/red:proto-research` erneut aufrufen.
+User trägt Findings in die Draft-Dateien ein, dann `/red-proto:research` erneut aufrufen.
 Der Command erkennt Drafts automatisch und wechselt in den Review-Modus.
 
 **Draft-Erkennung beim Command-Neustart:**
@@ -85,7 +85,7 @@ Kurze Pause?
 
 Echter Research (Interviews, Umfragen, Tage)?
 → Trag deine Findings direkt in die Datei ein
-→ Dann /red:proto-research erneut aufrufen – ich erkenne den Draft automatisch
+→ Dann /red-proto:research erneut aufrufen – ich erkenne den Draft automatisch
 ```
 
 ---

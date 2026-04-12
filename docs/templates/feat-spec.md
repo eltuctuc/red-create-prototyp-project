@@ -15,7 +15,7 @@ Fix-Schwelle: [Critical | Critical, High | Critical, High, Medium]
 ---
 
 ## 1. Feature Spec
-*Ausgefüllt von: /red:proto-requirements — [Datum]*
+*Ausgefüllt von: /red-proto:requirements — [Datum]*
 
 ### Beschreibung
 [IEEE/IREB: Kurze, präzise Beschreibung der Funktion aus Nutzersicht]

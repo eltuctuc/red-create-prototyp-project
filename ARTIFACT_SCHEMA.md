@@ -7,9 +7,9 @@ Es ist die einzige Source of Truth für den gesamten Workflow.
 
 ```
 ./
-  prd.md                          ← [/sparring] Product Requirements Document
-  project-config.md               ← [/red:proto-dev-setup] Tech-Stack, Projektstruktur, Git/GitHub
-  design-system/                  ← Verbindliche Design-Vorgaben – wird von /red:proto-ux, /red:proto-dev, ux-reviewer gelesen
+  prd.md                          ← [/red-proto:sparring] Product Requirements Document
+  project-config.md               ← [/red-proto:dev-setup] Tech-Stack, Projektstruktur, Git/GitHub
+  design-system/                  ← Verbindliche Design-Vorgaben – wird von /red-proto:ux, /red-proto:dev, ux-reviewer gelesen
     README.md                     ← Ausfüllanleitung
     tokens/
       colors.md                   ← Farb-Tokens (Primär, Sekundär, Semantic, Neutral)
@@ -31,21 +31,21 @@ Es ist die einzige Source of Truth für den gesamten Workflow.
   flows/
     product-flows.md              ← [/flows] Verbindliche Screen-Übersicht + Transition-Tabelle
   research/
-    problem-statement.md          ← [/red:proto-research]
-    personas.md                   ← [/red:proto-research]
-    research-questions.md         ← [/red:proto-research]
+    problem-statement.md          ← [/red-proto:research]
+    personas.md                   ← [/red-proto:research]
+    research-questions.md         ← [/red-proto:research]
   features/
     FEAT-1-feature-name.md        ← [alle Agenten ergänzen dieses File]
     FEAT-2-feature-name.md
     ...
-  bugs/                           ← [/red:proto-qa] Ein File pro Bug – nach Fix umbenannt zu BUG-...-fixed.md (Audit-Trail)
+  bugs/                           ← [/red-proto:qa] Ein File pro Bug – nach Fix umbenannt zu BUG-...-fixed.md (Audit-Trail)
     BUG-FEAT1-QA-001.md           ← Technischer Bug (QA Engineer)
     BUG-FEAT1-UX-001.md           ← UX-Bug (UX Reviewer)
     ...
   docs/
-    produktfähigkeiten.md         ← [/red:proto-qa] Was kann das Produkt aktuell? (pro Feature ergänzt)
-    releases.md                   ← [/red:proto-qa] Release-Historie: was wann integriert, welche Bugs behoben
-  [codeverzeichnis]/              ← [/red:proto-dev] Projektcode – Pfad steht in project-config.md → "Codeverzeichnis"
+    produktfähigkeiten.md         ← [/red-proto:qa] Was kann das Produkt aktuell? (pro Feature ergänzt)
+    releases.md                   ← [/red-proto:qa] Release-Historie: was wann integriert, welche Bugs behoben
+  [codeverzeichnis]/              ← [/red-proto:dev] Projektcode – Pfad steht in project-config.md → "Codeverzeichnis"
                                     Standard: projekt/ – kann aber src/, . oder ein anderer Pfad sein
 ```
 
@@ -67,7 +67,7 @@ Aktueller Schritt: [Spec | UX | Tech | Dev | QA | Done | REJECTED | ABANDONED]
 ---
 
 ## 1. Feature Spec
-*Ausgefüllt von: /red:proto-requirements**
+*Ausgefüllt von: /red-proto:requirements**
 
 ### User Stories
 - Als [Rolle] möchte ich [Aktion], um [Ziel]
@@ -84,7 +84,7 @@ Aktueller Schritt: [Spec | UX | Tech | Dev | QA | Done | REJECTED | ABANDONED]
 ---
 
 ## 2. UX Entscheidungen
-*Ausgefüllt von: /red:proto-ux**
+*Ausgefüllt von: /red-proto:ux**
 
 ### User Flow
 ### Interaktionsmuster
@@ -102,7 +102,7 @@ Aktueller Schritt: [Spec | UX | Tech | Dev | QA | Done | REJECTED | ABANDONED]
 ---
 
 ## 3. Technisches Design
-*Ausgefüllt von: /red:proto-architect**
+*Ausgefüllt von: /red-proto:architect**
 
 ### Component-Struktur
 ### Data Model
@@ -113,7 +113,7 @@ Aktueller Schritt: [Spec | UX | Tech | Dev | QA | Done | REJECTED | ABANDONED]
 ---
 
 ## 4. Implementierung
-*Ausgefüllt von: /red:proto-dev**
+*Ausgefüllt von: /red-proto:dev**
 
 ### Implementierte Dateien
 ### Offene Punkte
@@ -121,7 +121,7 @@ Aktueller Schritt: [Spec | UX | Tech | Dev | QA | Done | REJECTED | ABANDONED]
 ---
 
 ## 5. QA Ergebnisse
-*Ausgefüllt von: /red:proto-qa**
+*Ausgefüllt von: /red-proto:qa**
 
 ### Test-Ergebnisse
 ### Bugs
@@ -178,7 +178,7 @@ Fix now | Fix before release | Nice-to-have
 ...
 ```
 
-Jeder `/red:proto-qa`-Durchlauf ergänzt ein neues Feature-Kapitel, wenn Production-Ready: ✅.
+Jeder `/red-proto:qa`-Durchlauf ergänzt ein neues Feature-Kapitel, wenn Production-Ready: ✅.
 
 ---
 
@@ -225,7 +225,7 @@ Einträge werden chronologisch oben eingefügt (neueste zuerst).
 ```
 
 Einträge werden nur ergänzt, nie ohne Bestätigung geändert.
-`/red:proto-flows` kann jederzeit erneut aufgerufen werden um neue Features zu integrieren oder Lücken zu schließen.
+`/red-proto:flows` kann jederzeit erneut aufgerufen werden um neue Features zu integrieren oder Lücken zu schließen.
 
 ---
 
@@ -258,7 +258,7 @@ Einträge werden nur ergänzt, nie ohne Bestätigung geändert.
 - Codeverzeichnis: projekt/   ← Anpassen falls Code woanders liegt (src/, . etc.)
 
 ## Projektstruktur
-*(Von allen Agents als Pfad-Referenz genutzt – befüllt von /sparring)*
+*(Von allen Agents als Pfad-Referenz genutzt – befüllt von /red-proto:sparring)*
 - Komponenten: src/components/
 - Seiten/Views: src/app/
 - API-Routen: src/app/api/

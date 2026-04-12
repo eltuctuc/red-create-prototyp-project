@@ -5,6 +5,16 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.17.1 — 12. April 2026
+
+Alle Docs sprechen jetzt dieselbe Sprache.
+
+### Fixes
+
+- **Command-Namen in allen Dokumenten korrigiert:** README, ARTIFACT_SCHEMA, Design System, Templates, Agents und Conventions enthielten noch die alten `/red:proto-*`-Namen aus der Zeit vor v0.17.0. Wer die Doku las, sah andere Befehle als die, die tatsächlich funktionieren. Alle 35 Stellen sind jetzt auf `/red-proto:*` aktualisiert.
+
+---
+
 ## v0.17.0 — 12. April 2026
 
 Commands wohnen jetzt in einer eigenen Schublade.

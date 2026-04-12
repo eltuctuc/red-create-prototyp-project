@@ -49,8 +49,8 @@ Das Design System wächst mit dem Projekt. Das ist normal und gewollt.
 
 | Agent | Liest | Zweck |
 |-------|-------|-------|
-| `/red:proto-ux` | `components/`, `patterns/` | Nur DS-konforme Komponenten in User Flows |
-| `/red:proto-dev` | `tokens/`, `components/` | Tokens und Specs direkt in Code übersetzen |
+| `/red-proto:ux` | `components/`, `patterns/` | Nur DS-konforme Komponenten in User Flows |
+| `/red-proto:dev` | `tokens/`, `components/` | Tokens und Specs direkt in Code übersetzen |
 | `frontend-developer` | alles | Vollständige DS-Referenz bei Implementierung |
 | `ux-reviewer` | alles | DS-Compliance-Check nach Implementierung |
 

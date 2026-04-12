@@ -180,7 +180,7 @@ AskUserQuestion({
     question: "Implementierung prüfen",
     header: "Code Review",
     options: [
-      { label: "Sieht gut aus – weiter zu /red:proto-qa", description: "" },
+      { label: "Sieht gut aus – weiter zu /red-proto:qa", description: "" },
       { label: "Änderungen nötig", description: "Feedback im Chat" }
     ],
     multiSelect: false
@@ -198,4 +198,4 @@ git commit -m "feat: implement FEAT-[X] – [Feature Name]"
 git push
 ```
 
-Sage: "Implementierung abgeschlossen. Nächster Schritt: `/red:proto-qa`."
+Sage: "Implementierung abgeschlossen. Nächster Schritt: `/red-proto:qa`."

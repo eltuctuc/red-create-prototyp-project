@@ -9,22 +9,22 @@ Ein KI-gestütztes Product Development Framework für [Claude Code](https://clau
 Eine Sammlung von Claude Code Commands, die eine vollständige Produktentwicklungs-Pipeline abbilden. Du beschreibst deine Idee in natürlicher Sprache – Claude führt die Pipeline aus, du triffst die Entscheidungen.
 
 ```
-/red:proto-workflow     → Nach jeder Pause: zeigt exakt wo du stehst und was als nächstes zu tun ist
+/red-proto:workflow     → Nach jeder Pause: zeigt exakt wo du stehst und was als nächstes zu tun ist
 
-/red:proto-sparring     → Idee schärfen → PRD
-/red:proto-dev-setup    → Tech-Stack wählen, Projekt scaffolden, Git/GitHub einrichten
-/red:proto-research     → Problem Statement Map + Personas (optional)
-/red:proto-requirements → Feature Specs – einmal pro Feature, für ALLE Features
+/red-proto:sparring     → Idee schärfen → PRD
+/red-proto:dev-setup    → Tech-Stack wählen, Projekt scaffolden, Git/GitHub einrichten
+/red-proto:research     → Problem Statement Map + Personas (optional)
+/red-proto:requirements → Feature Specs – einmal pro Feature, für ALLE Features
                           ↓ wenn ALLE Features Specs haben:
-/red:proto-flows        → Screen-Inventar + verbindliche Transition-Tabelle (einmalig)
-/red:proto-ux           → UX-Entscheidungen – einmal pro Feature
+/red-proto:flows        → Screen-Inventar + verbindliche Transition-Tabelle (einmalig)
+/red-proto:ux           → UX-Entscheidungen – einmal pro Feature
 
 dann pro Feature (Build-Loop bis QA grün):
-/red:proto-architect    → Technisches Design + Security + Test-Setup
-/red:proto-dev          → Implementierung (Frontend + Backend, parallel falls nötig)
+/red-proto:architect    → Technisches Design + Security + Test-Setup
+/red-proto:dev          → Implementierung (Frontend + Backend, parallel falls nötig)
                           └── schreibt context/FEAT-x-dev-handoff.md am Ende
-/red:proto-qa           → Tests, Accessibility, Security, Bug-Loop bis Production-Ready
-                          └── Bugs? → neue Session → /red:proto-dev → /red:proto-qa
+/red-proto:qa           → Tests, Accessibility, Security, Bug-Loop bis Production-Ready
+                          └── Bugs? → neue Session → /red-proto:dev → /red-proto:qa
 ```
 
 Jeder Command ist eigenständig – du kannst an jedem Punkt einsteigen oder aufhören. Die Commands bauen aufeinander auf: jeder liest den Output des vorherigen und ergänzt die gemeinsamen Artefakte.
@@ -36,27 +36,27 @@ flowchart TD
     A([Idee]) --> B
 
     subgraph setup["📐 Einmalig pro Projekt"]
-        B["/red:proto-sparring\nIdee → PRD"]
-        B --> C["/red:proto-dev-setup\nTech-Stack + GitHub"]
+        B["/red-proto:sparring\nIdee → PRD"]
+        B --> C["/red-proto:dev-setup\nTech-Stack + GitHub"]
         C --> D{Research?}
-        D -->|optional| E["/red:proto-research\nPersonas + Problem Statement"]
+        D -->|optional| E["/red-proto:research\nPersonas + Problem Statement"]
         D -->|überspringen| F
-        E --> F["/red:proto-requirements\nSpecs für alle Features"]
-        F --> G["/red:proto-flows\nScreen-Inventar + Transitions"]
+        E --> F["/red-proto:requirements\nSpecs für alle Features"]
+        F --> G["/red-proto:flows\nScreen-Inventar + Transitions"]
     end
 
     subgraph feature["🔁 Pro Feature wiederholen"]
-        G --> H["/red:proto-ux\nUX-Entscheidungen"]
-        H --> I["/red:proto-architect\nTech-Design + Security + Tests"]
+        G --> H["/red-proto:ux\nUX-Entscheidungen"]
+        H --> I["/red-proto:architect\nTech-Design + Security + Tests"]
         I --> J
 
         subgraph session1["Session 1"]
-            J["/red:proto-dev\nImplementierung"]
+            J["/red-proto:dev\nImplementierung"]
             J --> J2["Handoff schreiben\ncontext/FEAT-x-dev-handoff.md"]
         end
 
         subgraph session2["Session 2 (neu starten)"]
-            J2 --> K["/red:proto-qa\nTests + Bugs"]
+            J2 --> K["/red-proto:qa\nTests + Bugs"]
         end
 
         K --> L{Bugs?}
@@ -68,10 +68,10 @@ flowchart TD
     N -->|ja| H
     N -->|nein| O([Release 🎉])
 
-    P(["/red:proto-workflow\nOrientierung jederzeit"]) -.->|wo stehe ich?| feature
+    P(["/red-proto:workflow\nOrientierung jederzeit"]) -.->|wo stehe ich?| feature
 ```
 
-**Faustregel:** Alles bis `/red:proto-flows` machst du einmal für dein Projekt. Ab `/red:proto-ux` wiederholst du den Loop für jedes Feature. `proto-dev` und `proto-qa` laufen in **getrennten Sessions** – `proto-dev` schreibt am Ende ein Handoff-File, das `proto-qa` in der neuen Session einliest.
+**Faustregel:** Alles bis `/red-proto:flows` machst du einmal für dein Projekt. Ab `/red-proto:ux` wiederholst du den Loop für jedes Feature. `/red-proto:dev` und `/red-proto:qa` laufen in **getrennten Sessions** – `/red-proto:dev` schreibt am Ende ein Handoff-File, das `/red-proto:qa` in der neuen Session einliest.
 
 ---
 
@@ -89,7 +89,7 @@ flowchart TD
 
 ### Schritt 1 – `npx red-proto` installiert das Framework auf deinem Computer
 
-Macht die `/red:proto-*` Commands in Claude Code verfügbar. Einmalig pro Computer ausführen.
+Macht die `/red-proto:*` Commands in Claude Code verfügbar. Einmalig pro Computer ausführen.
 
 ```bash
 npx red-proto@latest
@@ -120,11 +120,11 @@ cp ~/.claude/templates/red-create-prototyp-project/commands/red\:proto.md ~/.cla
 
 ---
 
-### Schritt 2 – `/red:proto` richtet ein einzelnes Projekt ein
+### Schritt 2 – `/red-proto:create` richtet ein einzelnes Projekt ein
 
 > **Diesen Schritt musst du für jedes neue Projekt wiederholen.**
 
-`npx` installiert nur die Commands. `/red:proto` baut die Projektstruktur auf:
+`npx` installiert nur die Commands. `/red-proto:create` baut die Projektstruktur auf:
 
 - legt `research/`, `features/`, `flows/`, `bugs/`, `docs/`, `context/` an
 - kopiert das Design System mit Index ins Projekt
@@ -138,13 +138,13 @@ claude
 Dann in Claude Code:
 
 ```
-/red:proto
+/red-proto:create
 ```
 
 **Danach loslegen:**
 
 ```
-/red:proto-sparring
+/red-proto:sparring
 ```
 
 ---
@@ -156,7 +156,7 @@ Nach dem Setup hat dein Projekt folgende Struktur:
 ```
 ./
   .claude/
-    commands/          ← Alle Pipeline-Commands (red:proto-sparring, red:proto-dev, ...)
+    commands/          ← Alle Pipeline-Commands (red-proto:sparring, red-proto:dev, ...)
     agents/            ← Sub-Agents (frontend-developer, ux-reviewer, ...)
   design-system/       ← Neutrales Design System (Tokens, Komponenten, Patterns)
     INDEX.md           ← Kompakte Übersicht – Agents laden von hier selektiv
@@ -171,7 +171,7 @@ Nach dem Setup hat dein Projekt folgende Struktur:
   bugs/                ← Bug-Reports (werden nicht gelöscht, sondern zu -fixed.md)
   context/             ← Session-Handoffs (dev → qa Übergaben)
   docs/                ← Produktfähigkeiten + Release-Historie
-  prd.md               ← Product Requirements Document (erstellt von /red:proto-sparring)
+  prd.md               ← Product Requirements Document (erstellt von /red-proto:sparring)
   project-config.md    ← Tech-Stack, Pfade, Versionierung
 ```
 
@@ -201,10 +201,10 @@ Das Framework läuft ohne zusätzliche Skills, nutzt sie aber wenn vorhanden:
 
 | Skill | Genutzt von | Effekt |
 |-------|-------------|--------|
-| `ui-ux-pro-max` | `/red:proto-ux`, `ux-reviewer` Agent | Deutlich bessere UX-Qualität |
+| `ui-ux-pro-max` | `/red-proto:ux`, `ux-reviewer` Agent | Deutlich bessere UX-Qualität |
 | `frontend-design` | `frontend-developer` Agent | Bessere Component-Implementierung |
 | `neon-postgres` | `backend-developer` Agent | Nur bei Neon-Datenbankstack |
-| `atlassian:spec-to-backlog` | `/red:proto-requirements` | Direkt in Jira schreiben |
+| `atlassian:spec-to-backlog` | `/red-proto:requirements` | Direkt in Jira schreiben |
 
 Skills werden in Claude Code unter **Einstellungen → Skills** installiert.
 
@@ -218,7 +218,7 @@ Skills werden in Claude Code unter **Einstellungen → Skills** installiert.
 
 **Session-Trennung:** `proto-dev` und `proto-qa` laufen bewusst in getrennten Sessions. Das verhindert Kontext-Akkumulation und hält den Token-Verbrauch pro Session niedrig. Das Handoff-File in `context/` ist die Brücke.
 
-**Flows als Navigationsvertrag:** `/red:proto-flows` erstellt eine verbindliche Transition-Tabelle, die UX und Developer als gemeinsame Quelle der Wahrheit nutzen. Undokumentierte Transitions werden gemeldet, nicht stillschweigend implementiert.
+**Flows als Navigationsvertrag:** `/red-proto:flows` erstellt eine verbindliche Transition-Tabelle, die UX und Developer als gemeinsame Quelle der Wahrheit nutzen. Undokumentierte Transitions werden gemeldet, nicht stillschweigend implementiert.
 
 **Audit-Trail:** Bugs werden nicht gelöscht, sondern zu `-fixed.md` umbenannt.
 

@@ -36,7 +36,7 @@ screens/
 
 ## Was die Agents damit machen
 
-- `/red:proto-ux` liest die Screens als visuelle Referenz für User Flows und Komponentenstruktur
+- `/red-proto:ux` liest die Screens als visuelle Referenz für User Flows und Komponentenstruktur
 - `frontend-developer` nutzt Screens als Implementierungs-Referenz
 - `ux-reviewer` vergleicht implementierte Screens mit den Referenz-Screens
 

@@ -1,6 +1,6 @@
 # Scaffold-Befehle
 
-Genutzt von `/red:proto-dev-setup` Phase 5. Wähle den passenden Block für den bestätigten Stack.
+Genutzt von `/red-proto:dev-setup` Phase 5. Wähle den passenden Block für den bestätigten Stack.
 
 > Bei allen Scaffolds gilt:
 > - **"Initialize git repository?"** → **No** – Git richtet das Framework in Phase 6 ein
