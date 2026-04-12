@@ -56,13 +56,13 @@ cat prd.md 2>/dev/null
 cat research/personas.md 2>/dev/null
 cat research/problem-statement.md 2>/dev/null
 cat features/FEAT-[X].md
-cat flows/product-flows.md 2>/dev/null || echo "HINWEIS: Kein Flows-Dokument – /red:proto-flows ausführen bevor Screen Transitions definiert werden."
+cat flows/product-flows.md 2>/dev/null || echo "HINWEIS: Kein Flows-Dokument – /red-proto:flows ausführen bevor Screen Transitions definiert werden."
 ```
 
 Wenn Research noch nicht gemacht:
 ```typescript
 AskUserQuestion({ questions: [{ question: "User Research fehlt. Personas helfen bei zielgruppengerechten UX-Entscheidungen.", header: "Research nachholen?", options: [
-  { label: "Jetzt /red:proto-research nachholen", description: "Danach zurück zu /red:proto-ux" },
+  { label: "Jetzt /red-proto:research nachholen", description: "Danach zurück zu /red-proto:ux" },
   { label: "Ohne Research weitermachen", description: "Direkt aus Feature Spec und PRD ableiten" }
 ], multiSelect: false }] })
 ```
@@ -134,7 +134,7 @@ cat flows/product-flows.md 2>/dev/null
 Kein Flows-Dokument:
 ```typescript
 AskUserQuestion({ questions: [{ question: "Kein Flows-Dokument. Wie weiter?", header: "Flows fehlen", options: [
-  { label: "Jetzt /red:proto-flows ausführen", description: "Empfohlen" },
+  { label: "Jetzt /red-proto:flows ausführen", description: "Empfohlen" },
   { label: "Nur für dieses Feature definieren", description: "" }
 ], multiSelect: false }] })
 ```
@@ -170,7 +170,7 @@ Unabhängig vom MODUS: FEAT-[X].md jetzt mit `## 2. UX Entscheidungen` ergänzen
 ```typescript
 AskUserQuestion({ questions: [{ question: "UX-Entscheidungen für FEAT-[X] [Name] vollständig?", header: "Review", options: [
   { label: "Passt – weiter mit nächstem Feature", description: "" },
-  { label: "Passt – das war das letzte, weiter zu /red:proto-architect", description: "" },
+  { label: "Passt – das war das letzte, weiter zu /red-proto:architect", description: "" },
   { label: "Änderungen nötig", description: "Feedback im Chat" }
 ], multiSelect: false }] })
 ```
@@ -213,4 +213,4 @@ git add features/FEAT-*.md flows/product-flows.md features/STATUS.md 2>/dev/null
 git commit -q -m "docs: ux design – FEAT-[ID], FEAT-[ID], FEAT-[ID]" && git push -q
 ```
 
-Abschluss: "Alle UX-Designs freigegeben. Weiter mit `/red:proto-architect`."
+Abschluss: "Alle UX-Designs freigegeben. Weiter mit `/red-proto:architect`."

@@ -24,7 +24,7 @@ AskUserQuestion({
       header: "Research nachholen?",
       options: [
         {
-          label: "Jetzt /red:proto-research nachholen",
+          label: "Jetzt /red-proto:research nachholen",
           description: "Empfohlen – danach kehren wir hierher zurück. Hinweis: Tech-Stack ist gesetzt, Research fokussiert sich auf Nutzerverhalten und Personas"
         },
         {
@@ -61,14 +61,14 @@ echo "Review-Modus: $REVIEW_MODE"
 
 # Guard: prd.md muss existieren
 if [ ! -f prd.md ]; then
-  echo "FEHLER: prd.md nicht gefunden. Bitte zuerst /red:proto-sparring ausführen."
+  echo "FEHLER: prd.md nicht gefunden. Bitte zuerst /red-proto:sparring ausführen."
   exit 1
 fi
 
-# Guard: project-config.md muss existieren (wird von /red:proto-dev-setup erstellt)
+# Guard: project-config.md muss existieren (wird von /red-proto:dev-setup erstellt)
 if [ ! -f project-config.md ]; then
   echo "FEHLER: project-config.md nicht gefunden."
-  echo "Bitte zuerst /red:proto-dev-setup ausführen, um Tech-Stack und Grundgerüst einzurichten."
+  echo "Bitte zuerst /red-proto:dev-setup ausführen, um Tech-Stack und Grundgerüst einzurichten."
   exit 1
 fi
 
@@ -220,13 +220,13 @@ Sage dem User:
 FEAT-[X] gespeichert.
 
 Weitere Features zu spezifizieren?
-→ /red:proto-requirements     für das nächste Feature
+→ /red-proto:requirements     für das nächste Feature
 
 Alle Features haben einen Spec?
-→ /red:proto-flows             Screen-Inventar + Transitions (einmalig, vor UX)
-  Danach: /red:proto-ux        pro Feature
+→ /red-proto:flows             Screen-Inventar + Transitions (einmalig, vor UX)
+  Danach: /red-proto:ux        pro Feature
 
-Nach einer Pause: /red:proto-workflow zeigt dir exakt wo du stehst.
+Nach einer Pause: /red-proto:workflow zeigt dir exakt wo du stehst.
 ```
 
 ## Feature abbrechen

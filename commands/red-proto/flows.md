@@ -5,7 +5,7 @@ description: Definiert übergreifende Nutzerreisen und exakte Screen Transitions
 
 > Lies `.claude/red-proto/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
 
-Du bist Navigations-Architekt. Deine Aufgabe: aus allen Feature Specs eine vollständige, exakte Karte aller Screens und ihrer Verbindungen erstellen. Das Ergebnis ist die verbindliche Referenz für alle `/red:proto-ux`- und `frontend-developer`-Entscheidungen zur Navigation.
+Du bist Navigations-Architekt. Deine Aufgabe: aus allen Feature Specs eine vollständige, exakte Karte aller Screens und ihrer Verbindungen erstellen. Das Ergebnis ist die verbindliche Referenz für alle `/red-proto:ux`- und `frontend-developer`-Entscheidungen zur Navigation.
 
 **Wichtig:** Kein Screen darf vom `frontend-developer` mit einem anderen verbunden werden, wenn die Transition hier nicht definiert ist. Dieses Dokument ist der einzige autorisierte Navigations-Plan.
 
@@ -36,8 +36,8 @@ AskUserQuestion({
       header: "Research nachholen?",
       options: [
         {
-          label: "Jetzt /red:proto-research nachholen",
-          description: "Danach zurück zu /red:proto-flows. Hinweis: Tech-Stack ist gesetzt, Research fokussiert sich auf Nutzerverhalten"
+          label: "Jetzt /red-proto:research nachholen",
+          description: "Danach zurück zu /red-proto:flows. Hinweis: Tech-Stack ist gesetzt, Research fokussiert sich auf Nutzerverhalten"
         },
         {
           label: "Ohne Research weitermachen",
@@ -56,7 +56,7 @@ Verstehe: Welche Aufgaben haben die Nutzer? Welche Screens werden in den Feature
 ```bash
 if [ ! "$(ls features/*.md 2>/dev/null)" ]; then
   echo "FEHLER: Keine Feature Specs gefunden."
-  echo "Bitte zuerst alle Features mit /red:proto-requirements definieren, dann /red:proto-flows ausführen."
+  echo "Bitte zuerst alle Features mit /red-proto:requirements definieren, dann /red-proto:flows ausführen."
   exit 1
 fi
 
@@ -72,7 +72,7 @@ if [ -n "$MISSING" ]; then
   echo "HINWEIS: Folgende Features haben noch keinen finalen Spec:"
   echo "$MISSING"
   echo ""
-  echo "Empfehlung: Zuerst alle Features mit /red:proto-requirements abschließen."
+  echo "Empfehlung: Zuerst alle Features mit /red-proto:requirements abschließen."
   echo "Trotzdem fortfahren? (flows wird dann unvollständig sein)"
 fi
 ```
@@ -163,7 +163,7 @@ status: draft
 ---
 
 # Product Flows
-*Erstellt von: /red:proto-flows — [Datum]*
+*Erstellt von: /red-proto:flows — [Datum]*
 *Letzte Aktualisierung: [Datum]*
 
 > Dieses Dokument ist die verbindliche Navigations-Referenz.
@@ -215,7 +215,7 @@ AskUserQuestion({
       question: "Sind alle Screens und Transitions vollständig und korrekt?",
       header: "Flows Review",
       options: [
-        { label: "Passt so – Flows sind vollständig", description: "Weiter zu /red:proto-ux für einzelne Features" },
+        { label: "Passt so – Flows sind vollständig", description: "Weiter zu /red-proto:ux für einzelne Features" },
         { label: "Änderungen nötig", description: "Feedback im Chat" }
       ],
       multiSelect: false
@@ -235,13 +235,13 @@ git add flows/
 git commit -q -m "docs: product flows – screen inventory + transitions" && git push -q
 ```
 
-Sage dem User: "Flows dokumentiert. Nächster Schritt: `/red:proto-ux` für jedes Feature (einmal pro Feature) – die Transitions aus `flows/product-flows.md` sind die verbindliche Referenz.
+Sage dem User: "Flows dokumentiert. Nächster Schritt: `/red-proto:ux` für jedes Feature (einmal pro Feature) – die Transitions aus `flows/product-flows.md` sind die verbindliche Referenz.
 
-Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."
+Nach einer Pause: `/red-proto:workflow` zeigt dir exakt wo du stehst."
 
 ## Flows aktualisieren (Re-Run)
 
-Wenn `/red:proto-flows` erneut aufgerufen wird (neue Features, gemeldete Lücken):
+Wenn `/red-proto:flows` erneut aufgerufen wird (neue Features, gemeldete Lücken):
 
 1. Bestehende `flows/product-flows.md` lesen
 2. Neue Feature Specs einlesen

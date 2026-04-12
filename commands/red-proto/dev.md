@@ -14,7 +14,7 @@ ls bugs/ 2>/dev/null | grep "FEAT-[ID]" || echo "Keine offenen Bugs"
 git log --oneline -5 2>/dev/null
 ```
 
-**Guard 1:** `## 3. Technisches Design` muss im Feature-File existieren. Falls nicht → stopp: "Bitte zuerst `/red:proto-architect` ausführen."
+**Guard 1:** `## 3. Technisches Design` muss im Feature-File existieren. Falls nicht → stopp: "Bitte zuerst `/red-proto:architect` ausführen."
 
 **Guard 2:** Abhängigkeiten prüfen:
 ```bash
@@ -130,7 +130,7 @@ AskUserQuestion({
     question: "Implementierung prüfen",
     header: "Code Review",
     options: [
-      { label: "Sieht gut aus – weiter zu /red:proto-qa", description: "" },
+      { label: "Sieht gut aus – weiter zu /red-proto:qa", description: "" },
       { label: "Änderungen nötig", description: "Feedback im Chat" }
     ],
     multiSelect: false
@@ -164,7 +164,7 @@ git commit -q -m "feat: implement FEAT-[X] – [Feature Name]" && git push -q
 
 ## Phase 7: Handoff schreiben
 
-Schreibe `context/FEAT-[ID]-dev-handoff.md` (legt Kontext für `/red:proto-qa` in neuer Session):
+Schreibe `context/FEAT-[ID]-dev-handoff.md` (legt Kontext für `/red-proto:qa` in neuer Session):
 
 ```bash
 cat .claude/red-proto/templates/dev-handoff.md
@@ -178,4 +178,4 @@ git add context/FEAT-[ID]-dev-handoff.md
 git commit -q -m "docs: FEAT-[X] dev handoff" && git push -q
 ```
 
-Sage: "Implementierung abgeschlossen. Handoff geschrieben. **Starte eine neue Session** und führe dort `/red:proto-qa FEAT-[ID]` aus. Nach einer Pause: `/red:proto-workflow` zeigt dir exakt wo du stehst."
+Sage: "Implementierung abgeschlossen. Handoff geschrieben. **Starte eine neue Session** und führe dort `/red-proto:qa FEAT-[ID]` aus. Nach einer Pause: `/red-proto:workflow` zeigt dir exakt wo du stehst."

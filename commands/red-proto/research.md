@@ -64,7 +64,7 @@ status: draft
 ---
 
 # Platform & Nutzungskontext
-*Abgeleitet aus PRD von: /red:proto-research — [Datum]*
+*Abgeleitet aus PRD von: /red-proto:research — [Datum]*
 
 ## Primäres Gerät
 [Aus PRD abgeleitet]
@@ -237,7 +237,7 @@ AskUserQuestion({
         },
         {
           label: "Pause – echten Research durchführen",
-          description: "Ich speichere die offenen Fragen. Du führst Interviews, Umfragen oder Beobachtungen durch und rufst /red:proto-research danach erneut auf"
+          description: "Ich speichere die offenen Fragen. Du führst Interviews, Umfragen oder Beobachtungen durch und rufst /red-proto:research danach erneut auf"
         }
       ],
       multiSelect: false
@@ -256,7 +256,7 @@ status: draft
 ---
 
 # Forschungsfragen
-*Erstellt von: /red:proto-research — [Datum]*
+*Erstellt von: /red-proto:research — [Datum]*
 *Status: Offen – noch nicht beantwortet*
 
 ## Offene Fragen
@@ -272,7 +272,7 @@ status: draft
 
 ## Nächster Schritt
 Beantworte diese Fragen durch echten User Research.
-Danach: `/red:proto-research` erneut aufrufen – ich verarbeite deine Antworten.
+Danach: `/red-proto:research` erneut aufrufen – ich verarbeite deine Antworten.
 ```
 
 Frage dann:
@@ -284,7 +284,7 @@ AskUserQuestion({
       question: "Forschungsfragen gespeichert in research/research-questions.md – passt die Liste?",
       header: "research-questions.md prüfen",
       options: [
-        { label: "Ja, passt so", description: "Ich führe den Research durch und rufe /red:proto-research danach erneut auf" },
+        { label: "Ja, passt so", description: "Ich führe den Research durch und rufe /red-proto:research danach erneut auf" },
         { label: "Ich möchte etwas anpassen", description: "Sag mir direkt was geändert werden soll" }
       ],
       multiSelect: false
@@ -315,7 +315,7 @@ status: draft
 ---
 
 # Forschungsfragen & Antworten
-*Erstellt von: /red:proto-research — [Datum]*
+*Erstellt von: /red-proto:research — [Datum]*
 *Status: Interaktiv beantwortet (Hypothesen)*
 
 ## Fragen & Antworten
@@ -363,7 +363,7 @@ status: draft
 ---
 
 # Problem Statement Map
-*Erstellt von: /red:proto-research — [Datum]*
+*Erstellt von: /red-proto:research — [Datum]*
 
 ## Nutzer
 [Wer hat das Problem? Kontext, Situation]
@@ -433,7 +433,7 @@ status: draft
 ---
 
 # Personas
-*Erstellt von: /red:proto-research — [Datum]*
+*Erstellt von: /red-proto:research — [Datum]*
 
 ## Persona: [Name]
 **Kontext:** [Kurzbeschreibung]
@@ -482,9 +482,9 @@ echo "Dev-Setup: $DEV_SETUP_DONE | Feature-Specs: $FEATURES_EXIST"
 
 Frage dann nach dem nächsten Schritt. Leite die passende Option dynamisch ab:
 
-- **Kein `project-config.md`** (Modus A) → nächster Schritt ist `/red:proto-dev-setup`
-- **`project-config.md` vorhanden, keine Features** → nächster Schritt ist `/red:proto-requirements`
-- **`project-config.md` vorhanden, Features existieren** → nächster Schritt ist `/red:proto-requirements` im Review-Modus
+- **Kein `project-config.md`** (Modus A) → nächster Schritt ist `/red-proto:dev-setup`
+- **`project-config.md` vorhanden, keine Features** → nächster Schritt ist `/red-proto:requirements`
+- **`project-config.md` vorhanden, Features existieren** → nächster Schritt ist `/red-proto:requirements` im Review-Modus
 
 ```typescript
 AskUserQuestion({
@@ -494,12 +494,12 @@ AskUserQuestion({
       header: "Nächster Schritt",
       options: [
         {
-          label: "[Dynamisch: /red:proto-dev-setup | /red:proto-requirements | /red:proto-requirements (Review-Modus)]",
+          label: "[Dynamisch: /red-proto:dev-setup | /red-proto:requirements | /red-proto:requirements (Review-Modus)]",
           description: "[Dynamisch: passende Beschreibung je nach Modus]"
         },
         {
           label: "Pause – ich mache später weiter",
-          description: "Alles ist gespeichert. /red:proto-workflow zeigt dir jederzeit wo du stehst"
+          description: "Alles ist gespeichert. /red-proto:workflow zeigt dir jederzeit wo du stehst"
         }
       ],
       multiSelect: false
@@ -508,4 +508,4 @@ AskUserQuestion({
 })
 ```
 
-Bei Modus B + Features vorhanden: informiere `/red:proto-requirements` explizit dass es im **Review-Modus** läuft.
+Bei Modus B + Features vorhanden: informiere `/red-proto:requirements` explizit dass es im **Review-Modus** läuft.

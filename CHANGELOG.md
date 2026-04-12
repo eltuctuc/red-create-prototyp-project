@@ -5,6 +5,35 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.17.0 — 12. April 2026
+
+Commands wohnen jetzt in einer eigenen Schublade.
+
+### Neue Features
+
+- **Gekapselter Namespace für alle Commands:** Statt `red:proto-workflow.md` direkt im `commands/`-Ordner liegen alle Commands jetzt unter `commands/red-proto/`. Claude Code ruft sie als `/red-proto:workflow`, `/red-proto:sparring` usw. auf – sauber getrennt von anderen Frameworks die möglicherweise denselben Ordner nutzen.
+- **`/red-proto:create` statt `/red:proto`:** Der Haupt-Setup-Command heißt jetzt konsequent wie das Framework – `/red-proto:create`. Macht klar was er tut, und passt zur neuen Namenslogik.
+
+### Was sich ändert (Breaking Change)
+
+Die alten Command-Namen (`/red:proto`, `/red:proto-workflow` etc.) funktionieren nach dem Update nicht mehr. Nach `npx red-proto` (Update) sind ausschließlich die neuen Namen aktiv:
+
+| Alt | Neu |
+|-----|-----|
+| `/red:proto` | `/red-proto:create` |
+| `/red:proto-workflow` | `/red-proto:workflow` |
+| `/red:proto-sparring` | `/red-proto:sparring` |
+| `/red:proto-dev-setup` | `/red-proto:dev-setup` |
+| `/red:proto-research` | `/red-proto:research` |
+| `/red:proto-requirements` | `/red-proto:requirements` |
+| `/red:proto-flows` | `/red-proto:flows` |
+| `/red:proto-ux` | `/red-proto:ux` |
+| `/red:proto-architect` | `/red-proto:architect` |
+| `/red:proto-dev` | `/red-proto:dev` |
+| `/red:proto-qa` | `/red-proto:qa` |
+
+---
+
 ## v0.16.1 — 5. April 2026
 
 ### Fixes

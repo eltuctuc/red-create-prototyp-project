@@ -19,7 +19,7 @@ Lies STATUS.md vollständig. Kategorisiere alle Features:
 - **Tech-bereit** (für diesen Skill relevant): UX ✓, Tech noch `–`
 - **In Bearbeitung**: Tech begonnen (status: draft), noch nicht approved
 - **Tech fertig**: Tech ✓ – überspringen
-- **UX fehlt noch**: UX `–` – überspringen, kurz erwähnen (erst /red:proto-ux nötig)
+- **UX fehlt noch**: UX `–` – überspringen, kurz erwähnen (erst /red-proto:ux nötig)
 - **Noch nicht ready**: Req fehlt – überspringen
 
 Zeige eine kurze Übersicht im Chat, z.B.:
@@ -27,7 +27,7 @@ Zeige eine kurze Übersicht im Chat, z.B.:
 Tech-bereit (2):  FEAT-01 Login, FEAT-03 Dashboard
 In Bearbeitung:   FEAT-02 Nutzerprofil (draft)
 Bereits fertig:   –
-UX fehlt noch:    FEAT-04 Benachrichtigungen, FEAT-05 Export (erst /red:proto-ux)
+UX fehlt noch:    FEAT-04 Benachrichtigungen, FEAT-05 Export (erst /red-proto:ux)
 ```
 
 **Wenn genau eine Feature-ID in der Anfrage angegeben** → direkt mit dieser starten, kein Multi-Select nötig. `MODUS = einzeln`.
@@ -125,7 +125,7 @@ Unabhängig vom MODUS: FEAT-[X].md jetzt mit `## 3. Technisches Design` ergänze
 ```typescript
 AskUserQuestion({ questions: [{ question: "Passt das technische Design für FEAT-[X] [Name]?", header: "Review", options: [
   { label: "Passt – weiter mit nächstem Feature", description: "" },
-  { label: "Passt – das war das letzte, weiter zu /red:proto-dev", description: "" },
+  { label: "Passt – das war das letzte, weiter zu /red-proto:dev", description: "" },
   { label: "Fragen / Änderungen", description: "Feedback im Chat" }
 ], multiSelect: false }] })
 ```
@@ -167,7 +167,7 @@ git add features/FEAT-*.md features/STATUS.md
 git commit -q -m "docs: tech design – FEAT-[ID], FEAT-[ID]" && git push -q
 ```
 
-Abschluss: "Alle Tech-Designs freigegeben. Weiter mit `/red:proto-dev`."
+Abschluss: "Alle Tech-Designs freigegeben. Weiter mit `/red-proto:dev`."
 
 ## Checklist vor Abschluss
 

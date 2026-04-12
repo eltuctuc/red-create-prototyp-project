@@ -294,7 +294,7 @@ git tag v0.0.0
 gh auth status 2>/dev/null || echo "NICHT EINGELOGGT"
 ```
 
-Falls nicht eingeloggt → stopp: "Bitte `gh auth login` im Terminal ausführen, dann `/red:proto-dev-setup` erneut aufrufen."
+Falls nicht eingeloggt → stopp: "Bitte `gh auth login` im Terminal ausführen, dann `/red-proto:dev-setup` erneut aufrufen."
 
 ```bash
 gh repo create [repo-name] \
@@ -373,8 +373,8 @@ Code:     [Codeverzeichnis]/
 Git:      Initialisiert ([Codeverzeichnis | Projekt-Root])
 GitHub:   [URL – oder: "Nur lokal"]
 
-Nächster Schritt: /red:proto-requirements – Feature Specs für alle Features definieren.
-Nach einer Pause: /red:proto-workflow zeigt dir exakt wo du stehst.
+Nächster Schritt: /red-proto:requirements – Feature Specs für alle Features definieren.
+Nach einer Pause: /red-proto:workflow zeigt dir exakt wo du stehst.
 ```
 
 Wenn Research noch nicht gemacht:
@@ -387,12 +387,12 @@ Code:     [Codeverzeichnis]/
 Git:      Initialisiert ([Codeverzeichnis | Projekt-Root])
 GitHub:   [URL – oder: "Nur lokal"]
 
-Research wurde übersprungen. Du kannst es jederzeit mit /red:proto-research nachholen –
+Research wurde übersprungen. Du kannst es jederzeit mit /red-proto:research nachholen –
 Personas und Problem Statement bereichern Requirements, Flows und UX. Die Platform-Entscheidung
 ist jetzt gesetzt und wird durch nachträgliches Research nicht mehr geändert.
 
-Nächster Schritt: /red:proto-requirements
-Nach einer Pause: /red:proto-workflow zeigt dir exakt wo du stehst.
+Nächster Schritt: /red-proto:requirements
+Nach einer Pause: /red-proto:workflow zeigt dir exakt wo du stehst.
 ```
 
 ## Checklist

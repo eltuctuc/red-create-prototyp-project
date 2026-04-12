@@ -119,7 +119,7 @@ Schwelle in Feature-File aktualisieren + `Fix-Schwelle bestätigt: [Datum]` anh�
 **Folge-Run** (`FOLGE_RUN` > 0) – offene Bugs über Schwelle auflisten, dann:
 ```typescript
 AskUserQuestion({ questions: [{ question: `Offene Bugs über Schwelle (${SCHWELLE}). Wie weiter?`, header: "Dev-QA-Loop", options: [
-  { label: "Dev-Loop fortsetzen", description: "→ /red:proto-dev fixt die offenen Bugs" },
+  { label: "Dev-Loop fortsetzen", description: "→ /red-proto:dev fixt die offenen Bugs" },
   { label: "Schwelle anpassen", description: "Neue Schwelle festlegen, z.B. nur Critical/High" },
   { label: "Als abgenommen markieren", description: "Feature trotz offener Bugs als Done deklarieren – Bugs werden als Known Issues dokumentiert" }
 ], multiSelect: false }] })
@@ -159,8 +159,8 @@ Abschnitt `## 5. QA Ergebnisse` ergänzen und `qa_status` im YAML-Frontmatter ak
 
 ## Bug-Loop
 
-1. `/red:proto-dev` → fixt bis Fix-Schwelle → `*-fixed.md`
-2. `/red:proto-qa` erneut → Regression + Retest der -fixed Bugs
+1. `/red-proto:dev` → fixt bis Fix-Schwelle → `*-fixed.md`
+2. `/red-proto:qa` erneut → Regression + Retest der -fixed Bugs
 3. Loop endet wenn keine Bugs über Schwelle oder User entscheidet "Als abgenommen markieren"
 
 Solange der Loop läuft: `qa_status` bleibt `🔄` – **kein ✅ setzen**.
@@ -180,7 +180,7 @@ npm version [patch|minor] --no-git-tag-version 2>/dev/null || true
 # Version in project-config.md manuell aktualisieren
 ```
 
-STATUS.md via `/red:proto-workflow` aktualisieren – QA-Spalte zeigt jetzt `✅` oder `✅⚠️`.
+STATUS.md via `/red-proto:workflow` aktualisieren – QA-Spalte zeigt jetzt `✅` oder `✅⚠️`.
 
 ```bash
 git add . features/FEAT-[ID].md
@@ -188,4 +188,4 @@ git commit -q -m "release: v[X.Y.Z] – FEAT-[X] [Feature Name]"
 git tag v[X.Y.Z] && git push -q && git push -q origin --tags
 ```
 
-Sage: "v[X.Y.Z] getaggt. FEAT-[X] ist abgenommen. Nächstes Feature: `/red:proto-requirements`. Nach Pause: `/red:proto-workflow`."
+Sage: "v[X.Y.Z] getaggt. FEAT-[X] ist abgenommen. Nächstes Feature: `/red-proto:requirements`. Nach Pause: `/red-proto:workflow`."

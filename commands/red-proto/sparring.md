@@ -100,7 +100,7 @@ AskUserQuestion({
       question: "Wie ist das PRD?",
       header: "Review",
       options: [
-        { label: "Passt so – weiter zu /red:proto-research", description: "PRD ist korrekt und vollständig" },
+        { label: "Passt so – weiter zu /red-proto:research", description: "PRD ist korrekt und vollständig" },
         { label: "Kleine Anpassungen nötig", description: "Ich gebe Feedback im Chat" },
         { label: "Nochmal von vorn", description: "Grundlegendes Missverständnis" }
       ],
@@ -118,7 +118,7 @@ Nach `weiter` oder Korrekturen: `prd.md` einlesen, Korrekturen übernehmen, `sta
 if git rev-parse --git-dir > /dev/null 2>&1; then
   git add prd.md && git commit -q -m "docs: add/update PRD" && git push -q
 else
-  echo "Kein Git-Repository – prd.md gespeichert. /red:proto-dev-setup macht den ersten Commit."
+  echo "Kein Git-Repository – prd.md gespeichert. /red-proto:dev-setup macht den ersten Commit."
 fi
 ```
 
@@ -127,19 +127,19 @@ Zeige dem User die vollständige Pipeline als Orientierung:
 ```
 PRD gespeichert. Die empfohlene Reihenfolge:
 
-  → /red:proto-research      Für wen bauen wir? Personas, Nutzungskontext, Plattform-Entscheidungen
+  → /red-proto:research      Für wen bauen wir? Personas, Nutzungskontext, Plattform-Entscheidungen
                               ↓ informiert den Tech-Stack
-  → /red:proto-dev-setup     Tech-Stack wählen, Projekt scaffolden, Git einrichten
-  → /red:proto-requirements  Feature Specs – einmal pro Feature, für ALLE Features
+  → /red-proto:dev-setup     Tech-Stack wählen, Projekt scaffolden, Git einrichten
+  → /red-proto:requirements  Feature Specs – einmal pro Feature, für ALLE Features
                               ↓ wenn ALLE Features Specs haben:
-  → /red:proto-flows         Screen-Inventar + Transitions (einmalig, vor UX)
-  → /red:proto-ux            UX-Entscheidungen – einmal pro Feature
+  → /red-proto:flows         Screen-Inventar + Transitions (einmalig, vor UX)
+  → /red-proto:ux            UX-Entscheidungen – einmal pro Feature
 
   DANN PRO FEATURE (Build-Loop bis QA grün):
-  → /red:proto-architect → /red:proto-dev → /red:proto-qa
-     └── Bugs? → /red:proto-dev → /red:proto-qa (wiederholen)
+  → /red-proto:architect → /red-proto:dev → /red-proto:qa
+     └── Bugs? → /red-proto:dev → /red-proto:qa (wiederholen)
 
-Nach einer Pause: /red:proto-workflow zeigt dir exakt wo du stehst.
+Nach einer Pause: /red-proto:workflow zeigt dir exakt wo du stehst.
 ```
 
 Dann frage:
@@ -148,15 +148,15 @@ Dann frage:
 AskUserQuestion({
   questions: [
     {
-      question: "Weiter zu /red:proto-research?",
+      question: "Weiter zu /red-proto:research?",
       header: "Nächster Schritt",
       options: [
         {
-          label: "Ja – /red:proto-research starten",
+          label: "Ja – /red-proto:research starten",
           description: "Zielgruppe, Personas und Nutzungskontext klären – informiert den Tech-Stack"
         },
         {
-          label: "Research später – direkt zu /red:proto-dev-setup",
+          label: "Research später – direkt zu /red-proto:dev-setup",
           description: "Research überspringen und Tech-Stack jetzt wählen. Research kann jederzeit nachgeholt werden"
         }
       ],
@@ -169,6 +169,6 @@ AskUserQuestion({
 ## Wichtig
 
 - Kein Tech-Design, keine Lösungsarchitektur – das ist nicht deine Aufgabe
-- Keine Feature-Listen – das macht /red:proto-requirements
+- Keine Feature-Listen – das macht /red-proto:requirements
 - Fokus: Das Problem wirklich verstehen, bevor eine Lösung definiert wird
 - Wenn die Idee unrealistisch klingt: direkt sagen, begründen, alternative vorschlagen
