@@ -60,6 +60,62 @@ Agent("ux-reviewer", {
 })
 ```
 
+## Phase 2.5: Copy-Drift-Check (wenn Copy-Inventar vorhanden)
+
+**Zweck:** Mechanischer Vergleich zwischen dem Copy-Inventar aus der Feature-Spec und der zentralen Copy-Datei im Code. Deterministisch, kein LLM-Urteil nötig. Schließt die Lücke, in der LLMs im Dev-Schritt sichtbare Texte paraphrasieren.
+
+**Guard:** Enthält die Feature-Spec einen `### Copy-Inventar (Ground Truth)`-Block? Nein → Phase überspringen mit Chat-Hinweis „Kein Copy-Inventar – Copy-Drift-Check nicht möglich."
+
+**Copy-Datei-Pfad bestimmen** (aus `project-config.md` → Tech-Stack):
+
+| Stack | Copy-Datei |
+|-------|-----------|
+| TypeScript / JavaScript | `[codedir]/src/messages/copy.ts` |
+| Python | `[codedir]/messages/copy.py` |
+| Go | `[codedir]/internal/messages/copy.go` |
+| Swift | `[codedir]/Messages/Copy.swift` |
+| Sonstige | `[codedir]/messages/copy.json` |
+
+Wenn die Datei nicht existiert → Bug anlegen: `Copy-Datei fehlt` (Severity: High), Phase abbrechen.
+
+**Ablauf (mechanisch):**
+
+1. **Copy-Inventar aus Feature-Spec parsen** – pro Zeile Key, Screen, Element, Text.
+
+2. **Pro Eintrag: Text-Match in Copy-Datei**
+   ```bash
+   grep -RF --include="[copy-dateiname]" "[exakter Text]" [codedir]/[copy-dateipfad]
+   ```
+   - 0 Treffer → **Bug** `BUG-FEAT[ID]-QA-[NNN]` Severity **Medium**, Titel `Copy-Drift: [Key] fehlt oder weicht ab`. Bug-Beschreibung listet Inventar-Text vs. tatsächlichen Wert (falls ähnlicher Text vorhanden, Diff zeigen)
+   - 1 Treffer → OK
+   - >1 Treffer → **Bug** `Duplikat-Copy: [Key] mehrfach in [Copy-Datei]` (Medium) – sollte in `shared.*` konsolidiert sein
+
+3. **Pro Eintrag: Key wird in Komponenten importiert**
+   Such-Pattern je nach Stack, z.B. für TypeScript:
+   ```bash
+   grep -rE "COPY\.(shared|feat[0-9]+)\.[a-zA-Z0-9.]+" [codedir]/src/
+   ```
+   Erwartung: Jeder Key aus dem Inventar taucht mindestens 1× als Konstanten-Zugriff in einer Komponente auf. Fehlt → **Bug** `Copy-Key [Key] nicht verwendet` (Medium).
+
+4. **Reverse-Check: keine hardcoded sichtbaren Strings außerhalb Copy-Datei** (heuristisch, nicht abschließend):
+   - UI-Dateien scannen nach String-Literalen mit Länge ≥10, die nicht offensichtlich technisch sind (Klassennamen, Selektoren, IDs)
+   - Jeder verdächtige Treffer → **Bug** `Hardcoded Copy: [Datei:Zeile]` (Medium). Whitelist: Test-Dateien, Storybook-Stories, Kommentare
+   - Sei konservativ mit False Positives – bei Unsicherheit den Fund im Chat listen statt automatisch zum Bug machen
+
+5. **Ergebnis zusammenfassen** – Tabelle im Chat:
+   ```
+   Copy-Drift-Check für FEAT-[ID]:
+   - Inventar-Einträge: [N]
+   - Exakte Matches:    [N]
+   - Abweichungen:      [N] → Bugs: [IDs]
+   - Ungenutzte Keys:   [N] → Bugs: [IDs]
+   - Hardcoded (verdächtig): [N] → Bugs: [IDs]
+   ```
+
+Diese Bugs entstehen **zusätzlich** zu den Agent-Funden aus Phase 2 und fließen in die Dedup-Logik von Phase 4 ein. Sie landen im Standard-Bug-Ordner und tragen zur Fix-Schwelle bei.
+
+**Kein visueller Diff der Screens.** Abnahme-Screens (`features/FEAT-X-*/screens/`) sind Referenz für Dev, nicht für QA. Visuelle Abnahme bleibt menschliche Aufgabe und geschah in `/red-proto:preview`.
+
 ## Phase 3: Bug-File Format
 
 Naming: `BUG-FEAT[X]-QA-[NNN].md` / `BUG-FEAT[X]-UX-[NNN].md`

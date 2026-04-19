@@ -46,6 +46,72 @@ Extrahiere alle Zustände aus `## 2. UX Entscheidungen`:
 
 Jede Zeile muss vor Phase 5 abgehakt sein – verbindliche Checkliste, kein Qualitätsprinzip.
 
+## Phase 1.6: Abnahme-Screens lesen (falls vorhanden)
+
+```bash
+SCREENS_DIR=$(ls -d features/FEAT-[ID]-*/screens 2>/dev/null | head -1)
+if [ -n "$SCREENS_DIR" ] && [ -f "$SCREENS_DIR/index.md" ]; then
+  echo "Abnahme-Screens vorhanden in: $SCREENS_DIR"
+  cat "$SCREENS_DIR/index.md"
+  ls "$SCREENS_DIR"/*.png 2>/dev/null
+fi
+```
+
+**Wenn Abnahme-Screens vorhanden:** Sie sind **Ground Truth für die visuelle Umsetzung**. Die Feature-Spec beschreibt _was_ und _warum_, die Screens zeigen _wie es aussehen soll_. Bei Konflikt gewinnt die Spec (Inhalt), aber die Screens bestimmen Layout, Komponenten-Wahl und visuelle Details.
+
+Lies alle PNGs mit `status: approved` als Bild-Kontext ein. PNGs mit `status: outdated` oder `status: review` im Chat markieren – der User sollte wissen, dass diese Screens nicht verbindlich sind.
+
+**Wenn keine Abnahme-Screens existieren:** Normal weitermachen – Spec ist dann die einzige Vorlage.
+
+## Phase 1.7: Copy-Inventar einpflegen (wenn vorhanden)
+
+**Zweck:** Sichtbare Nutzer-Texte sind Ground Truth aus der Feature-Spec (Abschnitt `### Copy-Inventar (Ground Truth)` falls vorhanden, oder aus den Abnahme-Screens extrahierbar). Der Dev-Agent darf Texte **niemals paraphrasieren** – er übernimmt sie wörtlich in eine zentrale Copy-Datei.
+
+**Guard:** Enthält die Feature-Spec einen `### Copy-Inventar (Ground Truth)`-Block?
+- Ja → Regeln unten strikt anwenden.
+- Nein → im Chat vermerken: „Kein Copy-Inventar in der Feature-Spec. Ich erzeuge Texte nach bestem Verständnis aus Spec und ggf. Abnahme-Screens; `/red-proto:qa` kann Copy-Drift nur mechanisch prüfen, wenn ein Inventar existiert." – dann normal weiter.
+
+**Zentrale Copy-Datei – stack-abhängig:**
+
+Lies `project-config.md` → Tech-Stack. Wähle das Zielformat:
+
+| Stack | Datei | Export-Form |
+|-------|-------|-------------|
+| TypeScript / JavaScript | `[codedir]/src/messages/copy.ts` | `export const COPY = { … } as const` |
+| Python | `[codedir]/messages/copy.py` | Modul-Konstanten oder Dict |
+| Go | `[codedir]/internal/messages/copy.go` | Package-Konstanten |
+| Swift (iOS) | `[codedir]/Messages/Copy.swift` | `enum Copy { … }` |
+| Sonstige | `[codedir]/messages/copy.json` | JSON mit Kommentar-Header |
+
+Struktur (analog, unabhängig vom Format):
+
+```
+COPY
+├── shared             ← Feature-übergreifend (Button-Labels, Dialog-Standards)
+│   ├── cancel: "Abbrechen"
+│   ├── ok: "OK"
+│   └── save: "Speichern"
+├── feat1              ← Feature-spezifisch
+│   ├── s10.title: "…"
+│   ├── s10.body: "…"
+│   └── s11.warning: "…"
+└── feat2              ← wächst mit weiteren Features
+```
+
+**Regeln für die Pflege:**
+
+1. **Key-Namen 1:1 aus dem Copy-Inventar** übernehmen. Keine eigenen Namen erfinden.
+2. **Text-Wert 1:1 aus dem Copy-Inventar.** Zeichen-genau – inklusive Fragezeichen, Umlauten, Leerzeichen, Interpunktion. Keine Umformulierung, nicht „glätten", nicht „verbessern".
+3. **Shared-Kandidaten zuerst in `shared` nachschlagen.** Identischer Wert vorhanden → wiederverwenden. Ähnlicher aber nicht identischer Wert → im Chat melden; User entscheidet.
+4. **Templates mit Platzhaltern** (`{name}`, `{count}`) bleiben als String; die Komponente ersetzt zur Laufzeit über eine einfache Template-Funktion.
+5. **Komponenten importieren ausschließlich aus der Copy-Datei** für sichtbare Nutzer-Texte.
+6. **Verboten:** hardcoded sichtbare Strings im UI-Code. Technische Strings (Logging, Selektoren, Test-IDs, Klassennamen) sind davon ausgenommen.
+
+**Verifikation vor Commit:**
+- [ ] Jeder Key aus dem Copy-Inventar hat einen passenden Eintrag in der Copy-Datei
+- [ ] Jeder Eintrag stimmt **zeichen-genau** mit dem Inventar-Text überein (Spot-Check: 3 zufällige Strings diffen)
+- [ ] Keine sichtbaren Nutzer-Texte außerhalb der Copy-Datei-Imports (Ausnahmen explizit begründen)
+
 ## Phase 2: Ein Agent oder zwei?
 
 `project-config.md` → "Developer aufgeteilt: Ja/Nein"
