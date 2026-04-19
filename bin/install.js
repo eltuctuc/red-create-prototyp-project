@@ -107,7 +107,7 @@ async function runUninstall() {
 
   console.log('');
   console.log(c.yellow('  ⚠  This will remove all red-proto commands and agents.'));
-  console.log(c.dim('  Your project files (features/, research/, prd.md, …) are NOT touched.'));
+  console.log(c.dim('  Your project files (features/, test-setup/, prd.md, …) are NOT touched.'));
   console.log('');
 
   const confirm = (await ask(rl, c.dim('  Type "yes" to confirm: '))).trim().toLowerCase();
@@ -319,7 +319,7 @@ async function installFiles(claudeBase, isGlobal, noClobber) {
 
   // If local install: also set up project structure + design system + docs
   if (!isGlobal) {
-    const dirs = ['research', 'features', 'flows', 'bugs', 'docs', 'projekt',
+    const dirs = ['test-setup', 'features', 'flows', 'bugs', 'docs', 'projekt',
                   'design-system/tokens', 'design-system/components',
                   'design-system/patterns', 'design-system/screens'];
     for (const dir of dirs) {

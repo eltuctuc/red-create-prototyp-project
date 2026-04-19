@@ -28,14 +28,14 @@ AskUserQuestion({
   questions: [
     {
       question: "Was soll am Ende stehen?",
-      header: "Ziel",
+      header: "Ziel-Typ",
+      multiSelect: false,
       options: [
-        { label: "Klickbarer Prototyp", description: "Nur Oberfläche zum Zeigen – kein echtes Backend, keine Daten" },
+        { label: "Klickbarer Prototyp", description: "Nur Oberfläche zum Zeigen, kein echtes Backend und keine Daten" },
         { label: "Funktionierender Prototyp", description: "Echte Logik, aber noch nicht produktionsreif" },
         { label: "Produktionsreifes MVP", description: "Kann echten Nutzern übergeben werden" },
         { label: "Noch unklar", description: "Lass uns das nach dem PRD entscheiden" }
-      ],
-      multiSelect: false
+      ]
     }
   ]
 })
@@ -75,7 +75,7 @@ status: draft
 - [Wie misst man, ob das Produkt funktioniert?]
 
 ## Offene Fragen
-- [Was ist noch unklar und muss im User Research / Requirements geklärt werden]
+- [Was ist noch unklar und muss im Test-Setup / Requirements geklärt werden]
 ```
 
 **Wichtig:** Schreibe die Datei `prd.md` mit dem Write-Tool direkt ins Projektverzeichnis. Nicht nur im Chat anzeigen – die Datei muss auf der Festplatte existieren.
@@ -98,13 +98,13 @@ AskUserQuestion({
   questions: [
     {
       question: "Wie ist das PRD?",
-      header: "Review",
+      header: "PRD-Status",
+      multiSelect: false,
       options: [
-        { label: "Passt so – weiter zu /red-proto:research", description: "PRD ist korrekt und vollständig" },
-        { label: "Kleine Anpassungen nötig", description: "Ich gebe Feedback im Chat" },
+        { label: "Passt so", description: "Weiter zu /red-proto:test-setup – PRD ist korrekt und vollständig" },
+        { label: "Anpassungen nötig", description: "Ich gebe Feedback im Chat" },
         { label: "Nochmal von vorn", description: "Grundlegendes Missverständnis" }
-      ],
-      multiSelect: false
+      ]
     }
   ]
 })
@@ -127,8 +127,8 @@ Zeige dem User die vollständige Pipeline als Orientierung:
 ```
 PRD gespeichert. Die empfohlene Reihenfolge:
 
-  → /red-proto:research      Für wen bauen wir? Personas, Nutzungskontext, Plattform-Entscheidungen
-                              ↓ informiert den Tech-Stack
+  → /red-proto:test-setup    Für wen testen wir? Personas + Hypothesen, die der Prototyp klären soll
+                              ↓ schärft den Fokus für spätere Tests
   → /red-proto:dev-setup     Tech-Stack wählen, Projekt scaffolden, Git einrichten
   → /red-proto:requirements  Feature Specs – einmal pro Feature, für ALLE Features
                               ↓ wenn ALLE Features Specs haben:
@@ -148,19 +148,13 @@ Dann frage:
 AskUserQuestion({
   questions: [
     {
-      question: "Weiter zu /red-proto:research?",
+      question: "Weiter zu /red-proto:test-setup?",
       header: "Nächster Schritt",
+      multiSelect: false,
       options: [
-        {
-          label: "Ja – /red-proto:research starten",
-          description: "Zielgruppe, Personas und Nutzungskontext klären – informiert den Tech-Stack"
-        },
-        {
-          label: "Research später – direkt zu /red-proto:dev-setup",
-          description: "Research überspringen und Tech-Stack jetzt wählen. Research kann jederzeit nachgeholt werden"
-        }
-      ],
-      multiSelect: false
+        { label: "Ja, test-setup starten", description: "Personas + Test-Hypothesen für den Prototyp klären" },
+        { label: "Test-Setup später", description: "Direkt zu /red-proto:dev-setup – kann jederzeit nachgeholt werden" }
+      ]
     }
   ]
 })

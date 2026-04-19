@@ -5,6 +5,36 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.18.0 — 19. April 2026
+
+Research war der falsche Name für das, was wirklich vor dem Prototyp passieren muss.
+
+### Neue Features
+
+- **`/red-proto:test-setup` ersetzt `/red-proto:research`:** Der Command heißt jetzt wie das, was er tut – er bereitet den späteren Prototyp-Test vor, statt Discovery-Research zu betreiben. Fokus: Personas (oder Proto-Personas aus vorhandenem Material) und Test-Hypothesen, die der Prototyp klären soll. Keine Problem-Statement-Map mehr – das Problem ist spätestens im PRD gesetzt, sonst würdest du gar nicht prototypen.
+- **Test-Hypothesen statt Forschungsfragen:** Jede Hypothese hat jetzt vier Felder: Annahme, Begründung, Test-Signal (woran erkennen wir im Test, ob sie trägt) und Persona-Bezug. Damit wird der Prototyp-Test von Anfang an mit einem klaren "was wollen wir eigentlich wissen?" verknüpft.
+- **Platform-Kontext direkt in `/red-proto:dev-setup`:** Die Frage "auf welchem Gerät läuft das Produkt?" hat nichts mit Nutzer-Research zu tun, sondern mit der Tech-Stack-Wahl. Sie lebt jetzt dort, wo sie hingehört. Wenn die PRD klar ist, leitet dev-setup sie direkt ab; nur bei Lücken wird noch gefragt.
+
+### Was sich ändert (Breaking Change)
+
+| Alt | Neu |
+|-----|-----|
+| `/red-proto:research` | `/red-proto:test-setup` |
+| Ordner `research/` | Ordner `test-setup/` |
+| `research/personas.md` | `test-setup/personas.md` |
+| `research/research-questions.md` | `test-setup/hypotheses.md` |
+| `research/problem-statement.md` | entfällt |
+| `research/platform-context.md` | entfällt (wandert in dev-setup) |
+
+Bestehende Projekte mit `research/`-Verzeichnis sind davon nicht automatisch betroffen – die Dateien bleiben liegen. Wenn du das Rename mitziehen willst: Ordner umbenennen und ggf. `problem-statement.md` löschen.
+
+### Verbesserungen
+
+- **Klarer Mental-Flow:** Idee → für wen testen wir? → Technik → Features. Test-Setup liegt jetzt bewusst vor Dev-Setup – das Framework führt den Nutzer in der Reihenfolge, die auch inhaltlich passt.
+- **Alle Begleit-Dokumente angepasst:** README, ARTIFACT_SCHEMA, CONVENTIONS, Install-Skript und alle Commands referenzieren den neuen Namen und Pfad. Keine widersprüchlichen Verweise mehr.
+
+---
+
 ## v0.17.1 — 12. April 2026
 
 Alle Docs sprechen jetzt dieselbe Sprache.

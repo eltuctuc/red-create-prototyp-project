@@ -22,7 +22,7 @@ done
 
 # Offene Drafts in der Discovery Phase
 echo "--- OFFENE DRAFTS ---"
-grep -rl "status: draft" prd.md research/ features/ flows/ 2>/dev/null || echo "Keine offenen Drafts"
+grep -rl "status: draft" prd.md test-setup/ features/ flows/ 2>/dev/null || echo "Keine offenen Drafts"
 
 # Offene Bugs (nach Feature gruppiert)
 ls bugs/ 2>/dev/null | grep -v "\-fixed" || echo "Keine offenen Bugs"
@@ -52,7 +52,7 @@ LEGENDE
 VORBEREITUNG
   [✅/🔄/⬜] PRD               prd.md
   [✅/🔄/⬜] Dev Setup          project-config.md
-  [✅/🔄/⬜] User Research      research/
+  [✅/🔄/⬜] Test-Setup         test-setup/
 
 OFFENE DRAFTS  ⚠️
   [Liste offener Draft-Dateien oder: Keine – alles finalisiert ✅]
@@ -107,7 +107,7 @@ generated: true
 |---|---|---|
 | PRD | prd.md | [✅ / 🔄 Draft / ❌ Fehlt] |
 | Dev Setup | project-config.md | [✅ / ❌ Fehlt] |
-| User Research | research/ | [✅ / 🔄 Draft / ❌ Fehlt] |
+| Test-Setup | test-setup/ | [✅ / 🔄 Draft / ❌ Fehlt] |
 | Flows | flows/product-flows.md | [✅ / 🔄 Draft / ❌ Fehlt] |
 
 ## Features
@@ -138,34 +138,37 @@ Wende diese Entscheidungslogik an – in dieser Reihenfolge:
 **1. Noch kein PRD?**
 → `Starte mit /red-proto:sparring`
 
-**2. PRD vorhanden, kein project-config.md?**
+**2. PRD vorhanden, kein Test-Setup (`test-setup/personas.md` fehlt)?**
+→ `Empfehlung: /red-proto:test-setup ausführen – Personas und Hypothesen schärfen den späteren Prototyp-Test. Alternativ direkt zu /red-proto:dev-setup.`
+
+**3. PRD vorhanden, kein project-config.md?**
 → `Führe /red-proto:dev-setup aus`
 
-**3. Dev-Setup vorhanden, offene Bugs aus früheren Features?**
+**4. Dev-Setup vorhanden, offene Bugs aus früheren Features?**
 → `Offene Bugs gefunden: [Liste]. Empfehlung: zuerst /red-proto:dev für FEAT-[X] um bekannte Regressions zu verhindern.`
 
-**4. Features fehlen oder nicht alle haben Status ≥ "Spec"?**
+**5. Features fehlen oder nicht alle haben Status ≥ "Spec"?**
 → `Definiere Features mit /red-proto:requirements`
 
-**5. Alle Features haben "Spec", aber kein Flows-Dokument?**
+**6. Alle Features haben "Spec", aber kein Flows-Dokument?**
 → `Alle Feature-Specs vorhanden – jetzt /red-proto:flows ausführen (einmalig, vor UX)`
 
-**6. Flows vorhanden, aber Features mit Status "Spec" (noch keine UX)?**
+**7. Flows vorhanden, aber Features mit Status "Spec" (noch keine UX)?**
 → `Führe /red-proto:ux für FEAT-[X] aus`
 
-**7. Features mit Status "UX", aber noch kein Tech-Design?**
+**8. Features mit Status "UX", aber noch kein Tech-Design?**
 → `Führe /red-proto:architect für FEAT-[X] aus`
 
-**8. Features mit Status "Tech", aber noch keine Implementierung?**
+**9. Features mit Status "Tech", aber noch keine Implementierung?**
 → `Führe /red-proto:dev für FEAT-[X] aus`
 
-**9. Features mit Status "Dev", aber noch kein QA?**
+**10. Features mit Status "Dev", aber noch kein QA?**
 → `Führe /red-proto:qa für FEAT-[X] aus`
 
-**10. Features mit `qa_status: 🔄` (offene Bugs, Dev-Loop läuft)?**
+**11. Features mit `qa_status: 🔄` (offene Bugs, Dev-Loop läuft)?**
 → `FEAT-[X] hat offene Bugs (qa_status: [Detail]). Führe /red-proto:dev für FEAT-[X] aus, dann erneut /red-proto:qa`
 
-**11. Features mit `qa_status: ✅` oder `✅⚠️` → alle Done?**
+**12. Features mit `qa_status: ✅` oder `✅⚠️` → alle Done?**
 → `Alle Features abgenommen ✅. Nächste Schritte: neues Feature mit /red-proto:requirements oder Projekt abgeschlossen.`
 
 Gib immer **einen** konkreten nächsten Schritt – nicht mehrere gleichwertige Optionen. Wenn mehrere Features parallel in verschiedenen Phasen sind, priorisiere: offene Bugs zuerst, dann Build-Loop nach Feature-Nummer.
@@ -190,8 +193,8 @@ Noch kein Projekt gestartet.
 
 Die Pipeline im Überblick:
   1. /red-proto:sparring      → Idee → PRD
-  2. /red-proto:dev-setup     → Tech-Stack + Scaffold + Git
-  3. /red-proto:research      → Personas (optional)
+  2. /red-proto:test-setup    → Personas + Test-Hypothesen (empfohlen)
+  3. /red-proto:dev-setup     → Tech-Stack + Scaffold + Git
   4. /red-proto:requirements  → Feature Specs (einmal pro Feature)
                                 ↓ wenn ALLE Features Specs haben:
   5. /red-proto:flows         → Screen-Inventar + Transitions (einmalig)

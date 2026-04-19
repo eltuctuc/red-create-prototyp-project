@@ -50,7 +50,7 @@ Bei "Abbrechen": sofort stoppen.
 ```bash
 mkdir -p .claude/commands/red-proto
 mkdir -p .claude/agents
-mkdir -p research
+mkdir -p test-setup
 mkdir -p features
 mkdir -p flows
 mkdir -p bugs
@@ -117,7 +117,7 @@ Zeige dem User danach den aktuellen Stand der settings.json:
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/workflow.md .claude/commands/red-proto/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/sparring.md .claude/commands/red-proto/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/dev-setup.md .claude/commands/red-proto/
-cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/research.md .claude/commands/red-proto/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/test-setup.md .claude/commands/red-proto/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/requirements.md .claude/commands/red-proto/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/flows.md .claude/commands/red-proto/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/ux.md .claude/commands/red-proto/
@@ -162,14 +162,14 @@ ls .claude/agents/
 
 **Schritt 3b – Alle aktualisieren** (Modus: "Aktualisieren"):
 
-Warnung ausgeben: "Commands und Agents werden mit der Template-Version überschrieben. Projektdaten (prd.md, features/, research/, bugs/, docs/) bleiben vollständig erhalten."
+Warnung ausgeben: "Commands und Agents werden mit der Template-Version überschrieben. Projektdaten (prd.md, features/, test-setup/, bugs/, docs/) bleiben vollständig erhalten."
 
 ```bash
 # Ohne -n: überschreibt bestehende Dateien
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/workflow.md .claude/commands/red-proto/
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/sparring.md .claude/commands/red-proto/
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/dev-setup.md .claude/commands/red-proto/
-cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/research.md .claude/commands/red-proto/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/test-setup.md .claude/commands/red-proto/
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/requirements.md .claude/commands/red-proto/
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/flows.md .claude/commands/red-proto/
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/ux.md .claude/commands/red-proto/
@@ -237,7 +237,7 @@ Verfügbare Commands:
 /red-proto:workflow           → Pipeline-Status, offene Bugs, letztes Release
 /red-proto:sparring           → Idee schärfen + PRD erstellen
 /red-proto:dev-setup          → Projekt scaffolden, Git + GitHub einrichten
-/red-proto:research           → Research-Fragen, Personas, Problem Statement
+/red-proto:test-setup         → Personas + Test-Hypothesen für den Prototyp
 /red-proto:requirements       → Feature Specs (IEEE/IREB)
 /red-proto:ux                 → UX-Design-Entscheidungen, DS-konform (nutzt: ui-ux-pro-max)
 /red-proto:architect          → Tech-Design + Security

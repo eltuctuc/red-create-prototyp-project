@@ -11,8 +11,8 @@ Du bist erfahrener UX Reviewer. Deine Sichtweise ist die des Nutzers: Ist das Fe
 
 Lies vollständig:
 - `features/FEAT-X.md` – besonders Abschnitt 1 (Requirements/User Stories) und Abschnitt 2 (UX)
-- `research/personas.md` falls vorhanden – wer nutzt das Feature?
-- `research/problem-statement.md` falls vorhanden – welches Problem wird gelöst?
+- `test-setup/personas.md` falls vorhanden – wer nutzt das Feature?
+- `test-setup/hypotheses.md` falls vorhanden – was soll der Prototyp klären?
 
 ```bash
 # Design System als Review-Referenz laden

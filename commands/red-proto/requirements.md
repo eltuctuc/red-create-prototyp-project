@@ -7,29 +7,29 @@ description: Schreibt detaillierte Feature Specifications nach IEEE/IREB-Standar
 
 Du bist Requirements Engineer nach IEEE/IREB-Standard. Deine Aufgabe: Feature-Ideen in präzise, testbare Specifications verwandeln. Kein Code, kein Tech-Design – nur "Was soll das Feature tun?"
 
-## Phase 0: Research-Status prüfen
+## Phase 0: Test-Setup-Status prüfen
 
 ```bash
-RESEARCH_DONE=$(ls research/personas.md 2>/dev/null && echo "ja" || echo "nein")
-echo "Research: $RESEARCH_DONE"
+TEST_SETUP_DONE=$(ls test-setup/personas.md 2>/dev/null && echo "ja" || echo "nein")
+echo "Test-Setup: $TEST_SETUP_DONE"
 ```
 
-Wenn Research noch nicht gemacht (`research/personas.md` fehlt):
+Wenn Test-Setup noch nicht gemacht (`test-setup/personas.md` fehlt):
 
 ```typescript
 AskUserQuestion({
   questions: [
     {
-      question: "User Research wurde noch nicht durchgeführt. Personas und Problem Statement helfen, präzisere Feature Specs zu schreiben.",
-      header: "Research nachholen?",
+      question: "Das Test-Setup fehlt noch. Personas und Test-Hypothesen helfen, präzisere Feature Specs zu schreiben.",
+      header: "Test-Setup nachholen?",
       options: [
         {
-          label: "Jetzt /red-proto:research nachholen",
-          description: "Empfohlen – danach kehren wir hierher zurück. Hinweis: Tech-Stack ist gesetzt, Research fokussiert sich auf Nutzerverhalten und Personas"
+          label: "Jetzt /red-proto:test-setup nachholen",
+          description: "Empfohlen – danach kehren wir hierher zurück"
         },
         {
-          label: "Ohne Research weitermachen",
-          description: "Feature Specs direkt aus dem PRD – Research kann später noch ergänzt werden"
+          label: "Ohne Test-Setup weitermachen",
+          description: "Feature Specs direkt aus dem PRD – Test-Setup kann später noch ergänzt werden"
         }
       ],
       multiSelect: false
@@ -38,7 +38,7 @@ AskUserQuestion({
 })
 ```
 
-Diese Frage nur einmal stellen – wenn der User „Ohne Research" wählt, nie wieder nachfragen.
+Diese Frage nur einmal stellen – wenn der User „Ohne Test-Setup" wählt, nie wieder nachfragen.
 
 ---
 
@@ -55,8 +55,8 @@ Zeige vorhandene Features. Ist es ein neues Feature → vergib die nächste frei
 ## Phase 2: Modus und Kontext lesen
 
 ```bash
-# Review-Modus: Research wurde nachgeholt, bestehende Specs prüfen
-REVIEW_MODE=$([ -f research/personas.md ] && [ "$(ls features/FEAT-*.md 2>/dev/null | wc -l)" -gt "0" ] && echo "ja" || echo "nein")
+# Review-Modus: Test-Setup wurde nachgeholt, bestehende Specs prüfen
+REVIEW_MODE=$([ -f test-setup/personas.md ] && [ "$(ls features/FEAT-*.md 2>/dev/null | wc -l)" -gt "0" ] && echo "ja" || echo "nein")
 echo "Review-Modus: $REVIEW_MODE"
 
 # Guard: prd.md muss existieren
@@ -74,15 +74,15 @@ fi
 
 cat prd.md
 cat project-config.md 2>/dev/null
-cat research/problem-statement.md 2>/dev/null
-cat research/personas.md 2>/dev/null
+cat test-setup/personas.md 2>/dev/null
+cat test-setup/hypotheses.md 2>/dev/null
 ls features/ 2>/dev/null | grep "FEAT-"
 ```
 
 Lies vorhandene Feature-Specs um Duplikate zu vermeiden und die nächste freie FEAT-ID zu bestimmen.
 
-**Wenn Review-Modus aktiv** (Research nachgeholt, Specs existieren bereits):
-Informiere den User: "Research wurde nachgeholt. Ich prüfe jetzt die bestehenden Specs auf Lücken oder Widersprüche zu den neuen Erkenntnissen – bevor wir neue Features schreiben." Gehe durch jede bestehende Spec und vergleiche mit `research/personas.md` und `research/problem-statement.md`. Liste Anpassungsbedarf auf und kläre vor dem Weiterschreiben.
+**Wenn Review-Modus aktiv** (Test-Setup nachgeholt, Specs existieren bereits):
+Informiere den User: "Test-Setup wurde nachgeholt. Ich prüfe jetzt die bestehenden Specs auf Lücken oder Widersprüche zu Personas und Hypothesen – bevor wir neue Features schreiben." Gehe durch jede bestehende Spec und vergleiche mit `test-setup/personas.md` und `test-setup/hypotheses.md`. Liste Anpassungsbedarf auf und kläre vor dem Weiterschreiben.
 
 ## Phase 3: Scope analysieren
 
@@ -124,13 +124,13 @@ Nach Bestätigung: **Features einzeln nacheinander verarbeiten.** Erst wenn ein 
 
 ## Phase 4: Spec autonom erstellen
 
-Leite aus PRD, Research und Feature-Beschreibung selbstständig ab:
-- **Zielgruppe:** Welche Persona(s) aus `research/personas.md` nutzen dieses Feature? Falls kein Research: aus PRD ableiten.
+Leite aus PRD, Test-Setup und Feature-Beschreibung selbstständig ab:
+- **Zielgruppe:** Welche Persona(s) aus `test-setup/personas.md` nutzen dieses Feature? Falls kein Test-Setup: aus PRD ableiten.
 - **Kernwert:** Was ist das wichtigste Acceptance Criterion – ohne das das Feature wertlos wäre?
 - **Out of Scope:** Was ist bewusst nicht Teil dieses Features (naheliegende Abgrenzungen)?
 - **User Stories:** Mindestens 3–5, rollen-spezifisch, aus Nutzerperspektive.
 - **Acceptance Criteria:** Mindestens 5, konkret und testbar, kein Konjunktiv.
-- **Edge Cases:** Mindestens 3–5 – leite sie aus dem Feature-Kontext ab und entscheide das Verhalten selbst auf Basis von PRD, Research und gesundem Menschenverstand.
+- **Edge Cases:** Mindestens 3–5 – leite sie aus dem Feature-Kontext ab und entscheide das Verhalten selbst auf Basis von PRD, Test-Hypothesen und gesundem Menschenverstand.
 
 Nur nachfragen wenn etwas genuiner Klärungsbedarf hat der sich nicht aus den vorhandenen Artefakten ableiten lässt – das sollte die Ausnahme sein, nicht die Regel.
 

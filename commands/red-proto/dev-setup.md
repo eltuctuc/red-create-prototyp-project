@@ -11,15 +11,6 @@ Du bist technischer Berater und Setup-Spezialist. Deine Aufgabe: aus dem PRD den
 cat prd.md
 ```
 
-Lies das PRD und – falls vorhanden – den Research-Platform-Kontext:
-
-```bash
-cat prd.md
-cat research/platform-context.md 2>/dev/null
-```
-
-Falls `research/platform-context.md` existiert: Priorisiere die dort dokumentierten Platform-Erkenntnisse gegenüber den PRD-Signalen. Research ist näher an echten Nutzerbedürfnissen als das PRD.
-
 Extrahiere die entscheidenden Signale für die Tech-Stack-Empfehlung:
 
 - **Was für ein Produkt?** (Web-App, Mobile App, API, CLI, Desktop, Datenverarbeitung, KI/ML, ...)
@@ -28,6 +19,45 @@ Extrahiere die entscheidenden Signale für die Tech-Stack-Empfehlung:
 - **Scope-Typ** (Klickbarer Prototyp / Funktionierend / Produktionsreifes MVP)
 - **Besondere Anforderungen** (Echtzeit, Offline, Performance-kritisch, Enterprise-Integration, ...)
 - **Hinweise auf vorhandenes Wissen?** (Erwähnt der User eine Sprache oder ein Framework?)
+
+## Phase 1b: Platform & Nutzungskontext klären
+
+Die Tech-Stack-Empfehlung hängt stark davon ab, auf welchen Geräten und in welchem Kontext das Produkt genutzt wird. Prüfe zuerst, ob die PRD das bereits klar beantwortet (z.B. "Responsive Web-App für Mobile und Desktop", "Native iOS-App", "täglich im Büro genutzt").
+
+**Wenn die PRD ausreichend klar ist:** Leite Platform und Kontext direkt aus der PRD ab und fasse sie in 2–3 Sätzen im Chat zusammen. Keine redundanten Fragen.
+
+**Wenn die PRD Lücken lässt:** Stelle gezielte Fragen nur zu den fehlenden Punkten:
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Auf welchen Geräten wird das Produkt primär genutzt?",
+      header: "Primäres Gerät",
+      options: [
+        { label: "Desktop / Laptop", description: "Browser am Schreibtisch, Maus & Tastatur" },
+        { label: "Smartphone", description: "Unterwegs, Touch-Bedienung, kleines Display" },
+        { label: "Tablet", description: "Mittleres Display, Touch, oft Couch oder unterwegs" },
+        { label: "Gemischt – Desktop + Mobile gleichwertig", description: "Responsive Design ist Pflicht" }
+      ],
+      multiSelect: false
+    },
+    {
+      question: "Falls Mobile relevant: Welche Art von Mobile-Erlebnis?",
+      header: "Mobile-Typ",
+      options: [
+        { label: "Mobile Web reicht (Browser)", description: "Kein App-Store, schnell verfügbar, responsive Web-App" },
+        { label: "Native App gewünscht", description: "App Store, Push-Notifications, Kamera/GPS/Offline-Funktionen nötig" },
+        { label: "Mobile nicht relevant", description: "Produkt ist Desktop-only" },
+        { label: "Noch unklar", description: "Später entscheiden" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
+Die Platform-Entscheidung fließt direkt in die Tech-Stack-Empfehlung in Phase 3 ein und wird später in `project-config.md` dokumentiert.
 
 ## Phase 2: Aktuelle Marktlage recherchieren
 
@@ -186,7 +216,7 @@ AskUserQuestion({
       question: "Was soll ins GitHub-Repository?",
       header: "Repository-Inhalt",
       options: [
-        { label: "Nur der Programm-Code", description: "Nur das Code-Verzeichnis – Projektdokumentation (features/, docs/, research/) bleibt lokal" },
+        { label: "Nur der Programm-Code", description: "Nur das Code-Verzeichnis – Projektdokumentation (features/, docs/, test-setup/) bleibt lokal" },
         { label: "Alles – Code + Projektdokumentation", description: "PRD, Feature-Specs, Docs und Code in einem Repository" }
       ],
       multiSelect: false
@@ -360,10 +390,10 @@ Erstelle jetzt `project-config.md` im Projekt-Root:
 ## Phase 9: Abschluss
 
 ```bash
-RESEARCH_DONE=$(ls research/platform-context.md 2>/dev/null && echo "ja" || echo "nein")
+TEST_SETUP_DONE=$(ls test-setup/personas.md 2>/dev/null && echo "ja" || echo "nein")
 ```
 
-Wenn Research bereits gemacht (`research/platform-context.md` existiert):
+Wenn Test-Setup bereits gemacht (`test-setup/personas.md` existiert):
 
 ```
 ✅ Dev-Setup abgeschlossen
@@ -377,7 +407,7 @@ Nächster Schritt: /red-proto:requirements – Feature Specs für alle Features 
 Nach einer Pause: /red-proto:workflow zeigt dir exakt wo du stehst.
 ```
 
-Wenn Research noch nicht gemacht:
+Wenn Test-Setup noch nicht gemacht:
 
 ```
 ✅ Dev-Setup abgeschlossen
@@ -387,11 +417,10 @@ Code:     [Codeverzeichnis]/
 Git:      Initialisiert ([Codeverzeichnis | Projekt-Root])
 GitHub:   [URL – oder: "Nur lokal"]
 
-Research wurde übersprungen. Du kannst es jederzeit mit /red-proto:research nachholen –
-Personas und Problem Statement bereichern Requirements, Flows und UX. Die Platform-Entscheidung
-ist jetzt gesetzt und wird durch nachträgliches Research nicht mehr geändert.
+Test-Setup fehlt noch. Personas und Test-Hypothesen machen den späteren Prototyp-Test
+deutlich aussagekräftiger – ohne sie testest du gegen ein undefiniertes Ziel.
 
-Nächster Schritt: /red-proto:requirements
+Nächster Schritt: /red-proto:test-setup (empfohlen) oder /red-proto:requirements
 Nach einer Pause: /red-proto:workflow zeigt dir exakt wo du stehst.
 ```
 

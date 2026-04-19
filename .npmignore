@@ -3,7 +3,7 @@
 .gitignore
 ARTIFACT_SCHEMA.md
 features/
-research/
+test-setup/
 flows/
 bugs/
 projekt/

@@ -51,19 +51,19 @@ AskUserQuestion({ questions: [{ question: "Welche Features sollen jetzt bearbeit
 ## Phase 1: Kontext lesen
 
 ```bash
-RESEARCH_DONE=$(ls research/personas.md 2>/dev/null && echo "ja" || echo "nein")
+TEST_SETUP_DONE=$(ls test-setup/personas.md 2>/dev/null && echo "ja" || echo "nein")
 cat prd.md 2>/dev/null
-cat research/personas.md 2>/dev/null
-cat research/problem-statement.md 2>/dev/null
+cat test-setup/personas.md 2>/dev/null
+cat test-setup/hypotheses.md 2>/dev/null
 cat features/FEAT-[X].md
 cat flows/product-flows.md 2>/dev/null || echo "HINWEIS: Kein Flows-Dokument – /red-proto:flows ausführen bevor Screen Transitions definiert werden."
 ```
 
-Wenn Research noch nicht gemacht:
+Wenn Test-Setup noch nicht gemacht:
 ```typescript
-AskUserQuestion({ questions: [{ question: "User Research fehlt. Personas helfen bei zielgruppengerechten UX-Entscheidungen.", header: "Research nachholen?", options: [
-  { label: "Jetzt /red-proto:research nachholen", description: "Danach zurück zu /red-proto:ux" },
-  { label: "Ohne Research weitermachen", description: "Direkt aus Feature Spec und PRD ableiten" }
+AskUserQuestion({ questions: [{ question: "Das Test-Setup fehlt. Personas helfen bei zielgruppengerechten UX-Entscheidungen.", header: "Test-Setup nachholen?", options: [
+  { label: "Jetzt /red-proto:test-setup nachholen", description: "Danach zurück zu /red-proto:ux" },
+  { label: "Ohne Test-Setup weitermachen", description: "Direkt aus Feature Spec und PRD ableiten" }
 ], multiSelect: false }] })
 ```
 

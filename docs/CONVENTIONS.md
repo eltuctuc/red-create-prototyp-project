@@ -1,7 +1,7 @@
 # Framework Conventions
 *Verbindliche Regeln für Draft, Approval, Resume und Git Commits – Discovery Phase*
 
-> Wird gelesen von: sparring, research, requirements, ux, flows, architect
+> Wird gelesen von: sparring, test-setup, requirements, ux, flows, architect
 > Developer, Dev-Setup und QA sind ausgenommen – sie schreiben direkt.
 
 ---
@@ -61,31 +61,31 @@ User tippt `weiter` im Chat. Claude liest die Datei erneut vom Disk und finalisi
 → Oder sag mir direkt was geändert werden soll
 ```
 
-### Option 2 – Langer Research-Prozess (Stunden bis Tage)
-Geeignet für: research (wenn echter User Research durchgeführt wird)
+### Option 2 – Längere Überarbeitung (Stunden bis Tage)
+Geeignet für: test-setup (wenn Personas/Hypothesen ausführlicher überarbeitet werden)
 
-User trägt Findings in die Draft-Dateien ein, dann `/red-proto:research` erneut aufrufen.
+User trägt Änderungen in die Draft-Dateien ein, dann `/red-proto:test-setup` erneut aufrufen.
 Der Command erkennt Drafts automatisch und wechselt in den Review-Modus.
 
 **Draft-Erkennung beim Command-Neustart:**
 ```bash
-DRAFTS=$(grep -rl "status: draft" research/ 2>/dev/null)
+DRAFTS=$(grep -rl "status: draft" test-setup/ 2>/dev/null)
 if [ -n "$DRAFTS" ]; then
   echo "DRAFT-MODUS aktiv – folgende Dateien warten auf Finalisierung:"
   echo "$DRAFTS"
 fi
 ```
 
-**Hinweis nach Draft-Speicherung (research):**
+**Hinweis nach Draft-Speicherung (test-setup):**
 ```
 📝 Draft gespeichert: [Dateiname]
 
 Kurze Pause?
 → Schreib `weiter` wenn du fertig bist
 
-Echter Research (Interviews, Umfragen, Tage)?
-→ Trag deine Findings direkt in die Datei ein
-→ Dann /red-proto:research erneut aufrufen – ich erkenne den Draft automatisch
+Längere Überarbeitung?
+→ Trag deine Änderungen direkt in die Datei ein
+→ Dann /red-proto:test-setup erneut aufrufen – ich erkenne den Draft automatisch
 ```
 
 ---

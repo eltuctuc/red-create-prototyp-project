@@ -54,7 +54,7 @@ Agent("qa-engineer", {
 
 Agent("ux-reviewer", {
   prompt: `UX-Review für FEAT-[ID].
-  Lies: features/FEAT-[ID].md (Abschnitt 2: UX), research/personas.md falls vorhanden
+  Lies: features/FEAT-[ID].md (Abschnitt 2: UX), test-setup/personas.md falls vorhanden
   Befolge: .claude/agents/ux-reviewer.md
   Schreibe Bug-Files: bugs/BUG-FEAT[ID]-UX-001.md etc.`
 })

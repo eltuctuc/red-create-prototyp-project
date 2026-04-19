@@ -13,8 +13,8 @@ Du bist Navigations-Architekt. Deine Aufgabe: aus allen Feature Specs eine volls
 
 ```bash
 cat prd.md 2>/dev/null
-cat research/personas.md 2>/dev/null
-cat research/problem-statement.md 2>/dev/null
+cat test-setup/personas.md 2>/dev/null
+cat test-setup/hypotheses.md 2>/dev/null
 
 # Alle Feature Specs laden
 ls features/ 2>/dev/null
@@ -22,25 +22,25 @@ cat features/*.md 2>/dev/null
 ```
 
 ```bash
-RESEARCH_DONE=$(ls research/personas.md 2>/dev/null && echo "ja" || echo "nein")
-echo "Research: $RESEARCH_DONE"
+TEST_SETUP_DONE=$(ls test-setup/personas.md 2>/dev/null && echo "ja" || echo "nein")
+echo "Test-Setup: $TEST_SETUP_DONE"
 ```
 
-Wenn Research noch nicht gemacht:
+Wenn Test-Setup noch nicht gemacht:
 
 ```typescript
 AskUserQuestion({
   questions: [
     {
-      question: "User Research fehlt noch. Personas helfen beim Definieren sinnvoller Nutzerreisen.",
-      header: "Research nachholen?",
+      question: "Das Test-Setup fehlt noch. Personas helfen beim Definieren sinnvoller Nutzerreisen.",
+      header: "Test-Setup nachholen?",
       options: [
         {
-          label: "Jetzt /red-proto:research nachholen",
-          description: "Danach zurück zu /red-proto:flows. Hinweis: Tech-Stack ist gesetzt, Research fokussiert sich auf Nutzerverhalten"
+          label: "Jetzt /red-proto:test-setup nachholen",
+          description: "Danach zurück zu /red-proto:flows"
         },
         {
-          label: "Ohne Research weitermachen",
+          label: "Ohne Test-Setup weitermachen",
           description: "Flows direkt aus den Feature Specs ableiten"
         }
       ],

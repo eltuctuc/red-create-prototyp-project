@@ -30,10 +30,9 @@ Es ist die einzige Source of Truth für den gesamten Workflow.
         [screen].png
   flows/
     product-flows.md              ← [/flows] Verbindliche Screen-Übersicht + Transition-Tabelle
-  research/
-    problem-statement.md          ← [/red-proto:research]
-    personas.md                   ← [/red-proto:research]
-    research-questions.md         ← [/red-proto:research]
+  test-setup/
+    personas.md                   ← [/red-proto:test-setup]
+    hypotheses.md                 ← [/red-proto:test-setup]
   features/
     FEAT-1-feature-name.md        ← [alle Agenten ergänzen dieses File]
     FEAT-2-feature-name.md

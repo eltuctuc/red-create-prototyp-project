@@ -12,8 +12,8 @@ Eine Sammlung von Claude Code Commands, die eine vollständige Produktentwicklun
 /red-proto:workflow     → Nach jeder Pause: zeigt exakt wo du stehst und was als nächstes zu tun ist
 
 /red-proto:sparring     → Idee schärfen → PRD
+/red-proto:test-setup   → Personas + Test-Hypothesen für den Prototyp (empfohlen)
 /red-proto:dev-setup    → Tech-Stack wählen, Projekt scaffolden, Git/GitHub einrichten
-/red-proto:research     → Problem Statement Map + Personas (optional)
 /red-proto:requirements → Feature Specs – einmal pro Feature, für ALLE Features
                           ↓ wenn ALLE Features Specs haben:
 /red-proto:flows        → Screen-Inventar + verbindliche Transition-Tabelle (einmalig)
@@ -37,11 +37,11 @@ flowchart TD
 
     subgraph setup["📐 Einmalig pro Projekt"]
         B["/red-proto:sparring\nIdee → PRD"]
-        B --> C["/red-proto:dev-setup\nTech-Stack + GitHub"]
-        C --> D{Research?}
-        D -->|optional| E["/red-proto:research\nPersonas + Problem Statement"]
-        D -->|überspringen| F
-        E --> F["/red-proto:requirements\nSpecs für alle Features"]
+        B --> T{Test-Setup?}
+        T -->|empfohlen| TS["/red-proto:test-setup\nPersonas + Hypothesen"]
+        T -->|später| C
+        TS --> C["/red-proto:dev-setup\nTech-Stack + GitHub"]
+        C --> F["/red-proto:requirements\nSpecs für alle Features"]
         F --> G["/red-proto:flows\nScreen-Inventar + Transitions"]
     end
 
@@ -109,7 +109,7 @@ Der Installer fragt interaktiv:
 npx red-proto --uninstall
 ```
 
-Entfernt alle Commands und Agents – deine Projektdateien (`features/`, `research/`, `prd.md` usw.) bleiben unangetastet.
+Entfernt alle Commands und Agents – deine Projektdateien (`features/`, `test-setup/`, `prd.md` usw.) bleiben unangetastet.
 
 **Option B – Manuell via Git (falls kein npx):**
 
@@ -126,7 +126,7 @@ cp ~/.claude/templates/red-create-prototyp-project/commands/red\:proto.md ~/.cla
 
 `npx` installiert nur die Commands. `/red-proto:create` baut die Projektstruktur auf:
 
-- legt `research/`, `features/`, `flows/`, `bugs/`, `docs/`, `context/` an
+- legt `test-setup/`, `features/`, `flows/`, `bugs/`, `docs/`, `context/` an
 - kopiert das Design System mit Index ins Projekt
 - erstellt `project-config.md` und `features/STATUS.md` als Basis für alle Agents
 
@@ -167,7 +167,7 @@ Nach dem Setup hat dein Projekt folgende Struktur:
   features/            ← Akkumulatives Feature-File (alle Agents ergänzen hier)
     STATUS.md          ← Zentraler Status-Index aller Features
   flows/               ← Screen-Inventar + verbindliche Transition-Tabellen
-  research/            ← User Research Ergebnisse
+  test-setup/          ← Personas + Test-Hypothesen für Prototyp-Tests
   bugs/                ← Bug-Reports (werden nicht gelöscht, sondern zu -fixed.md)
   context/             ← Session-Handoffs (dev → qa Übergaben)
   docs/                ← Produktfähigkeiten + Release-Historie
