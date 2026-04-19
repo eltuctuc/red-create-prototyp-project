@@ -13,17 +13,19 @@ Eine Sammlung von Claude Code Commands, die eine vollständige Produktentwicklun
 
 /red-proto:sparring     → Idee schärfen → PRD
 /red-proto:test-setup   → Personas + Test-Hypothesen für den Prototyp (empfohlen)
-/red-proto:dev-setup    → Tech-Stack wählen, Projekt scaffolden, Git/GitHub einrichten
+Design-System anlegen   → design-system/tokens/ befüllen (empfohlen vor dev-setup)
+/red-proto:dev-setup    → Tech-Stack wählen, Projekt scaffolden, DS-Tokens transportieren
 /red-proto:requirements → Feature Specs – einmal pro Feature, für ALLE Features
                           ↓ wenn ALLE Features Specs haben:
 /red-proto:flows        → Screen-Inventar + verbindliche Transition-Tabelle (einmalig)
-/red-proto:ux           → UX-Entscheidungen – einmal pro Feature
+/red-proto:ux           → UX-Entscheidungen – fragt optional nach Wireframes/Lo-Fi/Hi-Fi
 
 dann pro Feature (Build-Loop bis QA grün):
 /red-proto:architect    → Technisches Design + Security + Test-Setup
+/red-proto:preview      → Optional: Abnahme-Screens aus Spec, vor Dev begutachten
 /red-proto:dev          → Implementierung (Frontend + Backend, parallel falls nötig)
                           └── schreibt context/FEAT-x-dev-handoff.md am Ende
-/red-proto:qa           → Tests, Accessibility, Security, Bug-Loop bis Production-Ready
+/red-proto:qa           → Tests, Accessibility, Security, Copy-Drift, Bug-Loop
                           └── Bugs? → neue Session → /red-proto:dev → /red-proto:qa
 ```
 
@@ -39,8 +41,9 @@ flowchart TD
         B["/red-proto:sparring\nIdee → PRD"]
         B --> T{Test-Setup?}
         T -->|empfohlen| TS["/red-proto:test-setup\nPersonas + Hypothesen"]
-        T -->|später| C
-        TS --> C["/red-proto:dev-setup\nTech-Stack + GitHub"]
+        T -->|später| DS
+        TS --> DS["Design-System anlegen\ndesign-system/tokens/"]
+        DS --> C["/red-proto:dev-setup\nTech-Stack + GitHub + DS-Transport"]
         C --> F["/red-proto:requirements\nSpecs für alle Features"]
         F --> G["/red-proto:flows\nScreen-Inventar + Transitions"]
     end
@@ -48,7 +51,10 @@ flowchart TD
     subgraph feature["🔁 Pro Feature wiederholen"]
         G --> H["/red-proto:ux\nUX-Entscheidungen"]
         H --> I["/red-proto:architect\nTech-Design + Security + Tests"]
-        I --> J
+        I --> P{Preview?}
+        P -->|optional| PR["/red-proto:preview\nAbnahme-Screens"]
+        P -->|überspringen| J
+        PR --> J
 
         subgraph session1["Session 1"]
             J["/red-proto:dev\nImplementierung"]
@@ -166,6 +172,8 @@ Nach dem Setup hat dein Projekt folgende Struktur:
     screens/           ← Platzhalter für Figma-Exports
   features/            ← Akkumulatives Feature-File (alle Agents ergänzen hier)
     STATUS.md          ← Zentraler Status-Index aller Features
+    FEAT-X-name/
+      screens/         ← Optional: Abnahme-Screens pro Feature (von /red-proto:preview)
   flows/               ← Screen-Inventar + verbindliche Transition-Tabellen
   test-setup/          ← Personas + Test-Hypothesen für Prototyp-Tests
   bugs/                ← Bug-Reports (werden nicht gelöscht, sondern zu -fixed.md)

@@ -129,14 +129,18 @@ PRD gespeichert. Die empfohlene Reihenfolge:
 
   → /red-proto:test-setup    Für wen testen wir? Personas + Hypothesen, die der Prototyp klären soll
                               ↓ schärft den Fokus für spätere Tests
-  → /red-proto:dev-setup     Tech-Stack wählen, Projekt scaffolden, Git einrichten
+  → Design-System anlegen    design-system/tokens/ befüllen (Farben, Typo, Spacing, Shadows)
+                              ↓ beeinflusst Stack-Wahl und wird beim Scaffold transportiert
+  → /red-proto:dev-setup     Tech-Stack wählen, Projekt scaffolden, DS-Tokens ins Projekt
   → /red-proto:requirements  Feature Specs – einmal pro Feature, für ALLE Features
                               ↓ wenn ALLE Features Specs haben:
   → /red-proto:flows         Screen-Inventar + Transitions (einmalig, vor UX)
-  → /red-proto:ux            UX-Entscheidungen – einmal pro Feature
+  → /red-proto:ux            UX-Entscheidungen – einmal pro Feature (fragt optional nach Wireframes/Lo-Fi/Hi-Fi)
 
   DANN PRO FEATURE (Build-Loop bis QA grün):
-  → /red-proto:architect → /red-proto:dev → /red-proto:qa
+  → /red-proto:architect
+  → /red-proto:preview       (optional) Abnahme-Screens begutachten bevor gebaut wird
+  → /red-proto:dev → /red-proto:qa
      └── Bugs? → /red-proto:dev → /red-proto:qa (wiederholen)
 
 Nach einer Pause: /red-proto:workflow zeigt dir exakt wo du stehst.

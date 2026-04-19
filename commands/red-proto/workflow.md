@@ -51,8 +51,9 @@ LEGENDE
 
 VORBEREITUNG
   [✅/🔄/⬜] PRD               prd.md
-  [✅/🔄/⬜] Dev Setup          project-config.md
   [✅/🔄/⬜] Test-Setup         test-setup/
+  [✅/🔄/⬜] Design-System      design-system/tokens/
+  [✅/🔄/⬜] Dev Setup          project-config.md
 
 OFFENE DRAFTS  ⚠️
   [Liste offener Draft-Dateien oder: Keine – alles finalisiert ✅]
@@ -106,8 +107,9 @@ generated: true
 | Artefakt | Datei | Status |
 |---|---|---|
 | PRD | prd.md | [✅ / 🔄 Draft / ❌ Fehlt] |
-| Dev Setup | project-config.md | [✅ / ❌ Fehlt] |
 | Test-Setup | test-setup/ | [✅ / 🔄 Draft / ❌ Fehlt] |
+| Design-System | design-system/tokens/ | [✅ / 🔄 Teilweise / ⬜ Leer] |
+| Dev Setup | project-config.md | [✅ / ❌ Fehlt] |
 | Flows | flows/product-flows.md | [✅ / 🔄 Draft / ❌ Fehlt] |
 
 ## Features
@@ -141,6 +143,9 @@ Wende diese Entscheidungslogik an – in dieser Reihenfolge:
 **2. PRD vorhanden, kein Test-Setup (`test-setup/personas.md` fehlt)?**
 → `Empfehlung: /red-proto:test-setup ausführen – Personas und Hypothesen schärfen den späteren Prototyp-Test. Alternativ direkt zu /red-proto:dev-setup.`
 
+**2b. PRD vorhanden, `design-system/tokens/` leer?**
+→ `Empfehlung: Bevor /red-proto:dev-setup läuft, Design-System anlegen – Tokens (Farben, Typo, Spacing) beeinflussen Stack-Wahl und werden später automatisch in den Code transportiert. Alternativ ohne DS weiter.`
+
 **3. PRD vorhanden, kein project-config.md?**
 → `Führe /red-proto:dev-setup aus`
 
@@ -158,6 +163,9 @@ Wende diese Entscheidungslogik an – in dieser Reihenfolge:
 
 **8. Features mit Status "UX", aber noch kein Tech-Design?**
 → `Führe /red-proto:architect für FEAT-[X] aus`
+
+**8b. Features mit Status "Tech", noch keine Abnahme-Screens (optional)?**
+→ `Optional: /red-proto:preview FEAT-[X] – erzeugt Screens aus der Spec, damit du das erwartete Ergebnis vor dem Bau begutachten kannst. Alternativ direkt zu /red-proto:dev.`
 
 **9. Features mit Status "Tech", aber noch keine Implementierung?**
 → `Führe /red-proto:dev für FEAT-[X] aus`
@@ -194,14 +202,16 @@ Noch kein Projekt gestartet.
 Die Pipeline im Überblick:
   1. /red-proto:sparring      → Idee → PRD
   2. /red-proto:test-setup    → Personas + Test-Hypothesen (empfohlen)
-  3. /red-proto:dev-setup     → Tech-Stack + Scaffold + Git
-  4. /red-proto:requirements  → Feature Specs (einmal pro Feature)
+  3. Design-System anlegen    → design-system/tokens/ (empfohlen vor dev-setup)
+  4. /red-proto:dev-setup     → Tech-Stack + Scaffold + Git + DS-Transport
+  5. /red-proto:requirements  → Feature Specs (einmal pro Feature)
                                 ↓ wenn ALLE Features Specs haben:
-  5. /red-proto:flows         → Screen-Inventar + Transitions (einmalig)
-  6. /red-proto:ux            → UX-Entscheidungen (einmal pro Feature)
+  6. /red-proto:flows         → Screen-Inventar + Transitions (einmalig)
+  7. /red-proto:ux            → UX-Entscheidungen (einmal pro Feature)
 
   Dann pro Feature (Build-Loop):
-  7. /red-proto:architect → 8. /red-proto:dev → 9. /red-proto:qa
+  8. /red-proto:architect → (optional) /red-proto:preview → /red-proto:dev → /red-proto:qa
+     └── /red-proto:preview: Abnahme-Screens begutachten bevor gebaut wird
      └── Bei Bugs (🔄): zurück zu /red-proto:dev → /red-proto:qa
      └── QA-Abnahme: ✅ Abgenommen | ✅⚠️ Abgenommen mit Known Issues
 

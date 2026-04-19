@@ -1,7 +1,7 @@
 # Framework Conventions
 *Verbindliche Regeln für Draft, Approval, Resume und Git Commits – Discovery Phase*
 
-> Wird gelesen von: sparring, test-setup, requirements, ux, flows, architect
+> Wird gelesen von: sparring, test-setup, requirements, ux, flows, architect, preview
 > Developer, Dev-Setup und QA sind ausgenommen – sie schreiben direkt.
 
 ---
@@ -112,6 +112,26 @@ Fix-Schwelle: [Critical | Critical, High | Critical, High, Medium]
 - `Approved` – vom User geprüft und finalisiert
 
 **Aktueller Schritt** spiegelt die zuletzt abgeschlossene Phase wider.
+
+---
+
+## Design-System & Abnahme-Screens
+
+### Design-System vor Dev-Setup
+
+Das Framework empfiehlt, `design-system/tokens/` zu befüllen (Farben, Typo, Spacing, Shadows), **bevor** `/red-proto:dev-setup` läuft. Der Grund: die Tokens beeinflussen die Tech-Stack-Wahl (z.B. sind Figma-Tokens für Tailwind einfacher zu transportieren als für Vuetify), und dev-setup transformiert sie beim Scaffold in das stack-spezifische Format.
+
+Quelle bleibt immer `design-system/`. Die im Code erzeugten Token-Dateien (z.B. `tailwind.config.js`, `tokens.css`) sind **generiert** und werden bei Änderungen neu erzeugt, nicht manuell gepflegt.
+
+### Abnahme-Screens pro Feature
+
+Der optionale Command `/red-proto:preview FEAT-X` erzeugt Screens aus der fertig befüllten Feature-Spec und legt sie unter `features/FEAT-X-name/screens/` ab. Nach Abnahme durch den User sind diese Screens **Ground Truth für `/red-proto:dev`** (visuelle Vorlage) und Referenz für das **Copy-Inventar** in der Feature-Spec.
+
+Format und Metadaten: siehe `ARTIFACT_SCHEMA.md` → "Screen-Index Format".
+
+### Copy-Inventar
+
+Wenn die Feature-Spec einen `### Copy-Inventar (Ground Truth)`-Block enthält, übernimmt `/red-proto:dev` alle sichtbaren Texte **wörtlich** in eine zentrale Copy-Datei (Pfad und Format stack-abhängig, siehe `/red-proto:dev` Phase 1.7). `/red-proto:qa` prüft mechanisch auf Drift.
 
 ---
 

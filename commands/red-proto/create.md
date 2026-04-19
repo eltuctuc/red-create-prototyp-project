@@ -122,6 +122,7 @@ cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/require
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/flows.md .claude/commands/red-proto/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/ux.md .claude/commands/red-proto/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/architect.md .claude/commands/red-proto/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/preview.md .claude/commands/red-proto/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/dev.md .claude/commands/red-proto/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/qa.md .claude/commands/red-proto/
 cp -n ~/.claude/templates/red-create-prototyp-project/agents/frontend-developer.md .claude/agents/
@@ -174,6 +175,7 @@ cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/requiremen
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/flows.md .claude/commands/red-proto/
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/ux.md .claude/commands/red-proto/
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/architect.md .claude/commands/red-proto/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/preview.md .claude/commands/red-proto/
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/dev.md .claude/commands/red-proto/
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/qa.md .claude/commands/red-proto/
 cp ~/.claude/templates/red-create-prototyp-project/agents/frontend-developer.md .claude/agents/
@@ -241,6 +243,7 @@ Verfügbare Commands:
 /red-proto:requirements       → Feature Specs (IEEE/IREB)
 /red-proto:ux                 → UX-Design-Entscheidungen, DS-konform (nutzt: ui-ux-pro-max)
 /red-proto:architect          → Tech-Design + Security
+/red-proto:preview            → Optional: Abnahme-Screens aus Spec, vor Dev begutachten
 /red-proto:dev                → Implementierung, orchestriert Agents parallel bei Full-Stack
 /red-proto:qa                 → Tests + UX-Review parallel, Bug-Reports, Production-Ready
 
