@@ -5,6 +5,31 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.19.0 — 20. April 2026
+
+Von der vagen Idee zum Screen, den der Nutzer abnicken kann, bevor eine Zeile Code entsteht.
+
+### Neue Features
+
+- **Design-System ist Teil des Weges, nicht Deko:** `/red-proto:dev-setup` prüft vor der Stack-Wahl, ob `design-system/tokens/` befüllt ist. Die Tokens beeinflussen die Empfehlung (Tailwind, CSS-Variablen, SwiftUI-Extensions, was auch immer passt) und werden beim Scaffold automatisch ins Projekt transportiert. Leeres DS? Der Workflow erinnert dich daran, bevor gescaffoldet wird – überspringen ist erlaubt, aber nicht stillschweigend.
+- **`/red-proto:preview` – optionaler Abnahme-Pass vor Dev:** Nachdem Requirements, UX und Architect-Design stehen, kannst du Screens aus der Spec erzeugen lassen – per Figma-Node-Link, aus einer konfigurierten Figma-File, per PNG-Upload oder manuell abgelegt. Der Command legt sie in `features/FEAT-X-name/screens/` ab und holt deine Abnahme ein, bevor `/red-proto:dev` anfängt zu bauen. Kein visuelles QA, kein Rätselraten für den Entwickler – du siehst vorher, was kommt.
+- **UX fragt aktiv nach Design-Vorgaben:** `/red-proto:ux` fragt optional nach Wireframes, Low- oder High-Fi-Screens – als Figma-Links oder als Bilder im Chat. Wenn welche da sind, schärft das die UX-Entscheidungen. Wenn nicht, arbeitet der Agent wie bisher aus Spec + PRD + Design-System.
+- **Copy-Inventar stack-agnostisch:** Wenn die Feature-Spec ein `Copy-Inventar (Ground Truth)` enthält, pflegt `/red-proto:dev` die Texte **zeichen-genau** in eine zentrale Copy-Datei ein – je nach Stack `copy.ts`, `copy.py`, `copy.go`, `Copy.swift` oder `copy.json`. `/red-proto:qa` prüft mechanisch per `grep` auf Drift: fehlt ein Text, ist er dupliziert, oder steht er hardcoded in einer Komponente? Alles automatisch ein Bug. Löst ein LLM-Problem, das sonst unsichtbar bis zum Kunden durchrutscht.
+
+### Was sich ändert
+
+- `/red-proto:dev-setup` empfiehlt Tech-Stacks jetzt immer inklusive Design-System-Transport – die Empfehlung nennt explizit, wie deine Tokens im Projekt landen
+- `project-config.md` hat zwei neue Abschnitte: `Design-System-Transport` und `Figma-Quellen`
+- `/red-proto:workflow` zeigt Design-System als eigenen Vorbereitungs-Schritt und verweist auf `/red-proto:preview`, solange kein Dev gelaufen ist
+- Die Pipeline im README und in der Workflow-Übersicht zeigt jetzt beide optionalen Gates: Design-System vor Dev-Setup, Preview vor Dev
+
+### Verbesserungen
+
+- **Tool-Unabhängigkeit zieht sich durch:** Figma bleibt First-Class-Bürger, aber an keiner Stelle verlangt das Framework Figma. PNG-Upload im Chat, manuelle Ablage und konfigurierter File-Key sind gleichwertig. Kein rigides Naming-Schema mehr – Node-Links und Bilder reichen.
+- **Kein probabilistisches QA:** Visuelle Abnahme bleibt menschliche Aufgabe. Copy-Drift ist dagegen deterministisch geprüft. Das Framework verspricht nichts, was es nicht halten kann.
+
+---
+
 ## v0.18.0 — 19. April 2026
 
 Research war der falsche Name für das, was wirklich vor dem Prototyp passieren muss.
