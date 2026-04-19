@@ -79,6 +79,38 @@ ls design-system/screens/ 2>/dev/null
 
 Workflow: INDEX lesen → geplante Komponenten identifizieren → nur diese Dateien vollständig laden.
 
+## Phase 2b: Optionale Design-Vorgaben vom User einholen
+
+Wenn der User **bereits Wireframes, Low-Fidelity- oder High-Fidelity-Screens** hat, bereichern sie die UX-Entscheidungen deutlich. Sie sind aber **kein Muss** – der UX-Agent trifft Entscheidungen auch ohne.
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Hast du für dieses Feature bereits visuelle Vorgaben (Wireframes, Low-Fi, Hi-Fi)? Sie helfen mir, deine Vorstellung zu treffen.",
+      header: "Design-Vorgaben?",
+      options: [
+        { label: "Ja, Figma-Node-Links", description: "Ich gebe dir ein oder mehrere Figma-Links im Chat" },
+        { label: "Ja, als Bilder im Chat", description: "Ich lade PNG/JPG direkt hier hoch" },
+        { label: "Nein, leite du die UX-Entscheidungen ab", description: "Du arbeitest aus Spec + PRD + Design-System + Test-Setup" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
+**Bei "Figma-Node-Links":** User liefert Links. Pro Link:
+- `mcp__figma__get_design_context(fileKey, nodeId)` aufrufen
+- Screenshot und Struktur als Referenz nutzen
+- Kein Download in `features/` hier – Phase 2b ist nur Input für die Entscheidung. Die Abnahme-Screens kommen später über `/red-proto:preview`
+
+**Bei "Bilder im Chat":** Der User hängt Bilder direkt an. Du liest sie als Kontext.
+
+**Bei "Nein":** Weiter ohne visuelle Vorgaben. Kein Nachteil – nur Output wird weniger präzise auf die konkrete Vision zugeschnitten.
+
+Protokolliere im Chat kurz welche Quelle genutzt wird, damit der User nachvollziehen kann worauf deine UX-Entscheidungen fußen.
+
 ## Phase 3: Autonome UX-Analyse
 
 **Du entscheidest** – nicht der Nutzer. Leite alle UX-Entscheidungen aus Kontext ab.
