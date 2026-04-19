@@ -35,6 +35,11 @@ Es ist die einzige Source of Truth für den gesamten Workflow.
     hypotheses.md                 ← [/red-proto:test-setup]
   features/
     FEAT-1-feature-name.md        ← [alle Agenten ergänzen dieses File]
+    FEAT-1-feature-name/
+      screens/                    ← [/red-proto:preview] Abnahme-Screens pro Feature
+        S-10-empty.png
+        S-11-filled.png
+        index.md                  ← Screen-Metadaten (Node-ID, Zustand, Abnahme-Status)
     FEAT-2-feature-name.md
     ...
   bugs/                           ← [/red-proto:qa] Ein File pro Bug – nach Fix umbenannt zu BUG-...-fixed.md (Audit-Trail)
@@ -225,6 +230,39 @@ Einträge werden chronologisch oben eingefügt (neueste zuerst).
 
 Einträge werden nur ergänzt, nie ohne Bestätigung geändert.
 `/red-proto:flows` kann jederzeit erneut aufgerufen werden um neue Features zu integrieren oder Lücken zu schließen.
+
+---
+
+## Screen-Index Format (`./features/FEAT-X-name/screens/index.md`)
+
+Wird von `/red-proto:preview` angelegt, wenn der User vor Dev visuelle Abnahme-Screens durchgehen möchte. Optional – Features ohne `screens/`-Ordner laufen genauso durch die Pipeline.
+
+```markdown
+---
+status: draft
+feature: FEAT-[X]
+source: figma | upload | manual
+---
+
+# Screens – FEAT-[X]
+
+Quelle: [Figma-File-URL oder "PNG-Upload" oder "manuell abgelegt"]
+
+| Screen-ID | Datei | Zustand | Flow-Schritt | Figma-Node | Status |
+|-----------|-------|---------|--------------|------------|--------|
+| S-10 | S-10-empty.png | Initial | Einstieg | 123:456 | approved |
+| S-11 | S-11-filled.png | Ausgefüllt | Nach Eingabe | 123:457 | approved |
+| S-12 | S-12-error.png | Fehler | Bei ungültiger Eingabe | 123:458 | review |
+```
+
+**Status-Werte pro Screen:**
+- `review` – neu erzeugt, wartet auf User-Abnahme
+- `approved` – User hat bestätigt, Dev darf bauen
+- `outdated` – Spec oder Design hat sich geändert, Screen muss neu erzeugt werden
+
+**Figma-Node:** nur befüllt wenn Source `figma`. Sonst leer oder `–`.
+
+**Datei-Naming:** `S-NN-kurzbezeichnung.png` – fortlaufende Nummerierung pro Feature.
 
 ---
 

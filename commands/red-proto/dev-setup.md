@@ -59,6 +59,36 @@ AskUserQuestion({
 
 Die Platform-Entscheidung fließt direkt in die Tech-Stack-Empfehlung in Phase 3 ein und wird später in `project-config.md` dokumentiert.
 
+## Phase 1c: Design-System prüfen
+
+```bash
+DS_TOKENS=$(ls design-system/tokens/*.md 2>/dev/null | wc -l | xargs)
+DS_COMPONENTS=$(ls design-system/components/*.md 2>/dev/null | wc -l | xargs)
+echo "DS-Tokens: $DS_TOKENS Dateien | DS-Komponenten: $DS_COMPONENTS Dateien"
+```
+
+**Wenn das Design-System befüllt ist** (Tokens und/oder Komponenten vorhanden): Lies `design-system/tokens/*.md` grob durch. Die dort dokumentierten Tokens (Farben, Typo, Spacing, Shadows) beeinflussen die Stack-Wahl, weil nicht jeder Stack sie gleich gut aufnimmt. Berücksichtige das in Phase 2 und 3.
+
+**Wenn es leer ist**: Weise den User darauf hin, dass ein Design-System später schwieriger zu integrieren ist. Ausführen lässt sich das Setup trotzdem – der User hat dann die Wahl, jetzt zurückzugehen und das DS anzulegen oder später mit einem technischen Transport zu leben, der nicht optimal passt.
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Das Design-System ist noch leer. Willst du jetzt eines anlegen, bevor wir den Tech-Stack festlegen?",
+      header: "Design-System vor Stack?",
+      options: [
+        { label: "Pause – ich lege das DS erst an", description: "design-system/tokens/ befüllen (Farben, Typo, Spacing), dann /red-proto:dev-setup erneut aufrufen" },
+        { label: "Weiter ohne DS", description: "Stack ohne DS-Kontext wählen – Tokens werden später generisch transportiert" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
+Bei "Pause": Prozess stoppen, damit der User das DS anlegen kann.
+
 ## Phase 2: Aktuelle Marktlage recherchieren
 
 Bevor du empfiehlst, recherchiere gezielt. Tech-Stacks entwickeln sich schnell – eine veraltete Empfehlung schadet mehr als sie hilft.
@@ -76,6 +106,7 @@ Was du suchst:
 - Gibt es neuere, bessere Alternativen zu den klassischen Optionen?
 - Sind die Kandidaten noch aktiv gepflegt (letzte Releases, Community-Größe)?
 - Welche Probleme berichten Entwickler aktuell?
+- **Design-System-Transport:** Wie landen Design-Tokens (Farben, Typo, Spacing, Shadows) in diesem Stack? Gibt es etablierte Wege (CSS-Variablen, Tailwind-Config, Theme-Objekte, generierte Code-Files)? Passen sie zu dem, was in `design-system/tokens/` steht?
 
 Nutze die Suchergebnisse als Korrektiv zu deinem eingebauten Wissen. Wenn Suche und internes Wissen übereinstimmen: gut. Wenn sie divergieren: bevorzuge die aktuelleren Quellen.
 
@@ -132,10 +163,13 @@ Zeige dem User die Empfehlung in dieser Form (in einfacher Sprache, kein Tech-Ja
 **Frontend:** [Framework] – [Ein-Satz-Erklärung warum, für Nicht-Techniker]
 **Backend:** [Framework/Sprache] – [Erklärung] – oder: "Kein separates Backend nötig"
 **Datenbank:** [Technologie] – [Erklärung] – oder: "Nicht benötigt"
+**Design-System-Transport:** [z.B. "Tailwind-Config + CSS-Variablen", "Theme-Objekt in JS",
+"CSS-Custom-Properties in globals.css", "SwiftUI Color-Extensions"] – oder: "Kein DS vorhanden"
 
 ### Warum dieser Stack?
 [2–3 Sätze: Warum passt das zu diesem spezifischen Projekt? Welche Eigenschaft des PRDs
-hat diese Wahl beeinflusst? Verständlich ohne Vorkenntnisse.]
+hat diese Wahl beeinflusst? Verständlich ohne Vorkenntnisse. Wenn DS vorhanden: warum
+passt der DS-Transport zu diesem Stack?]
 
 ### Was bedeutet das konkret?
 [Was wird das Projekt nach dem Setup können? z.B.: "Du hast eine laufende Web-App unter
@@ -238,6 +272,24 @@ cat .claude/red-proto/SCAFFOLDING.md
 ```
 
 Führe die Befehle für `[gewähltes Framework]` aus. Danach zurück zu Phase 5b.
+
+## Phase 5b: Design-System-Tokens in Projekt transportieren
+
+Nur ausführen wenn `design-system/tokens/` befüllt ist.
+
+Lies die Token-Dateien (`design-system/tokens/colors.md`, `typography.md`, `spacing.md`, `shadows.md`) und transformiere sie in das für den gewählten Stack passende Format. Der konkrete Transport wurde in Phase 3 als Teil der Empfehlung entschieden – jetzt wird er ausgeführt:
+
+- **Next.js / Vite + React mit Tailwind:** Tokens in `[codedir]/tailwind.config.js` (theme.extend.colors, fontFamily, spacing, boxShadow) + CSS-Variablen in `[codedir]/src/app/globals.css` (oder vergleichbar)
+- **Nuxt / Vue mit Tailwind:** wie oben, Pfade entsprechend Vue-Struktur
+- **Vanilla / kein UI-Framework:** CSS-Custom-Properties in `[codedir]/src/styles/tokens.css` + Import in der Einstiegs-CSS
+- **SwiftUI / Swift:** `Color`-Extensions und `Font`-Struct in `[codedir]/DesignSystem/Tokens.swift`
+- **Flutter:** `ThemeData` in `[codedir]/lib/theme/tokens.dart`
+- **Sonstige Stacks:** Tokens als `design-tokens.json` im Code-Verzeichnis + Kommentar, dass der Transport manuell zu ergänzen ist
+
+**Verifikation:**
+- Alle Token-Werte aus `design-system/tokens/` sind im Ziel-Format angekommen
+- Zeige dem User die erzeugten Dateien und eine kurze Zusammenfassung: "Farb-Tokens [N], Typo [N], Spacing [N], Shadows [N] transportiert nach [Dateipfade]"
+- Die Ground Truth bleibt `design-system/tokens/` – der Transport ist generiert. Änderungen am DS müssen hier erneut laufen (Hinweis im Commit).
 
 ---
 
@@ -351,6 +403,12 @@ Erstelle jetzt `project-config.md` im Projekt-Root:
 - Frontend: [Framework + Sprache]
 - Backend: [Framework + Sprache – oder: "Kein separates Backend"]
 - Datenbank: [Technologie – oder: "Keine"]
+- Design-System-Transport: [Beschreibung + Zieldatei/-dateien – oder: "Kein DS vorhanden"]
+
+## Figma-Quellen
+*(Optional – nur wenn mit Figma gearbeitet wird. /red-proto:preview liest diese Einträge.)*
+- File-URL: [Figma-File-URL oder "–"]
+- File-Key: [aus URL extrahiert oder "–"]
 
 ## Team-Setup
 - Developer aufgeteilt (Frontend/Backend): Ja / Nein / Später entscheiden
@@ -427,10 +485,12 @@ Nach einer Pause: /red-proto:workflow zeigt dir exakt wo du stehst.
 ## Checklist
 
 - [ ] PRD vollständig gelesen und Signale extrahiert
-- [ ] Webrecherche durchgeführt (2–3 gezielte Suchanfragen)
-- [ ] Stack-Empfehlung erklärt (verständlich ohne Vorkenntnisse)
+- [ ] Design-System geprüft (befüllt vs. leer) und in Stack-Empfehlung berücksichtigt
+- [ ] Webrecherche durchgeführt (2–3 gezielte Suchanfragen, inkl. DS-Transport)
+- [ ] Stack-Empfehlung erklärt (verständlich ohne Vorkenntnisse, DS-Transport benannt)
 - [ ] User hat Stack bestätigt
 - [ ] Scaffold fehlerfrei durchgelaufen
+- [ ] Design-System-Tokens in Stack-Format transportiert (falls DS vorhanden)
 - [ ] Nur nötige Packages installiert
 - [ ] project-config.md mit korrekten Pfaden aus tatsächlichem Scaffold erstellt
 - [ ] Git initialisiert (im richtigen Verzeichnis)
