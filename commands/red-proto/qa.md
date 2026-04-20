@@ -60,7 +60,7 @@ Agent("ux-reviewer", {
 })
 ```
 
-## Phase 2.5: Copy-Drift-Check (wenn Copy-Inventar vorhanden)
+## Phase 2b: Copy-Drift-Check (wenn Copy-Inventar vorhanden)
 
 **Zweck:** Mechanischer Vergleich zwischen dem Copy-Inventar aus der Feature-Spec und der zentralen Copy-Datei im Code. Deterministisch, kein LLM-Urteil nötig. Schließt die Lücke, in der LLMs im Dev-Schritt sichtbare Texte paraphrasieren.
 

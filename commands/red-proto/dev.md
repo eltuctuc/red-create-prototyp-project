@@ -36,7 +36,7 @@ cat design-system/INDEX.md 2>/dev/null
 # Dann nur konkret benötigte Dateien laden
 ```
 
-## Phase 1.5: UX-Zustände als Checkliste
+## Phase 1c: UX-Zustände als Checkliste
 
 Extrahiere alle Zustände aus `## 2. UX Entscheidungen`:
 
@@ -46,7 +46,7 @@ Extrahiere alle Zustände aus `## 2. UX Entscheidungen`:
 
 Jede Zeile muss vor Phase 5 abgehakt sein – verbindliche Checkliste, kein Qualitätsprinzip.
 
-## Phase 1.6: Abnahme-Screens lesen (falls vorhanden)
+## Phase 1d: Abnahme-Screens lesen (falls vorhanden)
 
 ```bash
 SCREENS_DIR=$(ls -d features/FEAT-[ID]-*/screens 2>/dev/null | head -1)
@@ -63,7 +63,7 @@ Lies alle PNGs mit `status: approved` als Bild-Kontext ein. PNGs mit `status: ou
 
 **Wenn keine Abnahme-Screens existieren:** Normal weitermachen – Spec ist dann die einzige Vorlage.
 
-## Phase 1.7: Copy-Inventar einpflegen (wenn vorhanden)
+## Phase 1e: Copy-Inventar einpflegen (wenn vorhanden)
 
 **Zweck:** Sichtbare Nutzer-Texte sind Ground Truth aus der Feature-Spec (Abschnitt `### Copy-Inventar (Ground Truth)` falls vorhanden, oder aus den Abnahme-Screens extrahierbar). Der Dev-Agent darf Texte **niemals paraphrasieren** – er übernimmt sie wörtlich in eine zentrale Copy-Datei.
 
@@ -180,9 +180,9 @@ Nach allen Fixes:
 git add . && git commit -q -m "fix: FEAT-[X] – [Zusammenfassung]" && git push -q
 ```
 
-## Phase 4.5: Selbstcheck vor Review
+## Phase 4b: Selbstcheck vor Review
 
-- [ ] Alle Loading/Error/Empty/Success-States (UX-Checkliste Phase 1.5)?
+- [ ] Alle Loading/Error/Empty/Success-States (UX-Checkliste Phase 1c)?
 - [ ] A11y: aria-label, aria-expanded, h1 auf allen Vollbild-Ersatzansichten?
 - [ ] Pattern-Konsistenz: `grep -r "[Muster]"` – alle Treffer gleichartig?
 - [ ] Reaktivität: Side Effects bereinigt, Dependencies vollständig, kein Race Condition?

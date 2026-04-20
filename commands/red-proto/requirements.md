@@ -136,7 +136,7 @@ Nur nachfragen wenn etwas genuiner Klärungsbedarf hat der sich nicht aus den vo
 
 Schreibe die vollständige Spec und speichere sie direkt als Draft-Datei auf die Festplatte. Nicht nur im Chat anzeigen.
 
-## Phase 6: Feature Spec schreiben
+## Phase 5: Feature Spec schreiben
 
 Vor dem Schreiben: Fix-Schwelle aus Scope-Typ in `prd.md` ableiten:
 
@@ -158,7 +158,7 @@ cat .claude/red-proto/templates/feat-spec.md
 
 Fülle alle Platzhalter aus dem Kontext. Schreibe die fertige Datei direkt auf Disk.
 
-## Phase 7: Freigabe einholen
+## Phase 6: Freigabe einholen
 
 Zeige dem User:
 ```
@@ -188,7 +188,7 @@ AskUserQuestion({
 })
 ```
 
-## Phase 7b: Finalisieren
+## Phase 6b: Finalisieren
 
 Nach `weiter` oder nach "Passt so": Feature-File einlesen, Korrekturen übernehmen, `status: approved` + `## Fortschritt → Status: Freigegeben` setzen.
 

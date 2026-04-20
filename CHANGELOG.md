@@ -5,6 +5,16 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.19.1 — 20. April 2026
+
+### Fixes
+
+- **Einheitliche Phasen-Nummerierung in allen Commands:** Die Commands `/red-proto:dev` und `/red-proto:qa` vermischten historisch Buchstaben-Suffixe (`1b`, `4b`) und Dezimal-Einschübe (`1.5`, `1.6`, `1.7`, `2.5`, `4.5`). Jetzt durchgängig Buchstaben-Suffix – Phase 1 hat Sub-Phasen 1b, 1c, 1d, 1e statt 1.5–1.7. Lesbarkeit und Konsistenz deutlich besser.
+- **Fehlende Phase 5 in `/red-proto:requirements`:** Der Command sprang historisch von Phase 4 direkt auf Phase 6 und ließ 5 aus. Phasen sind jetzt lückenlos 0–6, 6b.
+- **Verweis in CONVENTIONS.md:** Bezog sich noch auf die alte `Phase 1.7` in dev, jetzt auf `Phase 1e`.
+
+---
+
 ## v0.19.0 — 20. April 2026
 
 Von der vagen Idee zum Screen, den der Nutzer abnicken kann, bevor eine Zeile Code entsteht.

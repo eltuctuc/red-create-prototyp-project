@@ -131,7 +131,7 @@ Format und Metadaten: siehe `ARTIFACT_SCHEMA.md` → "Screen-Index Format".
 
 ### Copy-Inventar
 
-Wenn die Feature-Spec einen `### Copy-Inventar (Ground Truth)`-Block enthält, übernimmt `/red-proto:dev` alle sichtbaren Texte **wörtlich** in eine zentrale Copy-Datei (Pfad und Format stack-abhängig, siehe `/red-proto:dev` Phase 1.7). `/red-proto:qa` prüft mechanisch auf Drift.
+Wenn die Feature-Spec einen `### Copy-Inventar (Ground Truth)`-Block enthält, übernimmt `/red-proto:dev` alle sichtbaren Texte **wörtlich** in eine zentrale Copy-Datei (Pfad und Format stack-abhängig, siehe `/red-proto:dev` Phase 1e). `/red-proto:qa` prüft mechanisch auf Drift.
 
 ---
 
