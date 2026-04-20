@@ -5,6 +5,20 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.19.4 — 20. April 2026
+
+README-Korrekturen nach einem zweiten Durchgang. Ein paar Aussagen waren schlicht falsch – raus damit.
+
+### Fixes
+
+- **Commands-Liste enthält nur noch Commands:** „Design-System anlegen" war keine Command-Zeile, stand aber dazwischen. Jetzt sauber getrennt: Command-Referenz oben, Workflow als Text-Ablauf darunter. Der Text-Workflow erklärt die Pipeline in nummerierten Schritten – die Mermaid-Grafik dient der Übersicht, nicht dem Lesen.
+- **Mermaid-Wiedereinstiegspfeile korrigiert:** `/red-proto:workflow` zeigte nur auf den Feature-Block. Wiedereinstieg ist aber an jedem Punkt möglich – jetzt drei gestrichelte Pfeile auf Einmalig / Pro Feature / QA-Dev-Loop. Zusätzlich im Loop-Titel klargestellt: „mindestens 1× pro Feature".
+- **Claude-Desktop-Aussage korrigiert:** War falsch. Claude Code ist **auch** als Desktop-App verfügbar (Mac/Windows), distinkt von der Chat-App „Claude". Nur die Chat-App führt keine Slash-Commands aus – das ist die richtige Aussage, die im README stand war irreführend.
+- **Design-System-Abschnitt: Kausalität geradegezogen.** Die vorherige Version behauptete, Agents würden das Markdown-DS bevorzugen. Richtig ist umgekehrt: wenn eine UI-Library im Code-Verzeichnis installiert ist, gewinnt die Library und das Markdown-DS wird stillschweigend ignoriert. Außerdem ergänzt: `/red-proto:preview` nutzt das Markdown-DS, wenn Screens in Figma angelegt werden.
+- **Skill-Empfehlungen reduziert:** `neon-postgres` und `atlassian:spec-to-backlog` waren projekt-spezifisch, nicht framework-relevant. Tabelle enthält jetzt nur noch `ui-ux-pro-max` und `frontend-design`.
+
+---
+
 ## v0.19.3 — 20. April 2026
 
 README aufgeräumt. Voraussetzungen sind jetzt vollständig – inklusive der Windows-Realität.

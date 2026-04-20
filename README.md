@@ -8,28 +8,49 @@ Ein KI-gestütztes Product Development Framework für [Claude Code](https://clau
 
 Eine Sammlung von Claude Code Commands, die eine vollständige Produktentwicklungs-Pipeline abbilden. Du beschreibst deine Idee in natürlicher Sprache – Claude führt die Pipeline aus, du triffst die Entscheidungen.
 
+### Commands
+
 ```
-/red-proto:workflow     → Nach jeder Pause: zeigt exakt wo du stehst und was als nächstes zu tun ist
+/red-proto:workflow     → Nach jeder Pause: zeigt wo du stehst und was als nächstes zu tun ist
 
 /red-proto:sparring     → Idee schärfen → PRD
-/red-proto:test-setup   → Personas + Test-Hypothesen für den Prototyp (empfohlen)
-Design-System anlegen   → design-system/tokens/ befüllen (empfohlen vor dev-setup)
-/red-proto:dev-setup    → Tech-Stack wählen, Projekt scaffolden, DS-Tokens transportieren
+/red-proto:test-setup   → Personas + Test-Hypothesen für den Prototyp
+/red-proto:dev-setup    → Tech-Stack wählen, Projekt scaffolden, Git/GitHub einrichten
 /red-proto:requirements → Feature Specs – einmal pro Feature, für ALLE Features
-                          ↓ wenn ALLE Features Specs haben:
 /red-proto:flows        → Screen-Inventar + verbindliche Transition-Tabelle (einmalig)
-/red-proto:ux           → UX-Entscheidungen – fragt optional nach Wireframes/Lo-Fi/Hi-Fi
-
-dann pro Feature (Build-Loop bis QA grün):
-/red-proto:architect    → Technisches Design + Security + Test-Setup
-/red-proto:preview      → Optional: Abnahme-Screens aus Spec, vor Dev begutachten
-/red-proto:dev          → Implementierung (Frontend + Backend, parallel falls nötig)
-                          └── schreibt context/FEAT-x-dev-handoff.md am Ende
-/red-proto:qa           → Tests, Accessibility, Security, Copy-Drift, Bug-Loop
-                          └── Bugs? → neue Session → /red-proto:dev → /red-proto:qa
+/red-proto:ux           → UX-Entscheidungen pro Feature
+/red-proto:architect    → Technisches Design + Security + Test-Setup pro Feature
+/red-proto:preview      → Abnahme-Screens aus Spec, vor Dev begutachten
+/red-proto:dev          → Implementierung (Frontend + Backend parallel, falls nötig)
+/red-proto:qa           → Tests + Accessibility + Security + Copy-Drift + Bug-Reports
 ```
 
-Jeder Command ist eigenständig – du kannst an jedem Punkt einsteigen oder aufhören. Die Commands bauen aufeinander auf: jeder liest den Output des vorherigen und ergänzt die gemeinsamen Artefakte.
+Jeder Command ist eigenständig – du kannst über `/red-proto:workflow` jederzeit wiedereinsteigen, er sagt dir wo du stehst. Commands bauen aufeinander auf: jeder liest den Output des vorherigen und ergänzt die gemeinsamen Artefakte.
+
+### Workflow
+
+**Einmalig pro Projekt:**
+
+1. `/red-proto:sparring` – Idee in ein PRD überführen
+2. `/red-proto:test-setup` *(empfohlen)* – Personas + Hypothesen für den späteren Prototyp-Test
+3. **Design-System anlegen** *(empfohlen)* – `design-system/tokens/` befüllen (Farben, Typo, Spacing), damit `/red-proto:dev-setup` die Tokens in den Stack transportieren kann. Optional: auch Components/Patterns als Markdown ablegen
+4. `/red-proto:dev-setup` – Tech-Stack wählen, Projekt scaffolden, DS-Tokens ins Projekt transportieren, Git/GitHub einrichten
+5. `/red-proto:requirements` – Feature-Spec pro Feature, bis **alle** Features eine Spec haben
+6. `/red-proto:flows` – einmaliges Screen-Inventar + Transitions über alle Features hinweg; wird pro Feature weiter ergänzt
+
+**Pro Feature:**
+
+7. `/red-proto:ux` – UX-Entscheidungen in die Spec; fragt optional nach Wireframes/Lo-Fi/Hi-Fi als Input
+8. `/red-proto:architect` – Tech-Design, Security, Test-Setup in die Spec
+9. `/red-proto:preview` *(optional)* – Abnahme-Screens erzeugen (Figma-MCP, PNG-Upload oder manuell) und vom User abnehmen lassen, bevor gebaut wird
+
+**QA-Dev-Loop pro Feature** *(mindestens einmal):*
+
+10. `/red-proto:dev` – Implementierung in der aktuellen Session, schreibt `context/FEAT-x-dev-handoff.md`
+11. `/red-proto:qa` – **in neuer Session** – Tests + Bug-Reports
+12. Bugs über Schwelle? → zurück zu 10. Keine Bugs → Feature fertig.
+
+**Wiedereinstieg:** `/red-proto:workflow` funktioniert an jedem Punkt und zeigt dir, wo du im Ablauf stehst.
 
 ### Workflow
 
@@ -59,7 +80,7 @@ flowchart TD
         PR --> QL
     end
 
-    subgraph loop["🔄 QA-Dev-Loop"]
+    subgraph loop["🔄 QA-Dev-Loop (mindestens 1x pro Feature)"]
         QL["/red-proto:dev<br/>Implementierung"]
         QL --> QL2["Handoff schreiben<br/>context/FEAT-x-dev-handoff.md"]
         QL2 --> K["/red-proto:qa<br/>Tests + Bugs (neue Session)"]
@@ -72,10 +93,13 @@ flowchart TD
     N -->|ja| H
     N -->|nein| O([Release 🎉])
 
-    WF(["/red-proto:workflow<br/>Orientierung jederzeit"]) -.->|wo stehe ich?| feature
+    WF(["/red-proto:workflow<br/>Wiedereinstieg jederzeit"])
+    WF -.-> setup
+    WF -.-> feature
+    WF -.-> loop
 ```
 
-**Faustregel:** Alles bis `/red-proto:flows` machst du einmal für dein Projekt. Ab `/red-proto:ux` wiederholst du den Loop für jedes Feature. `/red-proto:dev` und `/red-proto:qa` laufen in **getrennten Sessions** – `/red-proto:dev` schreibt am Ende ein Handoff-File, das `/red-proto:qa` in der neuen Session einliest.
+> **Session-Trennung im QA-Dev-Loop:** `/red-proto:dev` und `/red-proto:qa` laufen bewusst in getrennten Sessions. `/red-proto:dev` schreibt am Ende ein Handoff-File in `context/`, das `/red-proto:qa` in der neuen Session einliest. Das verhindert Kontext-Akkumulation und hält den Token-Verbrauch niedrig.
 
 ---
 
@@ -83,7 +107,7 @@ flowchart TD
 
 Pflicht:
 
-- **[Claude Code](https://docs.anthropic.com/claude-code)** (CLI oder IDE-Extension) – eingerichtet und authentifiziert. **Claude Desktop reicht nicht**, weil es keine Slash-Commands ausführt.
+- **[Claude Code](https://docs.anthropic.com/claude-code)** – eingerichtet und authentifiziert. Verfügbar als CLI, als Desktop-App (Mac/Windows), als Web-App (claude.ai/code) und als IDE-Extension (VS Code, JetBrains). Wichtig: die Chat-App „Claude" (claude.ai im Browser oder Claude Desktop) ist nicht dasselbe – sie führt keine Slash-Commands aus.
 - **[Node.js ≥18](https://nodejs.org/)** mit `npm`/`npx` – für die Framework-Installation (`npx red-proto`).
 - **Git** – das Framework commitet nach jedem Schritt, ohne Git funktioniert praktisch nichts.
 - **Unix-kompatible Shell** – die Commands nutzen Bash-Syntax (`cat`, `grep`, `mkdir -p`, Heredocs).
@@ -193,10 +217,12 @@ Details zu allen File-Formaten: [ARTIFACT_SCHEMA.md](./ARTIFACT_SCHEMA.md)
 
 Für einen Prototypen ist ein eigenes Design-System **nicht zwingend**. Du hast zwei Wege:
 
-1. **Eigenes Design-System als Markdown** – du legst in `design-system/tokens/`, `components/` und `patterns/` deine Vorgaben ab, bevor `/red-proto:dev-setup` läuft. Der Dev-Setup transportiert die Tokens dann automatisch in das stack-spezifische Format (Tailwind-Config, CSS-Variablen, SwiftUI-Extensions, …).
-2. **UI-Library im Tech-Stack** – z.B. shadcn/ui, Material UI, Vuetify. Look & Feel kommt aus der Library, `design-system/` bleibt leer und wird im Dev-Setup ignoriert.
+1. **Eigenes Design-System als Markdown** – du legst in `design-system/tokens/`, `components/` und `patterns/` deine Vorgaben ab, bevor `/red-proto:dev-setup` läuft. Der Dev-Setup transportiert die Tokens dann automatisch in das stack-spezifische Format (Tailwind-Config, CSS-Variablen, SwiftUI-Extensions, …). `/red-proto:preview` nutzt dieselben Markdowns, wenn Screens in Figma angelegt werden.
+2. **UI-Library im Tech-Stack** – z.B. shadcn/ui, Material UI, Vuetify. Look & Feel kommt aus der Library selbst, und dieser Weg gewinnt: sobald eine UI-Library im Code-Verzeichnis installiert ist, ignorieren die Agents das Markdown-DS und bauen nach Library-Konventionen.
 
-> **Geplant für einen späteren Release:** Das Framework bringt aktuell noch einen vorbefüllten, neutralen Design-System-Ordner mit – gedacht als Starter. In der Praxis kollidiert das mit Weg 2, weil Agents blind das Markdown-DS bevorzugen, obwohl eine UI-Library installiert ist. In v0.20 soll der Installer nur noch den leeren Ordner anlegen, und die Agents sollen explizit Library-First arbeiten, wenn eine vorhanden ist.
+**Nicht kombinieren.** UI-Library und Markdown-DS beißen sich – wenn beides da ist, gewinnt die Library und das Markdown-DS wird stillschweigend ignoriert. Entscheide dich vor `/red-proto:dev-setup` für einen Weg.
+
+> **Geplant für v0.20:** Aktuell bringt der Installer noch einen vorbefüllten, neutralen Design-System-Ordner mit. Für Weg 2 ist das Ballast. In v0.20 soll der Installer nur noch den leeren Ordner anlegen, und die Bevorzugung (Library-First, DS-Fallback) explizit in den Agents codiert werden.
 
 Für Weg 1 gilt: Agents laden das Design-System **selektiv** – zuerst den Index, dann nur die konkret benötigten Komponenten- und Token-Files.
 
@@ -218,8 +244,6 @@ Das Framework läuft ohne zusätzliche Skills, nutzt sie aber wenn vorhanden:
 |-------|-------------|--------|
 | `ui-ux-pro-max` | `/red-proto:ux`, `ux-reviewer` Agent | Deutlich bessere UX-Qualität |
 | `frontend-design` | `frontend-developer` Agent | Bessere Component-Implementierung |
-| `neon-postgres` | `backend-developer` Agent | Nur bei Neon-Datenbankstack |
-| `atlassian:spec-to-backlog` | `/red-proto:requirements` | Direkt in Jira schreiben |
 
 Skills werden in Claude Code unter **Einstellungen → Skills** installiert.
 

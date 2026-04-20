@@ -1,6 +1,6 @@
 {
   "name": "red-proto",
-  "version": "0.19.3",
+  "version": "0.19.4",
   "description": "AI-powered product development framework for Claude Code – from idea to tested prototype",
   "bin": {
     "red-proto": "bin/install.js"
