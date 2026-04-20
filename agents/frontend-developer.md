@@ -36,7 +36,7 @@ cat design-system/INDEX.md 2>/dev/null || echo "Kein Design System – ohne DS i
 
 Workflow: INDEX lesen → benötigte Komponenten identifizieren → nur diese Dateien vollständig laden. DS-Regeln: Vorhandene Komponente → Spec exakt umsetzen. Kein Hardcoding von Farben/Abständen/Schriftgrößen. `⚠ Tokens-Build` → mit Token-Werten bauen. `🧪 Hypothesentest` → exakt nach UX-Entscheidung.
 
-## Phase 1b-Validation: Token-Gap-Check
+## Phase 1c: Token-Gap-Check
 
 ```bash
 grep -o "\-\-[a-z][a-z0-9\-]*" features/FEAT-[ID].md 2>/dev/null | sort -u
@@ -45,7 +45,7 @@ grep -o "\-\-[a-z][a-z0-9\-]*:" design-system/tokens/*.md 2>/dev/null | sed 's/:
 
 Fehlende Tokens VOR der Implementierung im DS-Token-File ergänzen. Kein `var(--token, fallback)` – Token existiert oder wird registriert. Unsicher → unter "Offene Punkte", Platzhalter-Kommentar im Code.
 
-## Phase 1c: Flows lesen
+## Phase 1d: Flows lesen
 
 ```bash
 cat flows/product-flows.md 2>/dev/null || echo "Kein Flows-Dokument"
@@ -53,7 +53,7 @@ cat flows/product-flows.md 2>/dev/null || echo "Kein Flows-Dokument"
 
 Nur Transitions implementieren die in `product-flows.md` oder im Feature-File definiert sind. Fehlende Transition erkannt → NICHT implementieren, in `flows/product-flows.md` unter "Offene Transitions" eintragen, im Abschlussbericht melden.
 
-## Phase 1.5: UX-State-Inventory
+## Phase 1e: UX-State-Inventory
 
 Extrahiere aus Abschnitt 2 (UX) alle Zustände, Interaktionsmuster und Feedback-Anforderungen:
 
@@ -63,7 +63,7 @@ Extrahiere aus Abschnitt 2 (UX) alle Zustände, Interaktionsmuster und Feedback-
 
 Jede Zeile muss vor Phase 5 abgehakt sein.
 
-## Phase 1.6: A11y-State-Inventory
+## Phase 1f: A11y-State-Inventory
 
 Extrahiere alle A11y-Anforderungen aus dem A11y-Architektur-Abschnitt der Spec:
 
@@ -73,7 +73,7 @@ Extrahiere alle A11y-Anforderungen aus dem A11y-Architektur-Abschnitt der Spec:
 
 Pflicht-Typen: Dynamische Labels, Focus-Management nach jeder Aktion, Live-Regionen, Disabled-States (`disabled` + `aria-disabled`), `aria-hidden` niemals auf sichtbarem Text. Komponente ist nicht fertig bis alle Zeilen abgehakt.
 
-## Phase 1.7: AC-to-Test-Matrix
+## Phase 1g: AC-to-Test-Matrix
 
 Vor der ersten Codezeile – jeder AC und dokumentierter Edge Case bekommt eine Zeile:
 
@@ -145,13 +145,13 @@ Unklarheit bei API-Contract → stopp, unter "Offene Punkte" im Feature-File dok
 - Fehlende Transitions: [Liste oder –]
 
 ### AC-Test-Matrix
-[Tabelle aus Phase 1.7]
+[Tabelle aus Phase 1g]
 
 ### Offene Punkte
 - [...]
 ```
 
-## Phase 4.5: Selbstcheck vor Review
+## Phase 4b: Selbstcheck vor Review
 
 **A – Zustände:** Alle Loading/Error/Empty/Success/Interaktions-States implementiert?
 

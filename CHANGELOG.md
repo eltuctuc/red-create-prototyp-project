@@ -5,6 +5,14 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.19.2 — 20. April 2026
+
+### Fixes
+
+- **Einheitliche Phasen-Nummerierung im `frontend-developer`-Agent:** Der Agent hatte bisher eine gemischte Nummerierung mit `1b-Validation`, `1.5`, `1.6`, `1.7` und `4.5` – alles ohne erkennbare Logik zum Rest. Jetzt durchgängig Buchstaben-Suffix: 1b, 1c, 1d, 1e, 1f, 1g und 4b. Kein Fremdkörper mehr.
+
+---
+
 ## v0.19.1 — 20. April 2026
 
 ### Fixes
