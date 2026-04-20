@@ -106,7 +106,9 @@ flowchart TD
     WF -.-> loop
 ```
 
-> **Session-Trennung im QA-Dev-Loop:** `/red-proto:dev` und `/red-proto:qa` laufen bewusst in getrennten Sessions. `/red-proto:dev` schreibt am Ende ein Handoff-File in `context/`, das `/red-proto:qa` in der neuen Session einliest. Das verhindert Kontext-Akkumulation und hält den Token-Verbrauch niedrig.
+> **Kontext-Trennung im QA-Dev-Loop:** Beide Wege verhindern Kontext-Akkumulation, aber mit unterschiedlichen Mitteln:
+> - **Manuell:** `/red-proto:dev` und `/red-proto:qa` in **getrennten Sessions**. Dev schreibt `context/FEAT-x-dev-handoff.md`, qa liest es in der neuen Session ein.
+> - **Automatisch:** `/red-proto:dev-qa-loop` läuft in **einer Session**, spawnt aber pro Iteration einen Dev- und einen QA-**Subagent** mit isoliertem Kontext. Nur die kompakten Rückgabe-Zeilen landen im Haupt-Kontext, nicht die komplette Arbeit.
 
 ---
 

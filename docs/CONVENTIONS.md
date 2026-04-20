@@ -115,6 +115,19 @@ Fix-Schwelle: [Critical | Critical, High | Critical, High, Medium]
 
 ---
 
+## Autonomer Modus (für Subagents)
+
+Wenn ein Command einen Subagent spawnt, der eine andere Command-Datei als Playbook abarbeitet (Beispiel: `/red-proto:dev-qa-loop` lässt Subagents `dev.md` und `qa.md` abarbeiten), gelten folgende Regeln:
+
+- **Alle `AskUserQuestion`-Gates überspringen.** Der Subagent trifft sinnvolle Default-Entscheidungen selbst. Dazu zählen explizit Review-Checkpoints, Fix-Schwellen-Abfragen und andere Bestätigungs-Dialoge.
+- **Fehler-Gates beibehalten.** Hard-Guards (fehlende Dateien, fehlende Voraussetzungen) führen zum Abbruch mit Fehlermeldung, nicht zur stillen Fortsetzung.
+- **Am Ende commiten** wie in der Command-Datei beschrieben – Subagents dürfen committen, solange der aufrufende Kontext die Write-Permission hat.
+- **Rückgabe immer im kompakten Format** (spezifiziert vom aufrufenden Command). Subagent-Arbeit bleibt im Subagent-Kontext, nur die Ergebnis-Zeilen wandern zum Orchestrator.
+
+Dieser Modus gilt **nur** für Subagents, die explizit im autonomen Modus aufgerufen werden. Wenn der User einen Command direkt aufruft, bleiben alle Gates aktiv.
+
+---
+
 ## Design-System & Abnahme-Screens
 
 ### Design-System vor Dev-Setup

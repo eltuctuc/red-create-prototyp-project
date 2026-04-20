@@ -46,22 +46,16 @@ threshold: (noch nicht gesetzt)
 
 ## Phase 1: Dev-Subagent spawnen
 
+Spawnt einen Subagent im **autonomen Modus** (siehe `.claude/red-proto/CONVENTIONS.md` → „Autonomer Modus"). Der Subagent arbeitet `dev.md` ab und kennt alle Standard-Regeln.
+
 ```typescript
 Agent({
   description: "FEAT-[N] Dev-Implementation (Loop-Iteration [K])",
-  prompt: `Du bist Dev-Orchestrator für FEAT-[N], Loop-Iteration [K].
+  prompt: `Du bist Dev-Orchestrator für FEAT-[N], Loop-Iteration [K]. Arbeite die Phasen
+  aus .claude/commands/red-proto/dev.md autonom ab (siehe "Autonomer Modus" in
+  .claude/red-proto/CONVENTIONS.md). Arbeitsverzeichnis aus project-config.md.
 
-  AUFGABE: Lies die Datei .claude/commands/red-proto/dev.md vollständig und arbeite alle
-  dort beschriebenen Phasen für FEAT-[N] autonom ab.
-
-  AUTONOMER MODUS:
-  - Überspringe alle AskUserQuestion-Gates (besonders Phase 5 Review-Checkpoint).
-  - Treffe alle sinnvollen Default-Entscheidungen selbst.
-  - Committe am Ende wie in der Command-Datei beschrieben.
-
-  Arbeitsverzeichnis: siehe project-config.md → Codeverzeichnis.
-
-  Gib danach ausschließlich dieses kompakte Format zurück:
+  Gib danach ausschließlich zurück:
 
   DEV_RESULT:
   status: success | failed
@@ -75,24 +69,17 @@ Auf Ergebnis warten. Bei `status: failed`: Loop pausieren, Fehlerdetails anzeige
 
 ## Phase 2: QA-Subagent spawnen
 
+Analog im autonomen Modus. Zusätzliche Anweisung: QA soll **alle** Bugs finden, unabhängig vom Schweregrad – die Fix-Schwelle verwaltet der Loop-Orchestrator selbst (Phase 3), nicht die qa.md.
+
 ```typescript
 Agent({
   description: "FEAT-[N] QA-Review (Loop-Iteration [K])",
-  prompt: `Du bist QA-Orchestrator für FEAT-[N], Loop-Iteration [K].
+  prompt: `Du bist QA-Orchestrator für FEAT-[N], Loop-Iteration [K]. Arbeite die Phasen
+  aus .claude/commands/red-proto/qa.md autonom ab (siehe "Autonomer Modus" in
+  .claude/red-proto/CONVENTIONS.md). Finde alle Bugs, unabhängig vom Schweregrad –
+  die Fix-Schwelle verwaltet der Loop-Orchestrator, nicht qa.md.
 
-  AUFGABE: Lies die Datei .claude/commands/red-proto/qa.md vollständig und arbeite alle
-  dort beschriebenen Phasen für FEAT-[N] autonom ab.
-
-  AUTONOMER MODUS:
-  - Überspringe alle AskUserQuestion-Gates (insbesondere die Fix-Schwellen-Abfrage).
-  - Dieser Loop verwaltet die Fix-Schwelle selbst – die QA soll alle Bugs finden und
-    als Files ablegen, unabhängig von Schweregrad. Die Schwellen-Entscheidung fällt im
-    Loop-Orchestrator, nicht in qa.md.
-  - Committe die Bug-Files wie in der Command-Datei beschrieben.
-
-  Arbeitsverzeichnis: siehe project-config.md → Codeverzeichnis.
-
-  Gib danach ausschließlich dieses kompakte Format zurück:
+  Gib danach ausschließlich zurück:
 
   QA_RESULT:
   status: success | failed

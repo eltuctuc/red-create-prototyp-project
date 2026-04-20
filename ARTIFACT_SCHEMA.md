@@ -46,6 +46,9 @@ Es ist die einzige Source of Truth für den gesamten Workflow.
     BUG-FEAT1-QA-001.md           ← Technischer Bug (QA Engineer)
     BUG-FEAT1-UX-001.md           ← UX-Bug (UX Reviewer)
     ...
+  context/                        ← Session-Handoffs und Loop-Logs pro Feature
+    FEAT-1-dev-handoff.md         ← [/red-proto:dev] Handoff in QA-Session (manueller Pfad)
+    FEAT-1-loop.log               ← [/red-proto:dev-qa-loop] Iterations-Log inkl. Fix-Schwelle und Risk-Historie
   docs/
     produktfähigkeiten.md         ← [/red-proto:qa] Was kann das Produkt aktuell? (pro Feature ergänzt)
     releases.md                   ← [/red-proto:qa] Release-Historie: was wann integriert, welche Bugs behoben

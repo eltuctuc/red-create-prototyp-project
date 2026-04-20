@@ -15,6 +15,13 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 - **Risk-Berechnung als priorisierte Regelliste:** Bugs zählen, neue Bugs, wiederkehrende Bugs – alles fließt in ein Risiko-Level, das die oberste matchende Regel bestimmt. Keine Ambiguität mehr, 2× HIGH in Folge löst ein Exit-Angebot aus.
 - **Strikter Bug-Regex:** Bugs werden per `^BUG-FEAT[N]-` zugeordnet – FEAT-1 matcht nicht mehr versehentlich FEAT-10, FEAT-11 etc.
 
+### Verbesserungen
+
+- **„Autonomer Modus" als Konvention:** Die Regeln, wie ein Subagent eine andere Command-Datei als Playbook abarbeitet (AskUserQuestion-Gates überspringen, Hard-Guards beibehalten, am Ende committen, kompaktes Rückgabeformat), stehen jetzt in `docs/CONVENTIONS.md` als eigene Sektion. Subagent-Prompts können darauf verweisen, statt die Regeln jedes Mal auszubuchstabieren.
+- **`context/` im Artefakt-Schema dokumentiert:** War vorher gar nicht aufgeführt, obwohl `/red-proto:dev` schon länger `FEAT-X-dev-handoff.md` dort ablegt. Jetzt steht der Ordner inklusive des neuen `FEAT-X-loop.log` im Schema.
+- **`/red-proto:sparring` kennt den Auto-Loop:** Die Pipeline-Übersicht am Ende des Sparring-Commands zeigt jetzt beide Wege (manuell dev→qa vs. automatisch dev-qa-loop).
+- **README Kontext-Trennung klarer formuliert:** Der alte Hinweis sagte pauschal „getrennte Sessions". Jetzt unterscheiden wir: manueller Pfad = getrennte Sessions, Auto-Loop = Subagents mit isoliertem Kontext innerhalb einer Session.
+
 ### Hinweise
 
 - Der alte Skill in `~/.claude/skills/red-proto-dev-qa-loop/` war ein lokaler Prototyp beim Framework-Autor. Mit diesem Release wird er durch den offiziellen Command ersetzt. Wer ihn noch hat, kann ihn lokal löschen.
