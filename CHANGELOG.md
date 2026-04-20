@@ -5,6 +5,22 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## [Unreleased]
+
+### Neue Features
+
+- **`/red-proto:dev-qa-loop` als offizieller Command:** Der Dev-QA-Loop, bisher ein lokales Claude-Code-Skill unter `~/.claude/skills/`, ist jetzt ein regulärer Slash-Command im Framework. Ruf ihn mit einer Feature-ID auf – er spawnt pro Iteration einen Dev-Subagent (arbeitet `dev.md` autonom ab) und einen QA-Subagent (arbeitet `qa.md` autonom ab), sammelt die Bugs, berechnet ein Risk-Level und iteriert, bis keine Bugs mehr über der Fix-Schwelle offen sind. Der Haupt-Context bleibt schlank, weil die eigentliche Arbeit in den Subagenten passiert.
+- **Persistenter Loop-Log:** `context/FEAT-X-loop.log` hält Fix-Schwelle und Iterations-Historie fest. Bei Session-Abbruch oder erneutem Aufruf setzt der Loop genau dort an, wo er aufgehört hat.
+- **Fix-Schwelle mit Kontext:** In der ersten Iteration fragt der Loop einmalig nach der Schwelle – Default ist `Critical + High` für Prototypen, und wenn in einem anderen Feature schon mal ein Wert gewählt wurde, wird er als zusätzliche Option angeboten. Einmal gesetzt, nie wieder gefragt.
+- **Risk-Berechnung als priorisierte Regelliste:** Bugs zählen, neue Bugs, wiederkehrende Bugs – alles fließt in ein Risiko-Level, das die oberste matchende Regel bestimmt. Keine Ambiguität mehr, 2× HIGH in Folge löst ein Exit-Angebot aus.
+- **Strikter Bug-Regex:** Bugs werden per `^BUG-FEAT[N]-` zugeordnet – FEAT-1 matcht nicht mehr versehentlich FEAT-10, FEAT-11 etc.
+
+### Hinweise
+
+- Der alte Skill in `~/.claude/skills/red-proto-dev-qa-loop/` war ein lokaler Prototyp beim Framework-Autor. Mit diesem Release wird er durch den offiziellen Command ersetzt. Wer ihn noch hat, kann ihn lokal löschen.
+
+---
+
 ## v0.19.4 — 20. April 2026
 
 README-Korrekturen nach einem zweiten Durchgang. Ein paar Aussagen waren schlicht falsch – raus damit.

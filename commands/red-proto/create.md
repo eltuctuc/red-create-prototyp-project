@@ -125,6 +125,7 @@ cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/archite
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/preview.md .claude/commands/red-proto/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/dev.md .claude/commands/red-proto/
 cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/qa.md .claude/commands/red-proto/
+cp -n ~/.claude/templates/red-create-prototyp-project/commands/red-proto/dev-qa-loop.md .claude/commands/red-proto/
 cp -n ~/.claude/templates/red-create-prototyp-project/agents/frontend-developer.md .claude/agents/
 cp -n ~/.claude/templates/red-create-prototyp-project/agents/backend-developer.md .claude/agents/
 cp -n ~/.claude/templates/red-create-prototyp-project/agents/qa-engineer.md .claude/agents/
@@ -178,6 +179,7 @@ cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/architect.
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/preview.md .claude/commands/red-proto/
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/dev.md .claude/commands/red-proto/
 cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/qa.md .claude/commands/red-proto/
+cp ~/.claude/templates/red-create-prototyp-project/commands/red-proto/dev-qa-loop.md .claude/commands/red-proto/
 cp ~/.claude/templates/red-create-prototyp-project/agents/frontend-developer.md .claude/agents/
 cp ~/.claude/templates/red-create-prototyp-project/agents/backend-developer.md .claude/agents/
 cp ~/.claude/templates/red-create-prototyp-project/agents/qa-engineer.md .claude/agents/
@@ -246,6 +248,7 @@ Verfügbare Commands:
 /red-proto:preview            → Optional: Abnahme-Screens aus Spec, vor Dev begutachten
 /red-proto:dev                → Implementierung, orchestriert Agents parallel bei Full-Stack
 /red-proto:qa                 → Tests + UX-Review parallel, Bug-Reports, Production-Ready
+/red-proto:dev-qa-loop        → Automatischer dev→qa-Loop bis Bugs unter Fix-Schwelle
 
 Sub-Agents (.claude/agents/ – automatisch gestartet):
 frontend-developer  → Frontend-Implementierung (nutzt: frontend-design)

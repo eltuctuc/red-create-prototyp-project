@@ -23,6 +23,7 @@ Eine Sammlung von Claude Code Commands, die eine vollständige Produktentwicklun
 /red-proto:preview      → Abnahme-Screens aus Spec, vor Dev begutachten
 /red-proto:dev          → Implementierung (Frontend + Backend parallel, falls nötig)
 /red-proto:qa           → Tests + Accessibility + Security + Copy-Drift + Bug-Reports
+/red-proto:dev-qa-loop  → Automatischer dev→qa-Loop bis Bugs unter Fix-Schwelle (alternativ zu manuellem Wechsel)
 ```
 
 Jeder Command ist eigenständig – du kannst über `/red-proto:workflow` jederzeit wiedereinsteigen, er sagt dir wo du stehst. Commands bauen aufeinander auf: jeder liest den Output des vorherigen und ergänzt die gemeinsamen Artefakte.
@@ -46,9 +47,15 @@ Jeder Command ist eigenständig – du kannst über `/red-proto:workflow` jederz
 
 **QA-Dev-Loop pro Feature** *(mindestens einmal):*
 
-10. `/red-proto:dev` – Implementierung in der aktuellen Session, schreibt `context/FEAT-x-dev-handoff.md`
-11. `/red-proto:qa` – **in neuer Session** – Tests + Bug-Reports
-12. Bugs über Schwelle? → zurück zu 10. Keine Bugs → Feature fertig.
+Zwei Wege – manuell oder automatisch:
+
+- **Manuell:**
+  10. `/red-proto:dev` – Implementierung, schreibt `context/FEAT-x-dev-handoff.md`
+  11. `/red-proto:qa` – **in neuer Session** – Tests + Bug-Reports
+  12. Bugs über Schwelle? → zurück zu 10. Keine Bugs → Feature fertig.
+
+- **Automatisch** (empfohlen für längere Loops):
+  10. `/red-proto:dev-qa-loop FEAT-X` – orchestriert die Iterationen selbst. In jeder Runde spawnt der Command zwei Subagenten (einen für dev, einen für qa), sammelt die Bugs, berechnet ein Risk-Level und iteriert, bis keine Bugs mehr über der Fix-Schwelle offen sind. Bei zwei aufeinanderfolgenden HIGH-Risk-Runden bietet er einen Exit an. Log liegt unter `context/FEAT-X-loop.log`.
 
 **Wiedereinstieg:** `/red-proto:workflow` funktioniert an jedem Punkt und zeigt dir, wo du im Ablauf stehst.
 
