@@ -17,6 +17,10 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ### Verbesserungen
 
+- **Lazy Ordner-Anlage:** `test-setup/`, `features/`, `flows/`, `bugs/`, `context/`, `docs/` und das Projektverzeichnis werden nicht mehr vorab vom Installer/Create angelegt. Jeder Command legt seinen eigenen Output-Ordner idempotent per `mkdir -p` an, wenn er ihn das erste Mal braucht. Beim Projektstart sind nur `.claude/` und `design-system/` sichtbar – weniger leere Ordner, weniger Kognitions-Last für den Nutzer.
+- **Design-System-Struktur ist frei wählbar:** `/red-proto:dev-setup` Phase 1c prüft jetzt strukturagnostisch (`find design-system -name "*.md"`), Phase 5b liest alle `*.md` rekursiv. Egal ob Tokens in `tokens/colors.md` oder direkt als `colors.md` auf Root-Ebene liegen – beides wird erkannt und transportiert.
+- **`design-system/README.md` neu geschrieben:** Erklärt jetzt explizit, dass die Struktur frei wählbar ist, zeigt drei Beispiel-Strukturen (klassisch nach Art, flach, nach Feature/Domäne) und beschreibt, was die Agents mit dem Inhalt tun. Nicht prescriptive mehr.
+- **Struktur-Bäume in README und ARTIFACT_SCHEMA** nutzen jetzt `[eckige Klammern]` als Notation für lazy angelegte Ordner und dynamische Namen. Analog zu React-Dynamic-Routes. Legende direkt unter dem Baum.
 - **„Autonomer Modus" als Konvention:** Die Regeln, wie ein Subagent eine andere Command-Datei als Playbook abarbeitet (AskUserQuestion-Gates überspringen, Hard-Guards beibehalten, am Ende committen, kompaktes Rückgabeformat), stehen jetzt in `docs/CONVENTIONS.md` als eigene Sektion. Subagent-Prompts können darauf verweisen, statt die Regeln jedes Mal auszubuchstabieren.
 - **`context/` im Artefakt-Schema dokumentiert:** War vorher gar nicht aufgeführt, obwohl `/red-proto:dev` schon länger `FEAT-X-dev-handoff.md` dort ablegt. Jetzt steht der Ordner inklusive des neuen `FEAT-X-loop.log` im Schema.
 - **`/red-proto:sparring` kennt den Auto-Loop:** Die Pipeline-Übersicht am Ende des Sparring-Commands zeigt jetzt beide Wege (manuell dev→qa vs. automatisch dev-qa-loop).

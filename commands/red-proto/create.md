@@ -47,21 +47,12 @@ Bei "Abbrechen": sofort stoppen.
 
 **Schritt 2 – Verzeichnisse anlegen:**
 
+Nur `.claude/`-Struktur und `design-system/` werden jetzt angelegt. Projekt-Output-Ordner (`test-setup/`, `features/`, `flows/`, `bugs/`, `context/`, `docs/`, Projektverzeichnis) erzeugen die jeweiligen Commands bei Bedarf selbst.
+
 ```bash
 mkdir -p .claude/commands/red-proto
 mkdir -p .claude/agents
-mkdir -p test-setup
-mkdir -p features
-mkdir -p flows
-mkdir -p bugs
-mkdir -p docs
-mkdir -p design-system/tokens
-mkdir -p design-system/components
-mkdir -p design-system/patterns
-mkdir -p design-system/screens
-# Codeverzeichnis NUR anlegen wenn noch kein project-config.md existiert:
-# (sonst ist das Codeverzeichnis bereits konfiguriert und möglicherweise anders als "projekt/")
-[ ! -f project-config.md ] && mkdir -p projekt
+# design-system/ kommt per cp aus dem Framework-Repo (inkl. README mit Struktur-Empfehlung)
 ```
 
 **Schritt 2b – Terminal-Permissions einrichten (.claude/settings.json):**

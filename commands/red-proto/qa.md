@@ -118,6 +118,12 @@ Diese Bugs entstehen **zusätzlich** zu den Agent-Funden aus Phase 2 und fließe
 
 ## Phase 3: Bug-File Format
 
+Ordner bei Bedarf anlegen (idempotent):
+
+```bash
+mkdir -p bugs
+```
+
 Naming: `BUG-FEAT[X]-QA-[NNN].md` / `BUG-FEAT[X]-UX-[NNN].md`
 
 ```bash
@@ -222,6 +228,12 @@ Abschnitt `## 5. QA Ergebnisse` ergänzen und `qa_status` im YAML-Frontmatter ak
 Solange der Loop läuft: `qa_status` bleibt `🔄` – **kein ✅ setzen**.
 
 ## Phase 7: Docs (bei ✅ Abgenommen oder ✅ Abgenommen mit Known Issues)
+
+Ordner bei Bedarf anlegen (idempotent):
+
+```bash
+mkdir -p docs
+```
 
 `docs/produktfähigkeiten.md` → neues Kapitel: `## [Name] *(FEAT-[X], [Datum])*` + 2-4 Sätze. Falls nicht vorhanden: anlegen.
 

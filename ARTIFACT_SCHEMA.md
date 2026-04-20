@@ -7,54 +7,39 @@ Es ist die einzige Source of Truth für den gesamten Workflow.
 
 ```
 ./
-  prd.md                          ← [/red-proto:sparring] Product Requirements Document
-  project-config.md               ← [/red-proto:dev-setup] Tech-Stack, Projektstruktur, Git/GitHub
-  design-system/                  ← Verbindliche Design-Vorgaben – wird von /red-proto:ux, /red-proto:dev, ux-reviewer gelesen
-    README.md                     ← Ausfüllanleitung
-    tokens/
-      colors.md                   ← Farb-Tokens (Primär, Sekundär, Semantic, Neutral)
-      typography.md               ← Schriften, Größen, Gewichte, Line-Heights
-      spacing.md                  ← Spacing-Scale und Border-Radius
-      shadows.md                  ← Elevation-System
-      motion.md                   ← Transitions, Durations, Easing (optional)
-    components/
-      [name].md                   ← Ein File pro Komponente (Varianten, Zustände, Specs)
-    patterns/
-      navigation.md               ← Header, Sidebar, Breadcrumb, Tabs
-      forms.md                    ← Formular-Aufbau, Validation, Fehlermeldungen
-      feedback.md                 ← Toasts, Modals, Empty States, Skeleton
-      data-display.md             ← Tabellen, Listen, Badges, Avatare
-    screens/
-      README.md                   ← Anleitung für Screen-Exports
-      [flow-name]/                ← Figma-Exports nach Flow gruppiert
-        [screen].png
-  flows/
-    product-flows.md              ← [/flows] Verbindliche Screen-Übersicht + Transition-Tabelle
-  test-setup/
-    personas.md                   ← [/red-proto:test-setup]
-    hypotheses.md                 ← [/red-proto:test-setup]
-  features/
-    FEAT-1-feature-name.md        ← [alle Agenten ergänzen dieses File]
-    FEAT-1-feature-name/
-      screens/                    ← [/red-proto:preview] Abnahme-Screens pro Feature
-        S-10-empty.png
-        S-11-filled.png
-        index.md                  ← Screen-Metadaten (Node-ID, Zustand, Abnahme-Status)
-    FEAT-2-feature-name.md
-    ...
-  bugs/                           ← [/red-proto:qa] Ein File pro Bug – nach Fix umbenannt zu BUG-...-fixed.md (Audit-Trail)
-    BUG-FEAT1-QA-001.md           ← Technischer Bug (QA Engineer)
-    BUG-FEAT1-UX-001.md           ← UX-Bug (UX Reviewer)
-    ...
-  context/                        ← Session-Handoffs und Loop-Logs pro Feature
-    FEAT-1-dev-handoff.md         ← [/red-proto:dev] Handoff in QA-Session (manueller Pfad)
-    FEAT-1-loop.log               ← [/red-proto:dev-qa-loop] Iterations-Log inkl. Fix-Schwelle und Risk-Historie
-  docs/
-    produktfähigkeiten.md         ← [/red-proto:qa] Was kann das Produkt aktuell? (pro Feature ergänzt)
-    releases.md                   ← [/red-proto:qa] Release-Historie: was wann integriert, welche Bugs behoben
-  [codeverzeichnis]/              ← [/red-proto:dev] Projektcode – Pfad steht in project-config.md → "Codeverzeichnis"
-                                    Standard: projekt/ – kann aber src/, . oder ein anderer Pfad sein
+  design-system/                        ← [vom Setup angelegt, inkl. README]
+    README.md                           ← Struktur-Empfehlungen (frei wählbar)
+    [dein Content]                      ← Tokens/Komponenten/Patterns – Struktur nach Wahl
+  [prd.md]                              ← [/red-proto:sparring]
+  [test-setup/]                         ← [/red-proto:test-setup]
+    personas.md
+    hypotheses.md
+  [features/]                           ← [/red-proto:requirements]
+    STATUS.md                           ← Status-Index aller Features
+    [FEAT-X-name.md]                    ← akkumulative Feature-Spec (ux, architect, dev, qa ergänzen)
+    [FEAT-X-name/screens/]              ← [/red-proto:preview] optionale Abnahme-Screens
+      S-10-*.png
+      index.md                          ← Screen-Metadaten (Node-ID, Zustand, Abnahme-Status)
+  [flows/]                              ← [/red-proto:flows]
+    product-flows.md                    ← Verbindliche Screen-Übersicht + Transition-Tabelle
+  [bugs/]                               ← [/red-proto:qa]
+    BUG-FEAT1-QA-001.md                 ← Technischer Bug (QA Engineer)
+    BUG-FEAT1-UX-001.md                 ← UX-Bug (UX Reviewer)
+                                        ← nach Fix umbenannt zu BUG-...-fixed.md (Audit-Trail)
+  [context/]                            ← Session-Handoffs und Loop-Logs
+    FEAT-1-dev-handoff.md               ← [/red-proto:dev] Handoff für QA-Session (manueller Pfad)
+    FEAT-1-loop.log                     ← [/red-proto:dev-qa-loop] Iterations-Log
+  [docs/]                               ← [/red-proto:qa, Phase 7]
+    produktfähigkeiten.md               ← Was kann das Produkt aktuell?
+    releases.md                         ← Release-Historie
+  [projektverzeichnis/]                 ← [/red-proto:dev-setup] Projektcode, Name frei wählbar
+                                          (Standard: projekt/ – kann aber src/, app/, . usw. sein)
+  [project-config.md]                   ← [/red-proto:dev-setup] Tech-Stack, Pfade, Versionierung
 ```
+
+**Notations-Konvention:**
+- `[eckige Klammern]` → wird erst vom genannten Command angelegt. Name oder innere Struktur kann variieren.
+- Beim Setup liegen nur `.claude/` und `design-system/` bereit. Alles andere entsteht bei Bedarf.
 
 ## Feature-File Format
 

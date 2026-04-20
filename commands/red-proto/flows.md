@@ -155,6 +155,12 @@ Stelle diese Frage für jeden Screen. Erfasse zu jeder Transition:
 
 ## Phase 5: Flows-Dokument schreiben
 
+Ordner bei Bedarf anlegen (idempotent):
+
+```bash
+mkdir -p flows
+```
+
 Erstelle `flows/product-flows.md` als Draft:
 
 ```markdown

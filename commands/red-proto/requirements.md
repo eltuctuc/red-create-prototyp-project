@@ -138,6 +138,12 @@ Schreibe die vollständige Spec und speichere sie direkt als Draft-Datei auf die
 
 ## Phase 5: Feature Spec schreiben
 
+Ordner bei Bedarf anlegen (idempotent):
+
+```bash
+mkdir -p features
+```
+
 Vor dem Schreiben: Fix-Schwelle aus Scope-Typ in `prd.md` ableiten:
 
 ```bash

@@ -317,14 +317,11 @@ async function installFiles(claudeBase, isGlobal, noClobber) {
     await cp(srcDS, join(templateBase, 'design-system'), { recursive: true, force: true, errorOnExist: false });
   }
 
-  // If local install: also set up project structure + design system + docs
+  // If local install: also set up design system + docs
+  // Projekt-Output-Ordner (test-setup, features, flows, bugs, docs, context, projekt)
+  // werden NICHT vorab angelegt – die jeweiligen Commands legen sie bei Bedarf an.
+  // design-system/ kommt per cp aus dem Framework-Repo, enthält README + Starter-Content.
   if (!isGlobal) {
-    const dirs = ['test-setup', 'features', 'flows', 'bugs', 'docs', 'projekt',
-                  'design-system/tokens', 'design-system/components',
-                  'design-system/patterns', 'design-system/screens'];
-    for (const dir of dirs) {
-      await mkdir(join(projectRoot, dir), { recursive: true });
-    }
     const srcDS = join(PACKAGE_ROOT, 'design-system');
     await cp(srcDS, join(projectRoot, 'design-system'), { recursive: true, force: !noClobber, errorOnExist: false });
 

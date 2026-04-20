@@ -194,29 +194,28 @@ Nach dem Setup hat dein Projekt folgende Struktur:
 ```
 ./
   .claude/
-    commands/          ← Alle Pipeline-Commands (red-proto:sparring, red-proto:dev, ...)
-    agents/            ← Sub-Agents (frontend-developer, ux-reviewer, ...)
-  design-system/       ← Optional: Tokens/Komponenten/Patterns als Markdown
-    tokens/            ← Farben, Typografie, Spacing, Shadows, Motion
-    components/        ← Button, Input, Card, ...
-    patterns/          ← Navigation, Formulare, Feedback, Datendarstellung
-    screens/           ← Referenz-Screens (Mockups globaler Patterns)
-  features/
-    STATUS.md          ← Zentraler Status-Index aller Features
-    FEAT-1-name.md     ← Feature-Spec (erstellt von /red-proto:requirements,
-                         akkumulativ ergänzt von ux, architect, dev, qa)
-    FEAT-1-name/
-      screens/         ← Optional: Abnahme-Screens (von /red-proto:preview)
-        S-10-*.png
-        index.md       ← Metadaten der Abnahme-Screens
-  flows/               ← Screen-Inventar + verbindliche Transition-Tabellen
-  test-setup/          ← Personas + Test-Hypothesen für Prototyp-Tests
-  bugs/                ← Bug-Reports (werden nicht gelöscht, sondern zu -fixed.md)
-  context/             ← Session-Handoffs (dev → qa Übergaben)
-  docs/                ← Produktfähigkeiten + Release-Historie
-  prd.md               ← Product Requirements Document (erstellt von /red-proto:sparring)
-  project-config.md    ← Tech-Stack, Pfade, Versionierung
+    commands/               ← Alle Pipeline-Commands
+    agents/                 ← Sub-Agents (frontend-developer, ux-reviewer, ...)
+  design-system/
+    README.md               ← Erklärt Struktur-Empfehlungen (frei wählbar)
+    [dein Content]          ← Tokens, Komponenten, Patterns – Struktur nach Wahl
+  [prd.md]                  ← /red-proto:sparring
+  [test-setup/]             ← /red-proto:test-setup
+    personas.md
+    hypotheses.md
+  [features/]               ← /red-proto:requirements, ux, architect, dev, qa
+    STATUS.md
+    [FEAT-X-name.md]        ← Akkumulative Feature-Spec
+    [FEAT-X-name/screens/]  ← /red-proto:preview (optional, Abnahme-Screens)
+  [flows/]                  ← /red-proto:flows
+  [bugs/]                   ← /red-proto:qa (Bug-Reports, -fixed.md nach Fix)
+  [context/]                ← /red-proto:dev, /red-proto:dev-qa-loop
+  [docs/]                   ← /red-proto:qa (produktfähigkeiten, releases)
+  [projektverzeichnis/]     ← /red-proto:dev-setup (Name bei Scaffold gewählt)
+  [project-config.md]       ← /red-proto:dev-setup
 ```
+
+> `[eckige Klammern]` bedeutet: wird erst vom genannten Command angelegt, sobald er das erste Mal läuft. Name oder innere Struktur kann sich je nach User-Wahl unterscheiden. Beim Start nach der Installation ist nur `.claude/` und `design-system/` sichtbar – alles andere wächst mit dem Projekt.
 
 Details zu allen File-Formaten: [ARTIFACT_SCHEMA.md](./ARTIFACT_SCHEMA.md)
 
