@@ -38,43 +38,41 @@ flowchart TD
     A([Idee]) --> B
 
     subgraph setup["📐 Einmalig pro Projekt"]
-        B["/red-proto:sparring\nIdee → PRD"]
+        B["/red-proto:sparring<br/>Idee → PRD"]
         B --> T{Test-Setup?}
-        T -->|empfohlen| TS["/red-proto:test-setup\nPersonas + Hypothesen"]
-        T -->|später| DS
-        TS --> DS["Design-System anlegen\ndesign-system/tokens/"]
-        DS --> C["/red-proto:dev-setup\nTech-Stack + GitHub + DS-Transport"]
-        C --> F["/red-proto:requirements\nSpecs für alle Features"]
-        F --> G["/red-proto:flows\nScreen-Inventar + Transitions"]
+        T -->|empfohlen| TS["/red-proto:test-setup<br/>Personas + Hypothesen"]
+        T -->|überspringen| DS
+        TS --> DS{Design-System?}
+        DS -->|empfohlen| DSA["Design-System anlegen<br/>design-system/tokens/"]
+        DS -->|überspringen| C
+        DSA --> C["/red-proto:dev-setup<br/>Tech-Stack + GitHub + DS-Transport"]
+        C --> F["/red-proto:requirements<br/>Specs für alle Features"]
+        F --> G["/red-proto:flows<br/>Screen-Inventar + Transitions (einmalig)"]
     end
 
     subgraph feature["🔁 Pro Feature wiederholen"]
-        G --> H["/red-proto:ux\nUX-Entscheidungen"]
-        H --> I["/red-proto:architect\nTech-Design + Security + Tests"]
-        I --> P{Preview?}
-        P -->|optional| PR["/red-proto:preview\nAbnahme-Screens"]
-        P -->|überspringen| J
-        PR --> J
+        G --> H["/red-proto:ux<br/>UX-Entscheidungen"]
+        H --> I["/red-proto:architect<br/>Tech-Design + Security + Tests"]
+        I --> PRQ{Preview?}
+        PRQ -->|optional| PR["/red-proto:preview<br/>Abnahme-Screens"]
+        PRQ -->|überspringen| QL
+        PR --> QL
+    end
 
-        subgraph session1["Session 1"]
-            J["/red-proto:dev\nImplementierung"]
-            J --> J2["Handoff schreiben\ncontext/FEAT-x-dev-handoff.md"]
-        end
-
-        subgraph session2["Session 2 (neu starten)"]
-            J2 --> K["/red-proto:qa\nTests + Bugs"]
-        end
-
-        K --> L{Bugs?}
-        L -->|Critical / High| J
-        L -->|Grün ✅| M([Production-Ready])
+    subgraph loop["🔄 QA-Dev-Loop"]
+        QL["/red-proto:dev<br/>Implementierung"]
+        QL --> QL2["Handoff schreiben<br/>context/FEAT-x-dev-handoff.md"]
+        QL2 --> K["/red-proto:qa<br/>Tests + Bugs (neue Session)"]
+        K --> L{Bugs über Schwelle?}
+        L -->|ja| QL
+        L -->|grün ✅| M([Production-Ready])
     end
 
     M --> N{Weitere Features?}
     N -->|ja| H
     N -->|nein| O([Release 🎉])
 
-    P(["/red-proto:workflow\nOrientierung jederzeit"]) -.->|wo stehe ich?| feature
+    WF(["/red-proto:workflow<br/>Orientierung jederzeit"]) -.->|wo stehe ich?| feature
 ```
 
 **Faustregel:** Alles bis `/red-proto:flows` machst du einmal für dein Projekt. Ab `/red-proto:ux` wiederholst du den Loop für jedes Feature. `/red-proto:dev` und `/red-proto:qa` laufen in **getrennten Sessions** – `/red-proto:dev` schreibt am Ende ein Handoff-File, das `/red-proto:qa` in der neuen Session einliest.
@@ -83,27 +81,35 @@ flowchart TD
 
 ## Voraussetzungen
 
-- [Claude Code CLI](https://docs.anthropic.com/claude-code) installiert und eingerichtet
-- [`gh` CLI](https://cli.github.com/) (nur für GitHub-Setup in `/red:proto-dev-setup`)
-- Node.js, Python oder ähnliches – je nach gewähltem Tech-Stack
+Pflicht:
+
+- **[Claude Code](https://docs.anthropic.com/claude-code)** (CLI oder IDE-Extension) – eingerichtet und authentifiziert. **Claude Desktop reicht nicht**, weil es keine Slash-Commands ausführt.
+- **[Node.js ≥18](https://nodejs.org/)** mit `npm`/`npx` – für die Framework-Installation (`npx red-proto`).
+- **Git** – das Framework commitet nach jedem Schritt, ohne Git funktioniert praktisch nichts.
+- **Unix-kompatible Shell** – die Commands nutzen Bash-Syntax (`cat`, `grep`, `mkdir -p`, Heredocs).
+  - macOS, Linux: nativ vorhanden
+  - **Windows: WSL oder Git Bash** – PowerShell/cmd funktionieren nicht zuverlässig
+
+Optional:
+
+- **[`gh` CLI](https://cli.github.com/)** – nur wenn `/red-proto:dev-setup` ein GitHub-Repo anlegen soll.
+- **Figma-MCP-Server** – nur wenn `/red-proto:preview` Screens direkt aus Figma ziehen soll. Ohne MCP lädst du PNGs im Chat hoch oder legst sie manuell ab.
+- **Stack-Laufzeit** – Python, Go, Swift etc. werden erst nach der Stack-Wahl in `/red-proto:dev-setup` relevant, nicht vorher.
 
 ---
 
-## Installation – zwei Schritte, zwei verschiedene Dinge
+## Installation
 
-> **Wichtig:** Es gibt zwei Schritte, die unterschiedliche Zwecke haben. Beide sind nötig.
-
-### Schritt 1 – `npx red-proto` installiert das Framework auf deinem Computer
-
-Macht die `/red-proto:*` Commands in Claude Code verfügbar. Einmalig pro Computer ausführen.
+### Schritt 1 – Framework mit `npx red-proto` installieren
 
 ```bash
 npx red-proto@latest
 ```
 
 Der Installer fragt interaktiv:
-- **Global** (`~/.claude/`) → Commands in allen Projekten verfügbar
-- **Lokal** (`./.claude/`) → nur im aktuellen Verzeichnis
+
+- **Lokal** (`./.claude/` im aktuellen Ordner) → Commands **und** Projektstruktur werden sofort angelegt. **Das reicht. Kein Schritt 2 nötig.**
+- **Global** (`~/.claude/`) → Commands sind in allen Projekten verfügbar, aber die Projektstruktur muss separat pro Projekt angelegt werden → **Schritt 2 nötig**.
 
 > **Hinweis:** Nicht global und lokal gleichzeitig installieren – Claude Code zeigt die Commands sonst doppelt an. Der Installer warnt dich, wenn eine andere Installation erkannt wird.
 
@@ -117,24 +123,13 @@ npx red-proto --uninstall
 
 Entfernt alle Commands und Agents – deine Projektdateien (`features/`, `test-setup/`, `prd.md` usw.) bleiben unangetastet.
 
-**Option B – Manuell via Git (falls kein npx):**
-
-```bash
-git clone https://github.com/eltuctuc/red-create-prototyp-project.git ~/.claude/templates/red-create-prototyp-project && \
-cp ~/.claude/templates/red-create-prototyp-project/commands/red\:proto.md ~/.claude/commands/
-```
-
 ---
 
-### Schritt 2 – `/red-proto:create` richtet ein einzelnes Projekt ein
+### Schritt 2 – **Nur bei globaler Installation:** `/red-proto:create` pro Projekt ausführen
 
-> **Diesen Schritt musst du für jedes neue Projekt wiederholen.**
+Überspringen, wenn du in Schritt 1 „Lokal" gewählt hast – dann ist alles bereits angelegt.
 
-`npx` installiert nur die Commands. `/red-proto:create` baut die Projektstruktur auf:
-
-- legt `test-setup/`, `features/`, `flows/`, `bugs/`, `docs/`, `context/` an
-- kopiert das Design System mit Index ins Projekt
-- erstellt `project-config.md` und `features/STATUS.md` als Basis für alle Agents
+Bei globaler Installation legst du die Projektstruktur pro Projekt einmal an:
 
 ```bash
 mkdir mein-projekt && cd mein-projekt
@@ -147,7 +142,11 @@ Dann in Claude Code:
 /red-proto:create
 ```
 
-**Danach loslegen:**
+`/red-proto:create` legt dieselben Ordner (`test-setup/`, `features/`, `flows/`, `bugs/`, `docs/`, `context/`, `design-system/`) an, die bei lokaler Installation sofort entstehen.
+
+---
+
+### Loslegen
 
 ```
 /red-proto:sparring
@@ -164,16 +163,19 @@ Nach dem Setup hat dein Projekt folgende Struktur:
   .claude/
     commands/          ← Alle Pipeline-Commands (red-proto:sparring, red-proto:dev, ...)
     agents/            ← Sub-Agents (frontend-developer, ux-reviewer, ...)
-  design-system/       ← Neutrales Design System (Tokens, Komponenten, Patterns)
-    INDEX.md           ← Kompakte Übersicht – Agents laden von hier selektiv
+  design-system/       ← Optional: Tokens/Komponenten/Patterns als Markdown
     tokens/            ← Farben, Typografie, Spacing, Shadows, Motion
     components/        ← Button, Input, Card, ...
     patterns/          ← Navigation, Formulare, Feedback, Datendarstellung
-    screens/           ← Platzhalter für Figma-Exports
-  features/            ← Akkumulatives Feature-File (alle Agents ergänzen hier)
+    screens/           ← Referenz-Screens (Mockups globaler Patterns)
+  features/
     STATUS.md          ← Zentraler Status-Index aller Features
-    FEAT-X-name/
-      screens/         ← Optional: Abnahme-Screens pro Feature (von /red-proto:preview)
+    FEAT-1-name.md     ← Feature-Spec (erstellt von /red-proto:requirements,
+                         akkumulativ ergänzt von ux, architect, dev, qa)
+    FEAT-1-name/
+      screens/         ← Optional: Abnahme-Screens (von /red-proto:preview)
+        S-10-*.png
+        index.md       ← Metadaten der Abnahme-Screens
   flows/               ← Screen-Inventar + verbindliche Transition-Tabellen
   test-setup/          ← Personas + Test-Hypothesen für Prototyp-Tests
   bugs/                ← Bug-Reports (werden nicht gelöscht, sondern zu -fixed.md)
@@ -189,11 +191,16 @@ Details zu allen File-Formaten: [ARTIFACT_SCHEMA.md](./ARTIFACT_SCHEMA.md)
 
 ## Das Design System
 
-Das Framework bringt ein **neutrales Design System** mit – als Ausgangspunkt, keine Pflicht. Du kannst es schrittweise befüllen oder durch ein bestehendes ersetzen.
+Für einen Prototypen ist ein eigenes Design-System **nicht zwingend**. Du hast zwei Wege:
 
-Agents laden das Design System **selektiv**: zuerst `design-system/INDEX.md` (kompakte Übersicht), dann nur die Komponenten- und Token-Files die für das aktuelle Feature tatsächlich gebraucht werden. Das spart erheblich Kontext.
+1. **Eigenes Design-System als Markdown** – du legst in `design-system/tokens/`, `components/` und `patterns/` deine Vorgaben ab, bevor `/red-proto:dev-setup` läuft. Der Dev-Setup transportiert die Tokens dann automatisch in das stack-spezifische Format (Tailwind-Config, CSS-Variablen, SwiftUI-Extensions, …).
+2. **UI-Library im Tech-Stack** – z.B. shadcn/ui, Material UI, Vuetify. Look & Feel kommt aus der Library, `design-system/` bleibt leer und wird im Dev-Setup ignoriert.
 
-**Drei Zustände pro Komponente:**
+> **Geplant für einen späteren Release:** Das Framework bringt aktuell noch einen vorbefüllten, neutralen Design-System-Ordner mit – gedacht als Starter. In der Praxis kollidiert das mit Weg 2, weil Agents blind das Markdown-DS bevorzugen, obwohl eine UI-Library installiert ist. In v0.20 soll der Installer nur noch den leeren Ordner anlegen, und die Agents sollen explizit Library-First arbeiten, wenn eine vorhanden ist.
+
+Für Weg 1 gilt: Agents laden das Design-System **selektiv** – zuerst den Index, dann nur die konkret benötigten Komponenten- und Token-Files.
+
+**Drei Zustände pro Komponente** (bei Weg 1 relevant):
 
 | Status | Bedeutung |
 |--------|-----------|
@@ -224,7 +231,7 @@ Skills werden in Claude Code unter **Einstellungen → Skills** installiert.
 
 **Akkumulativ statt überschreibend:** Jeder Agent ergänzt seinen Abschnitt im Feature-File, bestehende Abschnitte bleiben erhalten.
 
-**Session-Trennung:** `proto-dev` und `proto-qa` laufen bewusst in getrennten Sessions. Das verhindert Kontext-Akkumulation und hält den Token-Verbrauch pro Session niedrig. Das Handoff-File in `context/` ist die Brücke.
+**Session-Trennung:** `/red-proto:dev` und `/red-proto:qa` laufen bewusst in getrennten Sessions. Das verhindert Kontext-Akkumulation und hält den Token-Verbrauch pro Session niedrig. Das Handoff-File in `context/` ist die Brücke.
 
 **Flows als Navigationsvertrag:** `/red-proto:flows` erstellt eine verbindliche Transition-Tabelle, die UX und Developer als gemeinsame Quelle der Wahrheit nutzen. Undokumentierte Transitions werden gemeldet, nicht stillschweigend implementiert.
 

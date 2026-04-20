@@ -5,6 +5,24 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.19.3 — 20. April 2026
+
+README aufgeräumt. Voraussetzungen sind jetzt vollständig – inklusive der Windows-Realität.
+
+### Fixes
+
+- **Mermaid-Diagramm repariert:** Der Node-Name `P` war zweimal vergeben – einmal als Preview-Entscheidung, einmal als Workflow-Node. Mermaid hat sie als denselben Node behandelt, das Diagramm war stillschweigend kaputt. Außerdem: Gruppen sauberer strukturiert (Einmalig / Pro Feature / QA-Dev-Loop), Design-System als eigener Schritt sichtbar gemacht, Newlines in Labels auf `<br/>` umgestellt.
+- **Installation klarer:** Schritt 2 (`/red-proto:create`) ist jetzt explizit als „nur bei globaler Installation nötig" markiert. Wer lokal installiert, ist nach Schritt 1 fertig – ohne Rätselraten.
+- **Projekt-Struktur stimmt:** Feature-Spec-Dateien (`features/FEAT-1-name.md`) und Abnahme-Screens (`features/FEAT-1-name/screens/`) sind jetzt richtig nebeneinander dargestellt, nicht mehr missverständlich verschachtelt.
+- **Alte Command-Namen ausgemistet:** `/red:proto-dev-setup` (Schreibweise vor v0.17.0) ist aus den Voraussetzungen raus, `proto-dev`/`proto-qa` in der Philosophie-Sektion auf die aktuellen Namen umgestellt. Die Manual-Installationsanleitung mit dem alten Pfad `commands/red\:proto.md` ist entfernt – `npx red-proto` ist der einzige Weg.
+
+### Neue Informationen
+
+- **Vollständige Voraussetzungen:** Pflicht (Claude Code CLI/IDE, Node.js ≥18, Git, Unix-Shell) und optional (gh, Figma-MCP, Stack-Laufzeit) getrennt aufgeführt. Windows-Hinweis auf WSL/Git Bash explizit – wer in PowerShell arbeitet, weiß jetzt vorher, dass es nicht läuft.
+- **Design-System-Abschnitt ehrlicher:** Es gibt zwei Wege – eigenes Markdown-DS oder UI-Library im Stack. Der aktuell mitgelieferte neutrale Starter kollidiert mit Weg 2 und wird in einem späteren Release (v0.20) entfernt. Bis dahin ist der Hinweis drin, damit niemand über stillschweigende Konflikte stolpert.
+
+---
+
 ## v0.19.2 — 20. April 2026
 
 ### Fixes
