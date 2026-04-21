@@ -15,7 +15,8 @@ cat prd.md 2>/dev/null | head -5 || echo "FEHLT"
 cat project-config.md 2>/dev/null | grep -E "Projektname|Tech-Stack|Codeverzeichnis|Developer aufgeteilt" || echo "FEHLT"
 
 # Alle Features: Fortschritt-Sektion + Draft-Status
-for f in features/FEAT-*.md 2>/dev/null; do
+# find statt Glob-Schleife – shell-agnostisch (zsh/bash), keine "no matches"-Fehler
+find features -maxdepth 1 -name "FEAT-*.md" -type f 2>/dev/null | while read -r f; do
   echo "=== $f ==="
   grep -E "^# |Status:|Aktueller Schritt:|Fix-Schwelle:" "$f" 2>/dev/null | head -5
 done
