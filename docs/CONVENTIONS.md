@@ -137,7 +137,7 @@ Das Framework erlaubt **nicht beides gleichzeitig**. Entschieden wird in `/red-p
 - **DS-Modus** (`UI-Library: keine`): `design-system/` wird befüllt, Frontend-Agent baut eigene Komponenten passend zum Stack.
 - **Library-Modus** (`UI-Library: shadcn/ui` etc.): `design-system/` bleibt leer, Frontend-Agent nutzt ausschließlich die Library.
 
-Konflikt (`UI-Library` gesetzt **und** DS-Dateien außer README vorhanden): Agents melden den Widerspruch und fragen nach, raten nie. `/red-proto:workflow` weist im Status-Output ganz oben darauf hin.
+Konflikt (`UI-Library` gesetzt **und** DS-Dateien außer README vorhanden): Alle Feature-Commands (`ux`, `dev`, `qa`, `dev-qa-loop`) und die Agents (`frontend-developer`, `ux-reviewer`, `qa-engineer`) führen als allererstes den Konflikt-Check aus `.claude/red-proto/templates/conflict-check.md` aus und **brechen ab**, wenn beide Seiten gesetzt sind. Der User löst den Konflikt außerhalb der Agents (Datei entfernen oder `project-config.md` ändern) und startet den Command dann neu. Keine Rückfrage im Chat – die Entscheidung ist inhärent im Projektzustand sichtbar, sobald sie getroffen ist. `/red-proto:workflow` zeigt den Konflikt prominent im Status-Output und in `STATUS.md`.
 
 Headless-Primitives ohne eigenes Styling (Radix Primitives, React Aria, Headless UI) zählen **nicht** als UI-Library – sie sind Infrastruktur und dürfen im DS-Modus parallel genutzt werden.
 

@@ -60,7 +60,9 @@ Mögliche Ursachen:
     b) UI-Library nutzen → DS-Inhalte aus design-system/ entfernen
        (die README bleibt), dann weitermachen
 
-    Frontend- und QA-Agents stoppen sonst mit Rückfrage.
+    Alle Feature-Commands (ux, dev, qa, dev-qa-loop) brechen ab,
+    bis der Konflikt aufgelöst ist. Keine Rückfrage im Chat –
+    Konflikt wird außerhalb der Agents gelöst.
 ```
 
 ## Phase 2: Status-Übersicht ausgeben
@@ -80,7 +82,9 @@ Zeige eine präzise Übersicht – alles aus den echten Dateiinhalten:
                     dann /red-proto:dev-setup neu starten
     b) Library nutzen → DS-Dateien aus design-system/ entfernen (README bleibt)
 
-    Frontend- und QA-Agents stoppen sonst mit Rückfrage.
+    Alle Feature-Commands (ux, dev, qa, dev-qa-loop) brechen ab,
+    bis der Konflikt aufgelöst ist. Keine Rückfrage im Chat –
+    Konflikt wird außerhalb der Agents gelöst.
 
 LEGENDE
   ⬜  Noch nicht begonnen
@@ -148,7 +152,7 @@ generated: true
 - **a) DS nutzen** → in `project-config.md` `UI-Library: keine` setzen, dann `/red-proto:dev-setup` neu starten (damit Tokens transportiert werden).
 - **b) UI-Library nutzen** → DS-Dateien aus `design-system/` entfernen (README bleibt).
 
-Solange der Konflikt besteht, stoppen Frontend- und QA-Agents mit Rückfrage.
+Solange der Konflikt besteht, brechen alle Feature-Commands (ux, dev, qa, dev-qa-loop) ab. Der Konflikt wird außerhalb der Agents gelöst – kein Dialog im Chat.
 
 ---
 

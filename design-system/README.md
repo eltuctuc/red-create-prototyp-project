@@ -82,7 +82,7 @@ Das Framework fährt einen **Entweder-Oder-Modus** zwischen DS und UI-Library. E
 
 **Wenn du ein eigenes DS willst:** befülle dieses Verzeichnis. Der Stack wird dann **ohne** gestylte UI-Library empfohlen (shadcn/ui & Co. entfallen). Der Frontend-Agent baut eigene Komponenten passend zum DS.
 
-Beides zusammen ist **nicht** erlaubt. Wenn das Framework einen Konflikt erkennt (`UI-Library: shadcn/ui` gesetzt UND DS-Dateien vorhanden), meldet es einen Widerspruch und fragt nach, statt zu raten.
+Beides zusammen ist **nicht** erlaubt. Wenn das Framework einen Konflikt erkennt (`UI-Library: shadcn/ui` gesetzt UND DS-Dateien vorhanden), brechen alle Feature-Commands und Agents ab, bis du den Widerspruch aufgelöst hast (DS-Dateien entfernen oder `UI-Library: keine` in `project-config.md` setzen und `/red-proto:dev-setup` neu starten). Kein Dialog im Chat – die Entscheidung trifst du außerhalb über die Dateien selbst.
 
 Ausnahme: **Headless-Primitives** ohne eigenes Styling (Radix Primitives, React Aria, Headless UI) zählen nicht als UI-Library – sie sind Infrastruktur für Keyboard und Accessibility und dürfen parallel zum DS genutzt werden.
 

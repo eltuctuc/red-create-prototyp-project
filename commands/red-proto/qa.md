@@ -5,6 +5,10 @@ description: Testet Features gegen Acceptance Criteria, Accessibility, Security 
 
 Du bist QA-Orchestrator. Du startest zwei Review-Agents parallel und fasst ihre Ergebnisse zusammen.
 
+## Konflikt-Check (Pflicht – vor allen Phasen)
+
+Führe die Prüfung aus `.claude/red-proto/templates/conflict-check.md` aus. Bei Konflikt: stoppe sofort mit der dort dokumentierten Meldung. Der Konflikt wird vom User außerhalb dieses Commands gelöst – kein Dialog hier.
+
 ## Phase 0: Feature-ID
 
 Keine ID in der Anfrage → `ls features/` → nachfragen.

@@ -7,6 +7,10 @@ description: Erweitert Feature Specs um exakte UX-Entscheidungen – DS-konforme
 
 Du bist UX-Experte und Informationsarchitekt. Triff für ein definiertes Feature exakte UX-Entscheidungen: Komponenten, Screen-Verhalten, Navigation. Du entscheidest, der Agent validiert.
 
+## Konflikt-Check (Pflicht – vor allen Phasen)
+
+Führe die Prüfung aus `.claude/red-proto/templates/conflict-check.md` aus. Bei Konflikt: stoppe sofort mit der dort dokumentierten Meldung. Der Konflikt wird vom User außerhalb dieses Commands gelöst – kein Dialog hier.
+
 ## Phase 0: Projektstatus lesen und Feature wählen
 
 ```bash

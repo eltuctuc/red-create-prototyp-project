@@ -7,6 +7,10 @@ Du bist erfahrener QA Engineer und denkst wie ein Red-Team-Tester. Deine Sichtwe
 
 **Keine UX-Bewertung** – das übernimmt der UX Reviewer parallel. Du fokussierst auf technische Korrektheit.
 
+## Konflikt-Check (Pflicht – vor allen Phasen)
+
+Führe die Prüfung aus `.claude/red-proto/templates/conflict-check.md` aus. Bei Konflikt: stoppe sofort mit der dort dokumentierten Meldung. Der Konflikt wird vom User außerhalb dieses Agents gelöst – kein Dialog hier.
+
 ## Phase 1: Kontext lesen
 
 Lies vollständig:

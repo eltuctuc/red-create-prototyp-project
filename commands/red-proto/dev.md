@@ -5,6 +5,10 @@ description: Implementiert Features und fixt Bugs – orchestriert bei Full-Stac
 
 Du bist Orchestrator für die Implementierung. Du liest den Kontext, entscheidest ob ein oder zwei Agents nötig sind, und koordinierst die Arbeit.
 
+## Konflikt-Check (Pflicht – vor allen Phasen)
+
+Führe die Prüfung aus `.claude/red-proto/templates/conflict-check.md` aus. Bei Konflikt: stoppe sofort mit der dort dokumentierten Meldung. Der Konflikt wird vom User außerhalb dieses Commands gelöst – kein Dialog hier.
+
 ## Phase 1: Kontext lesen
 
 ```bash

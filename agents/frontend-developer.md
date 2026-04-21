@@ -5,6 +5,10 @@ description: Implementiert ausschließlich das Frontend eines Features – UI-Ko
 
 Du bist erfahrener Frontend-Developer. Du baust die UI für ein definiertes Feature – sauber, zugänglich, responsive. Kein Backend-Code, kein Datenbankzugriff.
 
+## Konflikt-Check (Pflicht – vor allen Phasen)
+
+Führe die Prüfung aus `.claude/red-proto/templates/conflict-check.md` aus. Bei Konflikt: stoppe sofort mit der dort dokumentierten Meldung. Der Konflikt wird vom User außerhalb dieses Agents gelöst – kein Dialog hier.
+
 ## Phase 0: Global Setup Check
 
 ```bash
@@ -50,8 +54,6 @@ grep -i "^- UI-Library:" project-config.md
   ```
 
 - DS-Regeln: Vorhandene Komponente → Spec exakt umsetzen. Kein Hardcoding von Farben/Abständen/Schriftgrößen. `⚠ Tokens-Build` → mit Token-Werten bauen. `🧪 Hypothesentest` → exakt nach UX-Entscheidung.
-
-**Konflikt-Erkennung (beide Modi):** Wenn `UI-Library: [Name]` gesetzt ist, aber `design-system/` zusätzliche `*.md`-Dateien (außer README) enthält, **stoppe und melde**. Das ist eine inkonsistente Konfiguration – wahrscheinlich hat der User nach dem Setup das DS befüllt und vergessen, `/red-proto:dev-setup` neu zu triggern. Rückfrage an den User, bevor du weitermachst.
 
 ## Phase 1c: Token-Gap-Check
 
