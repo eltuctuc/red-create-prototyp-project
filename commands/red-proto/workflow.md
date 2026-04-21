@@ -71,16 +71,33 @@ Zeige eine präzise Übersicht – alles aus den echten Dateiinhalten:
   PROJEKTSTATUS: [Projektname aus prd.md]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+[NUR wenn DS/UI-Library-Konflikt erkannt (UI_LIB gesetzt UND DS_FILES > 0):]
+⚠️  KONFLIKT: project-config.md sagt `UI-Library: [Name]`, aber design-system/
+    enthält [N] Inhalts-Dateien (außer README). Entweder-Oder gilt:
+
+    a) DS nutzen  → in project-config.md `UI-Library: keine` setzen,
+                    dann /red-proto:dev-setup neu starten
+    b) Library nutzen → DS-Dateien aus design-system/ entfernen (README bleibt)
+
+    Frontend- und QA-Agents stoppen sonst mit Rückfrage.
+
 LEGENDE
   ⬜  Noch nicht begonnen
   🔄  In Bearbeitung / In Prüfung (z.B. Draft, offene Bugs)
   ✅  Abgenommen / Freigegeben
   ✅⚠️ Abgenommen mit Known Issues
 
+DESIGN-MODUS
+  [aus project-config.md + design-system/-Inhalt ableiten:]
+  [UI-Library: Name        + DS leer        → "UI-Library: [Name] (DS leer)"]
+  [UI-Library: keine       + DS befüllt     → "Design-System (eigene Komponenten)"]
+  [UI-Library: keine       + DS leer        → "⬜ Noch nicht entschieden – /red-proto:dev-setup nötig"]
+  [UI-Library: Name        + DS befüllt     → "⚠️ Konflikt – siehe oben"]
+
 VORBEREITUNG
   [✅/🔄/⬜] PRD               prd.md
   [✅/🔄/⬜] Test-Setup         test-setup/
-  [✅/🔄/⬜] Design-System      design-system/tokens/
+  [✅/🔄/⬜] Design-System      design-system/  (nur relevant im DS-Modus)
   [✅/🔄/⬜] Dev Setup          project-config.md
 
 OFFENE DRAFTS  ⚠️
@@ -120,6 +137,20 @@ generated: true
 > ⚠️ Automatisch generiert via /red-proto:workflow — [Datum + Uhrzeit]
 > Nicht manuell bearbeiten. Immer /red-proto:workflow aufrufen um zu aktualisieren.
 
+[NUR wenn DS/UI-Library-Konflikt erkannt einfügen – als oberster Block, direkt nach der generated-Notiz:]
+
+## ⚠️ Konflikt: Design-System und UI-Library gleichzeitig
+
+`project-config.md` sagt `UI-Library: [Name]`, aber `design-system/` enthält [N] Inhalts-Dateien (außer README). Das Framework erlaubt nur eins von beidem.
+
+**Entscheidung nötig:**
+- **a) DS nutzen** → in `project-config.md` `UI-Library: keine` setzen, dann `/red-proto:dev-setup` neu starten (damit Tokens transportiert werden).
+- **b) UI-Library nutzen** → DS-Dateien aus `design-system/` entfernen (README bleibt).
+
+Solange der Konflikt besteht, stoppen Frontend- und QA-Agents mit Rückfrage.
+
+---
+
 ## Legende
 
 | Symbol | Bedeutung |
@@ -130,13 +161,21 @@ generated: true
 | ✅⚠️ | Abgenommen mit Known Issues (offene Low-Bugs akzeptiert) |
 | ❌ | Fehlt / Blockiert |
 
+## Design-Modus
+
+| Aspekt | Wert |
+|---|---|
+| UI-Library (aus project-config.md) | [Name aus `- UI-Library:` oder `keine` oder `nicht gesetzt`] |
+| DS-Dateien (design-system/*.md ohne README) | [Anzahl] |
+| Aktiver Modus | [UI-Library: [Name] / Design-System / ⚠️ Konflikt / ⬜ Noch nicht entschieden] |
+
 ## Vorbereitung
 
 | Artefakt | Datei | Status |
 |---|---|---|
 | PRD | prd.md | [✅ / 🔄 Draft / ❌ Fehlt] |
 | Test-Setup | test-setup/ | [✅ / 🔄 Draft / ❌ Fehlt] |
-| Design-System | design-system/tokens/ | [✅ / 🔄 Teilweise / ⬜ Leer] |
+| Design-System | design-system/ | [nur relevant bei UI-Library: keine – sonst „– (Library-Modus)"] |
 | Dev Setup | project-config.md | [✅ / ❌ Fehlt] |
 | Flows | flows/product-flows.md | [✅ / 🔄 Draft / ❌ Fehlt] |
 
@@ -165,14 +204,17 @@ Status-Werte aus den Dateien lesen:
 
 Wende diese Entscheidungslogik an – in dieser Reihenfolge:
 
+**0. DS/UI-Library-Konflikt erkannt** (UI-Library gesetzt UND DS_FILES > 0)?
+→ `BLOCKER: Kläre zuerst den Konflikt oben. Frontend- und QA-Agents stoppen sonst mit Rückfrage. Entweder DS-Dateien entfernen oder UI-Library auf "keine" setzen und /red-proto:dev-setup neu starten.`
+
 **1. Noch kein PRD?**
 → `Starte mit /red-proto:sparring`
 
 **2. PRD vorhanden, kein Test-Setup (`test-setup/personas.md` fehlt)?**
 → `Empfehlung: /red-proto:test-setup ausführen – Personas und Hypothesen schärfen den späteren Prototyp-Test. Alternativ direkt zu /red-proto:dev-setup.`
 
-**2b. PRD vorhanden, `design-system/tokens/` leer?**
-→ `Empfehlung: Bevor /red-proto:dev-setup läuft, Design-System anlegen – Tokens (Farben, Typo, Spacing) beeinflussen Stack-Wahl und werden später automatisch in den Code transportiert. Alternativ ohne DS weiter.`
+**2b. PRD vorhanden, DS leer UND noch kein project-config.md?**
+→ `Vor /red-proto:dev-setup entscheiden: willst du ein eigenes Design-System (dann design-system/ jetzt befüllen) oder eine UI-Library (dann DS leer lassen, dev-setup empfiehlt passende Library)? /red-proto:dev-setup fragt dich bei Bedarf.`
 
 **3. PRD vorhanden, kein project-config.md?**
 → `Führe /red-proto:dev-setup aus`
