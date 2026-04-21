@@ -149,7 +149,9 @@ Quelle bleibt immer `design-system/`. Die im Code erzeugten Token-Dateien (z.B. 
 
 ### Abnahme-Screens pro Feature
 
-Der optionale Command `/red-proto:preview FEAT-X` erzeugt Screens aus der fertig befüllten Feature-Spec und legt sie unter `features/FEAT-X-name/screens/` ab. Nach Abnahme durch den User sind diese Screens **Ground Truth für `/red-proto:dev`** (visuelle Vorlage) und Referenz für das **Copy-Inventar** in der Feature-Spec.
+Der optionale Command `/red-proto:preview FEAT-X` erzeugt Abnahme-Screens **direkt in Figma** (via Figma-MCP). Im Repo landet nur `features/FEAT-X-name/screens/index.md` mit Metadaten und Figma-Frame-Links – keine PNGs, keine Base64-Ablage (zu groß, Timeout-Probleme). Nach Abnahme durch den User in Figma sind diese Screens **Ground Truth für `/red-proto:dev`** (visuelle Vorlage, über die verlinkten Frames) und Referenz für das **Copy-Inventar** in der Feature-Spec.
+
+**Input vs. Output – klare Trennung:** `/red-proto:ux` Phase 2b holt **Vorlagen vom User als Entscheidungsgrundlage** (Figma-Node-Links zu bestehenden Frames oder Bilder in `features/FEAT-X-name/input/`) – reiner Read. `/red-proto:preview` erzeugt daraus **Abnahme-Screens in Figma** – reiner Write. Die beiden Commands überlappen nicht.
 
 Format und Metadaten: siehe `ARTIFACT_SCHEMA.md` → "Screen-Index Format".
 
