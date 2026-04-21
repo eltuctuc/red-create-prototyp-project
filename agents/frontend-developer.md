@@ -17,33 +17,53 @@ Prüfe: kein Framework-Template-Inhalt (`:root`-Blöcke, `text-align:center` auf
 ## Phase 1: Kontext lesen
 
 ```bash
-cat project-config.md        # Tech-Stack, Framework, Design-System, Codeverzeichnis
+cat project-config.md        # Tech-Stack, UI-Library, Design-System, Codeverzeichnis
 cat features/FEAT-[ID].md    # Vollständige Spec – besonders Abschnitte 2 (UX) und 3 (Tech-Design)
 ls [Codeverzeichnis]/ 2>/dev/null
 ```
 
-Lies aus `project-config.md`: `Codeverzeichnis:` und `## Projektstruktur` (Komponenten-, Seiten-, State-Pfad). Diese Werte für alle weiteren Befehle verwenden.
+Lies aus `project-config.md`: `Codeverzeichnis:`, `## Projektstruktur` (Komponenten-, Seiten-, State-Pfad) und besonders `- UI-Library:`. Diese Werte für alle weiteren Befehle verwenden.
 
-## Phase 1b: Design System laden
+## Phase 1b: Design-Quelle bestimmen
+
+Das Framework fährt einen **Entweder-Oder-Modus**: entweder UI-Library oder Design-System, niemals beides gleichzeitig.
 
 ```bash
-cat design-system/INDEX.md 2>/dev/null || echo "Kein Design System – ohne DS implementieren"
-# Dann nur konkret benötigte Dateien laden:
-# cat design-system/components/[name].md   – pro verwendete Komponente
-# cat design-system/patterns/[name].md     – pro verwendetes Pattern
-# cat design-system/tokens/colors.md       – wenn Farbwerte benötigt
+grep -i "^- UI-Library:" project-config.md
 ```
 
-Workflow: INDEX lesen → benötigte Komponenten identifizieren → nur diese Dateien vollständig laden. DS-Regeln: Vorhandene Komponente → Spec exakt umsetzen. Kein Hardcoding von Farben/Abständen/Schriftgrößen. `⚠ Tokens-Build` → mit Token-Werten bauen. `🧪 Hypothesentest` → exakt nach UX-Entscheidung.
+**Modus A – `UI-Library: [Name]` (z.B. shadcn/ui, MUI, Chakra, Vuetify):**
+- Nutze **ausschließlich** die Library. Keine eigenen Komponenten-Wrapper, keine Custom-CSS-Datei für Button/Input/Card.
+- Greife **nicht** auf `design-system/` zu – selbst wenn dort Inhalte liegen, werden sie im Library-Modus ignoriert.
+- Tokens (Farben, Typo, Spacing) sind bereits in Phase 5b von `/red-proto:dev-setup` ins Projekt transportiert worden (Tailwind-Config, Theme-Objekt, CSS-Variablen). Nutze sie so wie im Stack üblich.
+- Abweichungen von Library-Defaults nur, wenn die feature-Spec das explizit verlangt.
+
+**Modus B – `UI-Library: keine`:**
+- Baue eigene Komponenten passend zum Stack (z.B. React-Komponenten für Next.js, Vue SFCs für Nuxt, SwiftUI Views).
+- Lies das DS **rekursiv und strukturagnostisch**:
+
+  ```bash
+  # Übersicht
+  find design-system -type f -name "*.md" ! -name "README.md"
+  # Inhalt pro Datei bei Bedarf
+  cat design-system/[gefundene-datei].md
+  ```
+
+- DS-Regeln: Vorhandene Komponente → Spec exakt umsetzen. Kein Hardcoding von Farben/Abständen/Schriftgrößen. `⚠ Tokens-Build` → mit Token-Werten bauen. `🧪 Hypothesentest` → exakt nach UX-Entscheidung.
+
+**Konflikt-Erkennung (beide Modi):** Wenn `UI-Library: [Name]` gesetzt ist, aber `design-system/` zusätzliche `*.md`-Dateien (außer README) enthält, **stoppe und melde**. Das ist eine inkonsistente Konfiguration – wahrscheinlich hat der User nach dem Setup das DS befüllt und vergessen, `/red-proto:dev-setup` neu zu triggern. Rückfrage an den User, bevor du weitermachst.
 
 ## Phase 1c: Token-Gap-Check
 
+**Nur in Modus B (Design-System).** Im Library-Modus bringt die Library ihre eigenen Tokens mit – dieser Check entfällt.
+
 ```bash
 grep -o "\-\-[a-z][a-z0-9\-]*" features/FEAT-[ID].md 2>/dev/null | sort -u
-grep -o "\-\-[a-z][a-z0-9\-]*:" design-system/tokens/*.md 2>/dev/null | sed 's/:.*//' | sort -u
+# Alle Token-Definitionen im DS rekursiv finden:
+find design-system -type f -name "*.md" ! -name "README.md" -exec grep -h -o "\-\-[a-z][a-z0-9\-]*:" {} + 2>/dev/null | sed 's/:.*//' | sort -u
 ```
 
-Fehlende Tokens VOR der Implementierung im DS-Token-File ergänzen. Kein `var(--token, fallback)` – Token existiert oder wird registriert. Unsicher → unter "Offene Punkte", Platzhalter-Kommentar im Code.
+Fehlende Tokens VOR der Implementierung im passenden DS-File ergänzen. Kein `var(--token, fallback)` – Token existiert oder wird registriert. Unsicher → unter "Offene Punkte", Platzhalter-Kommentar im Code.
 
 ## Phase 1d: Flows lesen
 

@@ -32,6 +32,34 @@ cat flows/product-flows.md 2>/dev/null | head -3 || echo "FEHLT"
 
 # Letztes Release
 cat docs/releases.md 2>/dev/null | head -10 || echo "FEHLT"
+
+# DS/UI-Library-Konflikt-Check
+UI_LIB=$(grep -i "^- UI-Library:" project-config.md 2>/dev/null | sed 's/.*: *//' | head -1)
+DS_FILES=$(find design-system -type f -name "*.md" ! -name "README.md" 2>/dev/null | wc -l | xargs)
+echo "UI-Library: ${UI_LIB:-nicht gesetzt} | DS-Dateien mit Inhalt: $DS_FILES"
+```
+
+**Konsistenz-Check (DS ↔ UI-Library):**
+
+Das Framework fährt einen Entweder-Oder-Modus – befülltes DS und gesetzte UI-Library schließen sich aus. Wenn beide Werte vorhanden sind (`UI-Library: shadcn/ui` UND `DS_FILES > 0`), ist die Konfiguration inkonsistent.
+
+Mögliche Ursachen:
+- User hat das DS nachträglich befüllt, nachdem er sich für Library entschieden hat
+- User hat in `project-config.md` die UI-Library-Zeile nachträglich geändert
+
+**In dem Fall im Status-Output ganz oben melden**, bevor du zum regulären Status übergehst:
+
+```
+⚠️  KONFLIKT: project-config.md sagt UI-Library: [Name], aber design-system/
+    enthält [N] Inhalts-Dateien. Beides zusammen führt zu Konflikten.
+
+    Entscheidung nötig:
+    a) DS nutzen → in project-config.md `UI-Library: keine` setzen,
+       dann /red-proto:dev-setup neu starten (für DS-Transport)
+    b) UI-Library nutzen → DS-Inhalte aus design-system/ entfernen
+       (die README bleibt), dann weitermachen
+
+    Frontend- und QA-Agents stoppen sonst mit Rückfrage.
 ```
 
 ## Phase 2: Status-Übersicht ausgeben
