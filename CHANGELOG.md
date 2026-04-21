@@ -5,7 +5,9 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
-## [Unreleased]
+## v0.19.5 — 21. April 2026
+
+Der Dev-QA-Loop zieht ins Framework – und beim Smoke-Test sind ein paar hässliche Ecken aufgefallen, die wir gleich mitgeschliffen haben.
 
 ### Neue Features
 
