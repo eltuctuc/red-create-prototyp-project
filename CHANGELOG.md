@@ -5,6 +5,34 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.21.0 — 22. April 2026
+
+Saubere Trennung zwischen visueller Eingabe (UX) und visueller Abnahme (Preview). Lokale Bildablage ist weg – Abnahme-Screens leben jetzt dort, wo sie hingehören: in Figma.
+
+### Breaking Changes
+
+- **`/red-proto:preview` erzeugt jetzt Screens, importiert sie nicht mehr.** Der Command schreibt Abnahme-Screens **direkt in Figma** (via Figma-MCP). Der User gibt einen Figma-Page-Link, Claude generiert die Frames dort. Die alten Import-Optionen (Figma-Node-Links, File-Key-Suche, PNG-Upload im Chat, manuelle Ablage) sind entfernt.
+- **Keine PNG- oder Base64-Ablage im Repo mehr.** `features/FEAT-X-name/screens/index.md` enthält ausschließlich Metadaten + Figma-Frame-Links. Grund: lokale Bildablage führte zu Timeout- und Ressourcen-Problemen. Wer bisher PNG-Dateien in `screens/` hatte, kann sie behalten (werden ignoriert) oder löschen – Dev baut jetzt gegen die Figma-Frames über die Links in der `index.md`.
+- **`/red-proto:ux` Phase 2b – Option „Bilder im Chat" entfernt.** Bilder im Chat waren flüchtig und überlappten mit Figma-Links. Ersetzt durch **„Bilder im Ordner"**: Claude legt `features/FEAT-X-name/input/` an, pausiert mit Ablage-Anleitung, der User lädt Vorlagen hoch und ruft `/red-proto:ux` erneut auf – Resume-Regel greift automatisch.
+
+### Neue Features
+
+- **Stop-and-Resume in `/red-proto:ux` Phase 2b.** Claude bricht nach Anlage des `input/`-Ordners sauber ab, der User hat Zeit zum Ablegen, danach einfacher Command-Restart.
+- **Figma-MCP-Pflicht-Check in `/red-proto:preview`.** Ohne verbundenen MCP-Server wird der Command mit klarem Hinweis beendet – kein Scheitern mitten im Lauf.
+- **Widerspruchs-/Lücken-Check in `/red-proto:preview`.** Claude prüft, ob der Screen-Plan alle Acceptance Criteria und Flow-Schritte abdeckt, bevor die Abnahme eingefordert wird.
+
+### Verbesserungen
+
+- **Klare Input-vs-Output-Semantik.** `/red-proto:ux` Phase 2b ist jetzt explizit **read-only** (Vorlagen als Entscheidungsgrundlage), `/red-proto:preview` ist **write-only** (Abnahme-Screens erzeugen). Keine Überlappung mehr.
+- **Projekt-Struktur in README um `input/`-Ordner erweitert.** Dokumentiert, wohin UX-Vorlagen gehören.
+- **`ARTIFACT_SCHEMA.md` Screen-Index Format komplett überarbeitet.** Spalten reflektieren Figma-Links, Frontmatter zeigt Page-Referenz, Datei-Naming-Regel entfällt (keine lokalen Dateien mehr).
+
+### Migrationshinweis
+
+Projekte mit v0.20.x-Screens (lokale PNGs): `features/FEAT-X-name/screens/*.png` bleiben im Repo unangetastet, aber ab v0.21 nicht mehr Ground Truth. Wer beim nächsten Preview-Durchgang auf Figma umsteigt, kann die PNGs danach löschen. Alternative: Feature bleibt auf dem v0.20-Stand – Dev-Agent findet die PNGs weiterhin, neue Features nutzen den Figma-Weg.
+
+---
+
 ## v0.20.0 — 21. April 2026
 
 **Breaking.** Der neutrale Starter-Design-System-Content ist weg. Das Framework fährt jetzt einen harten Entweder-Oder-Modus zwischen eigenem DS und gestylter UI-Library – kein schleichendes Ignorieren mehr.

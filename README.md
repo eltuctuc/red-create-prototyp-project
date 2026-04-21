@@ -43,7 +43,7 @@ Jeder Command ist eigenständig – du kannst über `/red-proto:workflow` jederz
 
 7. `/red-proto:ux` – UX-Entscheidungen in die Spec; fragt optional nach Wireframes/Lo-Fi/Hi-Fi als Input
 8. `/red-proto:architect` – Tech-Design, Security, Test-Setup in die Spec
-9. `/red-proto:preview` *(optional)* – Abnahme-Screens erzeugen (Figma-MCP, PNG-Upload oder manuell) und vom User abnehmen lassen, bevor gebaut wird
+9. `/red-proto:preview` *(optional)* – Abnahme-Screens direkt in Figma erzeugen (via Figma-MCP) und vom User dort abnehmen lassen, bevor gebaut wird. Keine lokale PNG-Ablage – nur Figma-Links im Repo.
 
 **QA-Dev-Loop pro Feature** *(mindestens einmal):*
 
@@ -126,7 +126,7 @@ Pflicht:
 Optional:
 
 - **[`gh` CLI](https://cli.github.com/)** – nur wenn `/red-proto:dev-setup` ein GitHub-Repo anlegen soll.
-- **Figma-MCP-Server** – nur wenn `/red-proto:preview` Screens direkt aus Figma ziehen soll. Ohne MCP lädst du PNGs im Chat hoch oder legst sie manuell ab.
+- **Figma-MCP-Server** – Pflicht, wenn `/red-proto:preview` genutzt werden soll (der Command schreibt Abnahme-Screens direkt nach Figma). Für `/red-proto:ux` optional: als Eingabe-Quelle für bestehende Wireframes/Screens per Node-Link. Ohne Figma-MCP läuft der Workflow trotzdem – Preview entfällt dann, UX-Vorlagen werden per Bildablage in `features/FEAT-X-name/input/` gehandhabt.
 - **Stack-Laufzeit** – Python, Go, Swift etc. werden erst nach der Stack-Wahl in `/red-proto:dev-setup` relevant, nicht vorher.
 
 ### Empfohlenes Claude-Modell
@@ -223,7 +223,8 @@ Nach dem Setup hat dein Projekt folgende Struktur:
   [features/]               ← /red-proto:requirements, ux, architect, dev, qa
     STATUS.md
     [FEAT-X-name.md]        ← Akkumulative Feature-Spec
-    [FEAT-X-name/screens/]  ← /red-proto:preview (optional, Abnahme-Screens)
+    [FEAT-X-name/input/]    ← /red-proto:ux (optional, UX-Vorlagen vom User)
+    [FEAT-X-name/screens/]  ← /red-proto:preview (optional, nur index.md mit Figma-Links)
   [flows/]                  ← /red-proto:flows
   [bugs/]                   ← /red-proto:qa (Bug-Reports, -fixed.md nach Fix)
   [context/]                ← /red-proto:dev, /red-proto:dev-qa-loop

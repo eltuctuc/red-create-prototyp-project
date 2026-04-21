@@ -223,34 +223,36 @@ Einträge werden nur ergänzt, nie ohne Bestätigung geändert.
 
 ## Screen-Index Format (`./features/FEAT-X-name/screens/index.md`)
 
-Wird von `/red-proto:preview` angelegt, wenn der User vor Dev visuelle Abnahme-Screens durchgehen möchte. Optional – Features ohne `screens/`-Ordner laufen genauso durch die Pipeline.
+Wird von `/red-proto:preview` angelegt, wenn der User vor Dev visuelle Abnahme-Screens in Figma erzeugen möchte. Optional – Features ohne Screen-Index laufen genauso durch die Pipeline.
+
+**Wichtig:** `screens/index.md` enthält **nur Metadaten und Figma-Links** – keine PNG-Dateien, keine Base64-Bilder. Die Abbilder liegen in Figma, nicht im Repo. Grund: lokale Bildablage führt zu Timeout- und Ressourcen-Problemen.
 
 ```markdown
 ---
 status: draft
 feature: FEAT-[X]
-source: figma | upload | manual
+figma_file: <fileKey>
+figma_page: <pageId>
+figma_page_url: https://www.figma.com/design/<fileKey>/...?node-id=<pageId>
 ---
 
-# Screens – FEAT-[X]
+# Abnahme-Screens – FEAT-[X]
 
-Quelle: [Figma-File-URL oder "PNG-Upload" oder "manuell abgelegt"]
+**Figma-Page:** [Name der Page]([page-url])
 
-| Screen-ID | Datei | Zustand | Flow-Schritt | Figma-Node | Status |
-|-----------|-------|---------|--------------|------------|--------|
-| S-10 | S-10-empty.png | Initial | Einstieg | 123:456 | approved |
-| S-11 | S-11-filled.png | Ausgefüllt | Nach Eingabe | 123:457 | approved |
-| S-12 | S-12-error.png | Fehler | Bei ungültiger Eingabe | 123:458 | review |
+| Screen-ID | Zustand | Flow-Schritt | Figma-Frame | Status |
+|-----------|---------|--------------|-------------|--------|
+| S-10 | Initial | Einstieg | [Frame-Link](https://www.figma.com/design/.../?node-id=<frameId>) | approved |
+| S-11 | Ausgefüllt | Nach Eingabe | [Frame-Link](...) | approved |
+| S-12 | Fehler | Bei ungültiger Eingabe | [Frame-Link](...) | review |
 ```
 
 **Status-Werte pro Screen:**
 - `review` – neu erzeugt, wartet auf User-Abnahme
-- `approved` – User hat bestätigt, Dev darf bauen
-- `outdated` – Spec oder Design hat sich geändert, Screen muss neu erzeugt werden
+- `approved` – User hat in Figma bestätigt, Dev darf bauen
+- `outdated` – Spec oder Design hat sich geändert, Screen muss in Figma aktualisiert werden
 
-**Figma-Node:** nur befüllt wenn Source `figma`. Sonst leer oder `–`.
-
-**Datei-Naming:** `S-NN-kurzbezeichnung.png` – fortlaufende Nummerierung pro Feature.
+**Figma-Frame:** anklickbarer Link zum Frame in der Figma-Page. Die Frame-ID steht im Link als `node-id=<id>`.
 
 ---
 
