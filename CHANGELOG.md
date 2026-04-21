@@ -15,8 +15,14 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 - **Risk-Berechnung als priorisierte Regelliste:** Bugs zählen, neue Bugs, wiederkehrende Bugs – alles fließt in ein Risiko-Level, das die oberste matchende Regel bestimmt. Keine Ambiguität mehr, 2× HIGH in Folge löst ein Exit-Angebot aus.
 - **Strikter Bug-Regex:** Bugs werden per `^BUG-FEAT[N]-` zugeordnet – FEAT-1 matcht nicht mehr versehentlich FEAT-10, FEAT-11 etc.
 
+### Fixes
+
+- **`/red-proto:create` schreibt nicht mehr in die globale `~/.claude/settings.json`:** Beim Smoke-Test hatten sich die Wildcard-Permissions (`Bash(*)`, `Read(*)`, …) in die globalen User-Settings verirrt statt ins projektlokale `.claude/settings.json`. Ursache: die Anleitung ließ offen, welche Datei gemeint ist, und triggerte einen Bash-Script-Umweg statt einer sauberen Schreiboperation. Jetzt: Hard-Guards im Command, die `~/.claude/` ausdrücklich tabu machen, und explizite Anweisung, die nativen Datei-Tools zu nutzen. Entschuldigung an alle, deren globale Settings dadurch ungewollt Wildcard-Einträge bekommen haben – einmal öffnen und manuell entfernen.
+- **Trailing-Slash-Bug beim Design-System-Copy:** `cp -rn .../design-system/ ./` hat durch macOS-`cp`-Semantik den **Inhalt** statt den Ordner ins Projekt-Root kopiert. Ergebnis: `components/`, `patterns/`, `screens/`, `tokens/` lagen als lose Ordner neben deinem Code. Gefixt durch explizites Ziel `./design-system/`. Beim Update-Pfad zusätzlich kritisch, weil er ohne `-n` eine existierende Projekt-README hätte überschreiben können.
+
 ### Verbesserungen
 
+- **Installations-Transparenz in der README:** Neuer Abschnitt „Was dich während `/red-proto:create` erwartet" erklärt die zwei Berechtigungs-Prompts, die Claude Code per Design zeigt (Verzeichnis anlegen, settings.json erstellen). Beide sind erwartet, nicht gefährlich, und wirken ausschließlich projektlokal.
 - **Lazy Ordner-Anlage:** `test-setup/`, `features/`, `flows/`, `bugs/`, `context/`, `docs/` und das Projektverzeichnis werden nicht mehr vorab vom Installer/Create angelegt. Jeder Command legt seinen eigenen Output-Ordner idempotent per `mkdir -p` an, wenn er ihn das erste Mal braucht. Beim Projektstart sind nur `.claude/` und `design-system/` sichtbar – weniger leere Ordner, weniger Kognitions-Last für den Nutzer.
 - **Design-System-Struktur ist frei wählbar:** `/red-proto:dev-setup` Phase 1c prüft jetzt strukturagnostisch (`find design-system -name "*.md"`), Phase 5b liest alle `*.md` rekursiv. Egal ob Tokens in `tokens/colors.md` oder direkt als `colors.md` auf Root-Ebene liegen – beides wird erkannt und transportiert.
 - **`design-system/README.md` neu geschrieben:** Erklärt jetzt explizit, dass die Struktur frei wählbar ist, zeigt drei Beispiel-Strukturen (klassisch nach Art, flach, nach Feature/Domäne) und beschreibt, was die Agents mit dem Inhalt tun. Nicht prescriptive mehr.

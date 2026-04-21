@@ -57,47 +57,47 @@ mkdir -p .claude/agents
 
 **Schritt 2b – Terminal-Permissions einrichten (.claude/settings.json):**
 
-Damit du nicht bei jedem Bash-, Git- oder Node-Befehl manuell zustimmen musst, werden die Permissions einmalig gesetzt.
+Damit der User nicht bei jedem Bash-, Git- oder Node-Befehl manuell zustimmen muss, werden Permissions einmalig gesetzt.
 
-**Wichtig:** Falls bereits eine `.claude/settings.json` existiert (z.B. durch MCP-Einstellungen), wird sie **erweitert**, nicht überschrieben.
+### 🚨 Hard-Guards (unverhandelbar)
 
-```bash
-if [ -f .claude/settings.json ]; then
-  echo "settings.json existiert bereits – wird erweitert"
-  cat .claude/settings.json
-else
-  echo "Keine settings.json vorhanden – wird neu erstellt"
-fi
-```
+- **Ziel-Datei ist IMMER `./.claude/settings.json`** – projektlokal, relativ zum aktuellen Projekt-Verzeichnis.
+- **NIEMALS `~/.claude/settings.json` oder `$HOME/.claude/settings.json` anfassen.** Das sind die globalen User-Settings mit Hooks, Plugins, Model-Wahl – tabu für diesen Command. Wenn der Pfad mit `~` oder `/Users/` oder `$HOME` beginnt: STOP.
+- **Nutze die nativen Datei-Tools (Read, Write, Edit), nicht Bash-Heredocs oder Node-Scripts.** Kein `cat > file <<EOF`, kein `node /tmp/update-permissions.js`. Das erzeugt unnötige Bash-Permission-Prompts und macht JSON-Merging fehleranfällig.
 
-Wenn die Datei **nicht existiert**: erstelle `.claude/settings.json` mit folgendem Inhalt:
+### Ablauf
 
-```json
-{
-  "permissions": {
-    "allow": [
-      "Bash(*)",
-      "Read(*)",
-      "Write(*)",
-      "Edit(*)",
-      "Glob(*)",
-      "Grep(*)"
-    ],
-    "deny": []
-  }
-}
-```
+1. **Existenz prüfen** mit dem Read-Tool auf `.claude/settings.json` (relativer Pfad).
 
-Wenn die Datei **bereits existiert**: lies sie vollständig, prüfe ob ein `permissions`-Block vorhanden ist:
-- Falls **kein** `permissions`-Block → füge ihn zum bestehenden JSON hinzu (JSON korrekt mergen, alle anderen Felder erhalten)
-- Falls `permissions`-Block **bereits vorhanden** → nichts ändern, dem User mitteilen dass Permissions bereits konfiguriert sind
+2. **Wenn Datei NICHT existiert** → direkt mit dem Write-Tool anlegen:
 
-Zeige dem User danach den aktuellen Stand der settings.json:
-```
-✅ Terminal-Permissions gesetzt – du wirst nicht mehr bei jedem Befehl gefragt.
-   Bash, Git, Read, Write und Edit sind für dieses Projekt vorab genehmigt.
-   (Konfiguriert in .claude/settings.json – jederzeit anpassbar)
-```
+   ```json
+   {
+     "permissions": {
+       "allow": [
+         "Bash(*)",
+         "Read(*)",
+         "Write(*)",
+         "Edit(*)",
+         "Glob(*)",
+         "Grep(*)"
+       ],
+       "deny": []
+     }
+   }
+   ```
+
+3. **Wenn Datei existiert** → Read-Tool hat den Inhalt bereits geliefert. Logik:
+   - `permissions.allow` ist bereits vorhanden und enthält alle 6 Einträge → nichts tun, „✅ Permissions bereits konfiguriert" melden.
+   - `permissions.allow` fehlt komplett → mit Edit-Tool den `permissions`-Block ergänzen (andere Felder wie `hooks`, `env`, `model` unangetastet lassen).
+   - `permissions.allow` existiert, aber einzelne Einträge fehlen → fehlende per Edit-Tool ergänzen, Reihenfolge bestehender Einträge nicht umsortieren.
+
+4. **Abschluss-Meldung**:
+
+   ```
+   ✅ Terminal-Permissions gesetzt (projektlokal in .claude/settings.json).
+      Bash, Read, Write, Edit, Glob und Grep sind vorab genehmigt – jederzeit anpassbar.
+   ```
 
 ---
 
@@ -123,7 +123,8 @@ cp -n ~/.claude/templates/red-create-prototyp-project/agents/qa-engineer.md .cla
 cp -n ~/.claude/templates/red-create-prototyp-project/agents/ux-reviewer.md .claude/agents/
 
 # Design System Templates kopieren (nur wenn noch nicht vorhanden)
-cp -rn ~/.claude/templates/red-create-prototyp-project/design-system/ ./
+mkdir -p design-system
+cp -rn ~/.claude/templates/red-create-prototyp-project/design-system/. ./design-system/
 
 # Framework-Docs kopieren (Templates, SCAFFOLDING, CONVENTIONS) – ins .claude/red-proto/ Verzeichnis
 mkdir -p .claude/red-proto
@@ -177,7 +178,8 @@ cp ~/.claude/templates/red-create-prototyp-project/agents/qa-engineer.md .claude
 cp ~/.claude/templates/red-create-prototyp-project/agents/ux-reviewer.md .claude/agents/
 
 # Design System Templates aktualisieren
-cp -r ~/.claude/templates/red-create-prototyp-project/design-system/ ./
+mkdir -p design-system
+cp -r ~/.claude/templates/red-create-prototyp-project/design-system/. ./design-system/
 
 # Framework-Docs aktualisieren (Templates, SCAFFOLDING, CONVENTIONS)
 mkdir -p .claude/red-proto

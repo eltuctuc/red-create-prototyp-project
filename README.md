@@ -175,7 +175,17 @@ Dann in Claude Code:
 /red-proto:create
 ```
 
-`/red-proto:create` legt dieselben Ordner (`test-setup/`, `features/`, `flows/`, `bugs/`, `docs/`, `context/`, `design-system/`) an, die bei lokaler Installation sofort entstehen.
+`/red-proto:create` richtet denselben Zustand her, den du bei lokaler Installation bekommst: `.claude/` mit Commands und Agents plus `design-system/`. Alle weiteren Ordner (`test-setup/`, `features/`, `flows/`, `bugs/`, `context/`, `docs/`, dein Projektverzeichnis) legen die jeweiligen Commands bei Bedarf selbst an.
+
+#### Was dich während `/red-proto:create` erwartet
+
+Claude Code wird dich zweimal um Bestätigung bitten. Beides ist **normales Verhalten**, keine Fehlermeldung – Claude Code fragt grundsätzlich einmal nach, bevor es in ein neues Verzeichnis schreibt oder eine Permissions-Datei anlegt:
+
+1. **Verzeichnis anlegen** – Claude Code fragt, ob es in `.claude/commands/red-proto` schreiben darf. Wähle „Yes, and always allow access to commands/ from this project" und du hast für die Session Ruhe.
+
+2. **`.claude/settings.json` erstellen** – legt projektlokale Terminal-Permissions fest, damit du nicht bei jedem Bash-/Git-/Node-Befehl erneut zustimmen musst. Der genaue Inhalt wird dir vor dem Zustimmen gezeigt.
+
+Beide Aktionen wirken **ausschließlich projektlokal**. Deine globale `~/.claude/settings.json` bleibt unangetastet.
 
 ---
 
