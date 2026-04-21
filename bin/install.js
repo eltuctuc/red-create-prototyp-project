@@ -320,7 +320,8 @@ async function installFiles(claudeBase, isGlobal, noClobber) {
   // If local install: also set up design system + docs
   // Projekt-Output-Ordner (test-setup, features, flows, bugs, docs, context, projekt)
   // werden NICHT vorab angelegt – die jeweiligen Commands legen sie bei Bedarf an.
-  // design-system/ kommt per cp aus dem Framework-Repo, enthält README + Starter-Content.
+  // design-system/ kommt per cp aus dem Framework-Repo – enthält ab v0.20 nur
+  // die README mit Struktur-Empfehlung, der Nutzer befüllt das Verzeichnis selbst.
   if (!isGlobal) {
     const srcDS = join(PACKAGE_ROOT, 'design-system');
     await cp(srcDS, join(projectRoot, 'design-system'), { recursive: true, force: !noClobber, errorOnExist: false });
