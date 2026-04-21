@@ -7,6 +7,10 @@ description: Erweitert Feature Specs um exakte UX-Entscheidungen – DS-konforme
 
 Du bist UX-Experte und Informationsarchitekt. Triff für ein definiertes Feature exakte UX-Entscheidungen: Komponenten, Screen-Verhalten, Navigation. Du entscheidest, der Agent validiert.
 
+## Konflikt-Check (Pflicht – vor allen Phasen)
+
+Führe die Prüfung aus `.claude/red-proto/templates/conflict-check.md` aus. Bei Konflikt: stoppe sofort mit der dort dokumentierten Meldung. Der Konflikt wird vom User außerhalb dieses Commands gelöst – kein Dialog hier.
+
 ## Phase 0: Projektstatus lesen und Feature wählen
 
 ```bash
@@ -67,17 +71,40 @@ AskUserQuestion({ questions: [{ question: "Das Test-Setup fehlt. Personas helfen
 ], multiSelect: false }] })
 ```
 
-## Phase 2: Design System laden
+## Phase 2: Design-Quelle bestimmen und laden
+
+Zuerst feststellen, **welche Quelle** UX-Entscheidungen leitet – das steht in `project-config.md`:
 
 ```bash
-cat design-system/INDEX.md 2>/dev/null || echo "Kein DS"
-# Dann für jede Komponente die du planst:
-cat design-system/components/[name].md
-cat design-system/patterns/[name].md
-ls design-system/screens/ 2>/dev/null
+grep -i "^- UI-Library:" project-config.md 2>/dev/null || echo "Kein UI-Library-Eintrag gefunden"
 ```
 
-Workflow: INDEX lesen → geplante Komponenten identifizieren → nur diese Dateien vollständig laden.
+Es gibt zwei Modi (sich gegenseitig ausschließend):
+
+**Modus A – UI-Library aktiv** (z.B. `UI-Library: shadcn/ui`):
+Der Frontend-Agent wird die Library nutzen und das DS ignorieren. Du als UX-Agent orientierst dich deshalb an den Konventionen der Library:
+
+- Welche Komponenten existieren? (bei shadcn/ui z.B. `Button`, `Dialog`, `Form`, `Select`, `Tabs`, …)
+- Welche Varianten bringt die Library mit? (sizes, intents, states)
+- Welche Patterns sind idiomatisch? (Form-Validation, Data-Table, Command-Palette)
+
+Referenziere im weiteren Verlauf die **Library-Komponenten-Namen** direkt, nicht Tokens oder DS-Patterns.
+
+**Modus B – `UI-Library: keine`** (Design-System wird genutzt):
+Lies das DS rekursiv und strukturagnostisch:
+
+```bash
+# Alle DS-Dateien außer README auflisten
+find design-system -type f -name "*.md" ! -name "README.md" 2>/dev/null
+# Inhalt laden
+find design-system -type f -name "*.md" ! -name "README.md" -exec cat {} +
+```
+
+Identifiziere: welche Tokens sind dokumentiert (Farben, Typo, Spacing, Shadows, Motion, …)? Welche Komponenten und Patterns? Welche Screen-Beispiele?
+
+Der Frontend-Agent wird später eigene Komponenten bauen, die diesem DS folgen. Deine UX-Entscheidungen müssen deshalb konkret genug sein, damit er das umsetzen kann – bezieh dich beim Referenzieren auf die gefundenen Tokens/Patterns.
+
+Workflow: Modus erkennen → passende Quelle laden → geplante Bausteine identifizieren.
 
 ## Phase 2b: Optionale Design-Vorgaben vom User einholen
 
@@ -92,7 +119,7 @@ AskUserQuestion({
       options: [
         { label: "Ja, Figma-Node-Links", description: "Ich gebe dir ein oder mehrere Figma-Links im Chat" },
         { label: "Ja, als Bilder im Chat", description: "Ich lade PNG/JPG direkt hier hoch" },
-        { label: "Nein, leite du die UX-Entscheidungen ab", description: "Du arbeitest aus Spec + PRD + Design-System + Test-Setup" }
+        { label: "Nein, leite du die UX-Entscheidungen ab", description: "Du arbeitest aus Spec + PRD + Design-Quelle (DS oder UI-Library) + Test-Setup" }
       ],
       multiSelect: false
     }
@@ -117,25 +144,42 @@ Protokolliere im Chat kurz welche Quelle genutzt wird, damit der User nachvollzi
 
 - **Einbettung:** Wo lebt das Feature? (begründen: Modal/eigene Route/Sidebar-Panel – warum?)
 - **Interaktionsmuster:** Welches Pattern passt? (begründen aus Persona-Verhalten, Datenmenge)
-- **Komponenten:** Alle benötigten Komponenten aus DS eigenständig wählen und kurz begründen
+- **Komponenten:** Alle benötigten Komponenten aus der Design-Quelle (DS-Modus: eigene Komponenten passend zum DS / Library-Modus: Library-Komponenten) eigenständig wählen und kurz begründen
 
-## Phase 4: DS-Validierung
+## Phase 4: Design-Konformität prüfen
+
+Das Vorgehen hängt vom Modus aus Phase 2 ab:
+
+**Modus A – UI-Library aktiv:**
+
+Prüfe jede geplante Komponente gegen die **Library-Konventionen**:
+- Existiert die Komponente in der Library? (Library-Docs checken)
+- Welche Props/Varianten erwartet sie? (sizes, variants, states)
+- Gibt es Regeln / Anti-Patterns in den Library-Docs? (z.B. „Button mit Icon-only braucht `aria-label`")
+
+Verletzt der geplante Einsatz eine Library-Regel? → Als **Hypothesentest** dokumentieren oder anpassen. Nie still ignorieren.
+
+Touch-Targets: Die meisten gestylten Libraries halten WCAG 2.5.5 (44px) von Haus aus ein. Falls du die Größe custom änderst – prüfen.
+
+**Modus B – Design-System aktiv:**
 
 ```bash
-ls design-system/components/ 2>/dev/null
+# Alle DS-Dateien mit Regel-Signalen
+find design-system -type f -name "*.md" ! -name "README.md" -exec grep -l -i "nicht\|never\|nur\|only\|pflicht\|must\|verboten" {} +
 ```
 
-**DS Regel-Compliance** – für jede gewählte Komponente:
-```bash
-cat design-system/components/[komponente].md | grep -i "nicht\|never\|nur\|only\|pflicht\|must\|verboten"
-```
+**DS Regel-Compliance** – für jede gewählte Komponente: Lies die zugehörige DS-Datei vollständig und prüfe auf explizite Regeln (Negationen, Gebote).
+
 Verletzt der geplante Einsatz eine Regel? → Als **Hypothesentest** dokumentieren oder anpassen. Nie still ignorieren.
 
-**Token-Suffizienz-Check** – für alle interaktiven Elemente:
+**Token-Suffizienz-Check** – für alle interaktiven Elemente: Welche Tokens für Spacing, Size, Touch-Area sind im DS dokumentiert? Reichen sie für WCAG 2.5.5 (44px Mindest-Touch-Target)?
+
 ```bash
-cat design-system/tokens/spacing.md 2>/dev/null | grep -i "size\|height\|touch"
-cat design-system/tokens/colors.md 2>/dev/null
+# Rekursiv in DS nach Größen/Touch-Hinweisen suchen
+find design-system -type f -name "*.md" ! -name "README.md" -exec grep -l -i "size\|height\|touch\|spacing" {} +
 ```
+
+---
 
 Touch-Target-Tabelle für alle klick-/tippbaren Elemente:
 | Element | Größen-Token | Wert (px) | WCAG 2.5.5 (44px) | Anpassung |

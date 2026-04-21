@@ -240,24 +240,38 @@ Details zu allen File-Formaten: [ARTIFACT_SCHEMA.md](./ARTIFACT_SCHEMA.md)
 
 ## Das Design System
 
-Für einen Prototypen ist ein eigenes Design-System **nicht zwingend**. Du hast zwei Wege:
+Für einen Prototypen ist ein eigenes Design-System **nicht zwingend**. Du entscheidest dich **vor `/red-proto:dev-setup`** für einen von zwei Wegen – sie schließen sich aus:
 
-1. **Eigenes Design-System als Markdown** – du legst in `design-system/tokens/`, `components/` und `patterns/` deine Vorgaben ab, bevor `/red-proto:dev-setup` läuft. Der Dev-Setup transportiert die Tokens dann automatisch in das stack-spezifische Format (Tailwind-Config, CSS-Variablen, SwiftUI-Extensions, …). `/red-proto:preview` nutzt dieselben Markdowns, wenn Screens in Figma angelegt werden.
-2. **UI-Library im Tech-Stack** – z.B. shadcn/ui, Material UI, Vuetify. Look & Feel kommt aus der Library selbst, und dieser Weg gewinnt: sobald eine UI-Library im Code-Verzeichnis installiert ist, ignorieren die Agents das Markdown-DS und bauen nach Library-Konventionen.
+### Weg 1 – Eigenes Design-System als Markdown
 
-**Nicht kombinieren.** UI-Library und Markdown-DS beißen sich – wenn beides da ist, gewinnt die Library und das Markdown-DS wird stillschweigend ignoriert. Entscheide dich vor `/red-proto:dev-setup` für einen Weg.
+Du legst Tokens (Farben, Typo, Spacing, Shadows, …), Komponenten und Patterns in `design-system/` ab, bevor `/red-proto:dev-setup` läuft. Die Ordner-Struktur ist frei wählbar – die Agents lesen alle `*.md`-Dateien rekursiv. Beispiele stehen in `design-system/README.md`.
 
-> **Geplant für v0.20:** Aktuell bringt der Installer noch einen vorbefüllten, neutralen Design-System-Ordner mit. Für Weg 2 ist das Ballast. In v0.20 soll der Installer nur noch den leeren Ordner anlegen, und die Bevorzugung (Library-First, DS-Fallback) explizit in den Agents codiert werden.
+`/red-proto:dev-setup` transportiert die Tokens dann automatisch ins stack-spezifische Format (Tailwind-Config, CSS-Variablen, SwiftUI-Extensions, …) und empfiehlt einen Stack **ohne gestylte UI-Library**. Der Frontend-Agent baut eigene Komponenten passend zum DS.
 
-Für Weg 1 gilt: Agents laden das Design-System **selektiv** – zuerst den Index, dann nur die konkret benötigten Komponenten- und Token-Files.
+### Weg 2 – Gestylte UI-Library im Tech-Stack
 
-**Drei Zustände pro Komponente** (bei Weg 1 relevant):
+Du lässt `design-system/` leer (nur die mitgelieferte `README.md`). `/red-proto:dev-setup` darf dann eine gestylte UI-Library empfehlen – shadcn/ui für Next.js/Vite, MUI für React-Enterprise, Chakra, Vuetify für Vue, etc. Look & Feel kommt aus der Library, der Frontend-Agent nutzt ausschließlich Library-Komponenten.
+
+### Entweder-Oder, hart
+
+Beides zusammen geht **nicht**. Wenn in `project-config.md` eine `UI-Library: [Name]` gesetzt ist und zusätzlich Dateien in `design-system/` liegen, melden die Agents einen Konflikt und fragen nach – sie raten nicht.
+
+Headless-Primitives ohne Styling (Radix Primitives, React Aria, Headless UI) zählen **nicht** als UI-Library. Sie sind Infrastruktur für Accessibility und Keyboard-Handling und dürfen parallel zu Weg 1 genutzt werden.
+
+### Umswitchen später
+
+Möglich, aber nicht automatisch:
+
+- **Von Weg 2 zu Weg 1:** DS in `design-system/` befüllen → `UI-Library: keine` in `project-config.md` setzen → `/red-proto:dev-setup` Phase 5b neu triggern (für Token-Transport).
+- **Von Weg 1 zu Weg 2:** DS-Dateien außer README entfernen → Library-Name in `project-config.md` eintragen → Library installieren, DS-Imports im Code entfernen.
+
+### DS-Komponenten-Zustände (nur Weg 1)
 
 | Status | Bedeutung |
 |--------|-----------|
-| `DS-konform` | Implementiert nach Spec – keine Anpassung nötig |
-| `Tokens-Build` | Nutzt DS-Tokens, aber keine fertige Komponente vorhanden – Agent baut selbst |
-| `Hypothesen-Test` | Bewusstes Abweichen – UX-Entscheidung mit Begründung |
+| `DS-konform` | Implementiert nach DS-Spec – keine Anpassung nötig |
+| `Tokens-Build` | Nutzt DS-Tokens, aber keine fertige Komponente im DS vorhanden – Agent baut selbst |
+| `Hypothesen-Test` | Bewusstes Abweichen vom DS – UX-Entscheidung mit Begründung |
 
 ---
 

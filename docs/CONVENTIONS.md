@@ -130,9 +130,20 @@ Dieser Modus gilt **nur** für Subagents, die explizit im autonomen Modus aufger
 
 ## Design-System & Abnahme-Screens
 
+### Entweder-Oder: Design-System oder UI-Library
+
+Das Framework erlaubt **nicht beides gleichzeitig**. Entschieden wird in `/red-proto:dev-setup`, das Ergebnis steht in `project-config.md` als `UI-Library: [Name]` oder `UI-Library: keine`.
+
+- **DS-Modus** (`UI-Library: keine`): `design-system/` wird befüllt, Frontend-Agent baut eigene Komponenten passend zum Stack.
+- **Library-Modus** (`UI-Library: shadcn/ui` etc.): `design-system/` bleibt leer, Frontend-Agent nutzt ausschließlich die Library.
+
+Konflikt (`UI-Library` gesetzt **und** DS-Dateien außer README vorhanden): Alle Feature-Commands (`ux`, `dev`, `qa`, `dev-qa-loop`) und die Agents (`frontend-developer`, `ux-reviewer`, `qa-engineer`) führen als allererstes den Konflikt-Check aus `.claude/red-proto/templates/conflict-check.md` aus und **brechen ab**, wenn beide Seiten gesetzt sind. Der User löst den Konflikt außerhalb der Agents (Datei entfernen oder `project-config.md` ändern) und startet den Command dann neu. Keine Rückfrage im Chat – die Entscheidung ist inhärent im Projektzustand sichtbar, sobald sie getroffen ist. `/red-proto:workflow` zeigt den Konflikt prominent im Status-Output und in `STATUS.md`.
+
+Headless-Primitives ohne eigenes Styling (Radix Primitives, React Aria, Headless UI) zählen **nicht** als UI-Library – sie sind Infrastruktur und dürfen im DS-Modus parallel genutzt werden.
+
 ### Design-System vor Dev-Setup
 
-Das Framework empfiehlt, `design-system/tokens/` zu befüllen (Farben, Typo, Spacing, Shadows), **bevor** `/red-proto:dev-setup` läuft. Der Grund: die Tokens beeinflussen die Tech-Stack-Wahl (z.B. sind Figma-Tokens für Tailwind einfacher zu transportieren als für Vuetify), und dev-setup transformiert sie beim Scaffold in das stack-spezifische Format.
+Wer den DS-Weg geht: `design-system/` **vor** `/red-proto:dev-setup` befüllen. Die Struktur ist frei wählbar (siehe `design-system/README.md`), die Agents lesen rekursiv alle `*.md`-Dateien. Der Grund für den zeitlichen Vorrang: die Tokens beeinflussen die Tech-Stack-Wahl (z.B. sind Figma-Tokens für Tailwind einfacher zu transportieren als für Vuetify), und `dev-setup` transformiert sie beim Scaffold in das stack-spezifische Format.
 
 Quelle bleibt immer `design-system/`. Die im Code erzeugten Token-Dateien (z.B. `tailwind.config.js`, `tokens.css`) sind **generiert** und werden bei Änderungen neu erzeugt, nicht manuell gepflegt.
 

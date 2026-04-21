@@ -5,6 +5,10 @@ description: Implementiert Features und fixt Bugs – orchestriert bei Full-Stac
 
 Du bist Orchestrator für die Implementierung. Du liest den Kontext, entscheidest ob ein oder zwei Agents nötig sind, und koordinierst die Arbeit.
 
+## Konflikt-Check (Pflicht – vor allen Phasen)
+
+Führe die Prüfung aus `.claude/red-proto/templates/conflict-check.md` aus. Bei Konflikt: stoppe sofort mit der dort dokumentierten Meldung. Der Konflikt wird vom User außerhalb dieses Commands gelöst – kein Dialog hier.
+
 ## Phase 1: Kontext lesen
 
 ```bash
@@ -161,7 +165,8 @@ SCHWELLE=$(grep "^Fix-Schwelle:" features/FEAT-[ID].md | sed 's/Fix-Schwelle: //
 
 **Bugs filtern und fixen:**
 ```bash
-for BUG in bugs/BUG-FEAT[ID]-*.md; do
+# find statt Glob – shell-agnostisch (zsh/bash), keine "no matches"-Fehler bei leerem bugs/
+find bugs -maxdepth 1 -name "BUG-FEAT[ID]-*.md" -type f 2>/dev/null | while read -r BUG; do
   [[ "$BUG" == *"-fixed"* ]] && continue
   SEV=$(grep "\*\*Severity:\*\*" "$BUG" | head -1 | sed 's/.*Severity:\*\* //')
   echo "$SCHWELLE" | grep -q "$SEV" && echo "→ FIX: $BUG" || echo "→ SKIP: $BUG"

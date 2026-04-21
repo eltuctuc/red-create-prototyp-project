@@ -5,6 +5,39 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## v0.20.0 — 21. April 2026
+
+**Breaking.** Der neutrale Starter-Design-System-Content ist weg. Das Framework fährt jetzt einen harten Entweder-Oder-Modus zwischen eigenem DS und gestylter UI-Library – kein schleichendes Ignorieren mehr.
+
+### Breaking Changes
+
+- **Starter-Design-System entfernt.** Beim Install findest du nur noch `design-system/README.md` mit Struktur-Empfehlung. Die vorbefüllten Tokens (`colors.md`, `typography.md`, `spacing.md`, `shadows.md`, `motion.md`), Components (`button.md`, `card.md`, `input.md`), Patterns (`data-display.md`, `feedback.md`, `forms.md`, `navigation.md`) und Screens sind raus. Grund: der neutrale Starter kollidierte mit UI-Library-Projekten – du bekamst als shadcn/ui-Nutzer trotzdem generische DS-Markdowns, die dann nur verwirrt haben. Wenn du ein DS willst: befülle den Ordner selbst, in beliebiger Struktur.
+- **Entweder-Oder statt weicher Library-First-Logik.** Vorher galt: wenn Library da ist, gewinnt sie, DS wird stillschweigend ignoriert. Jetzt: entweder DS ist befüllt (dann **keine** gestylte UI-Library, Frontend baut eigene Komponenten) oder DS ist leer (dann darf `/red-proto:dev-setup` eine Library empfehlen). Beides zusammen = Konflikt, Agents brechen ab.
+
+### Neue Features
+
+- **Konflikt-Check als zentrales Template** (`.claude/red-proto/templates/conflict-check.md`). Alle sieben Feature-Commands und Agents (`ux`, `dev`, `qa`, `dev-qa-loop`, `frontend-developer`, `ux-reviewer`, `qa-engineer`) führen ihn als erste Prüfung aus. Bei Konflikt: klare Stop-Meldung mit zwei Optionen (DS behalten oder Library nutzen), kein Rückfrage-Dialog. Die Entscheidung trifft der User außerhalb der Agents, indem er den Projektzustand anpasst.
+- **`UI-Library`-Eintrag in `project-config.md`.** Hält fest, welcher Modus aktiv ist – `shadcn/ui`, `MUI`, `Chakra`, `Vuetify` etc. oder `keine`. Kein Raten mehr, alle Agents prüfen den Wert.
+- **Konflikt-Warnung in `/red-proto:workflow`.** Sowohl Chat-Output als auch `STATUS.md` zeigen jetzt einen prominenten Konflikt-Block ganz oben, wenn DS und Library gleichzeitig gesetzt sind – inklusive Entscheidungs-Vorschlag a/b.
+- **Neuer „Design-Modus"-Block im Workflow-Status.** Transparente Anzeige, welcher Modus aktuell gilt (`UI-Library: shadcn/ui`, `Design-System`, `⚠️ Konflikt` oder `⬜ Noch nicht entschieden`).
+
+### Verbesserungen
+
+- **Headless-Primitives als Ausnahme dokumentiert.** Radix Primitives, React Aria und Headless UI zählen nicht als gestylte UI-Library und dürfen parallel zu einem befüllten DS genutzt werden. Sie sind Infrastruktur, kein Style-Konkurrent.
+- **Alle Commands strukturagnostisch gegenüber dem DS.** Agents lesen `design-system/` rekursiv per `find` – egal ob du die klassische Struktur (`tokens/`, `components/`, `patterns/`) nutzt, flach arbeitest oder nach Feature gruppierst.
+- **`dev-setup.md` Phase 1c erkennt den Modus automatisch** und empfiehlt bei befülltem DS keine gestylte Library mehr. Wenn der optimale Stack typischerweise eine Library hätte (z.B. „Next.js + shadcn/ui"), fragt Phase 3 aktiv nach – statt stumm zu entscheiden.
+- **Umswitch-Anleitung in README und `design-system/README.md`.** Klare Schritte, wie du von Weg 1 (DS) zu Weg 2 (Library) wechselst und umgekehrt.
+
+### Fixes
+
+- **Keine knallroten Shell-Errors mehr bei leeren Verzeichnissen.** `for f in features/FEAT-*.md` warf in zsh „no matches found" bei frischem Projekt; `2>/dev/null` direkt hinter `for` war Syntax-Fehler. Ersetzt durch `find ... | while read`, shell-agnostisch und fehlerfrei bei leeren Verzeichnissen. Betroffen: `workflow.md`, `dev.md`.
+
+### Migrationshinweis
+
+Wer das Starter-DS v0.19.x tatsächlich genutzt hat: dein Projekt ist **nicht** betroffen – der Inhalt wurde nur aus dem Framework-Repo entfernt, nicht aus bereits installierten Projekten. Beim Update per `npx red-proto@latest` wird dein `design-system/` nicht angerührt (cp -n). Wer umschwenken will: Starter-Dateien manuell löschen oder auf eigene Inhalte überschreiben.
+
+---
+
 ## v0.19.5 — 21. April 2026
 
 Der Dev-QA-Loop zieht ins Framework – und beim Smoke-Test sind ein paar hässliche Ecken aufgefallen, die wir gleich mitgeschliffen haben.

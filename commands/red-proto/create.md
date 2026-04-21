@@ -52,7 +52,8 @@ Nur `.claude/`-Struktur und `design-system/` werden jetzt angelegt. Projekt-Outp
 ```bash
 mkdir -p .claude/commands/red-proto
 mkdir -p .claude/agents
-# design-system/ kommt per cp aus dem Framework-Repo (inkl. README mit Struktur-Empfehlung)
+# design-system/ kommt per cp aus dem Framework-Repo – enthält nur die README
+# mit Struktur-Empfehlung, der Nutzer befüllt das Verzeichnis selbst
 ```
 
 **Schritt 2b – Terminal-Permissions einrichten (.claude/settings.json):**
@@ -138,7 +139,7 @@ ls .claude/commands/red-proto/qa.md 2>/dev/null || echo "FEHLT: qa.md"
 ls .claude/agents/qa-engineer.md 2>/dev/null || echo "FEHLT: qa-engineer.md"
 ls .claude/red-proto/templates/bug-report.md 2>/dev/null || echo "FEHLT: bug-report.md (Bug-Template)"
 ls .claude/red-proto/CONVENTIONS.md 2>/dev/null || echo "FEHLT: CONVENTIONS.md"
-ls design-system/INDEX.md 2>/dev/null || echo "FEHLT: design-system/"
+ls design-system/README.md 2>/dev/null || echo "FEHLT: design-system/README.md"
 ```
 
 Wenn eine Datei als FEHLT gemeldet wird:
@@ -192,7 +193,7 @@ ls .claude/commands/red-proto/qa.md 2>/dev/null || echo "FEHLT: qa.md"
 ls .claude/agents/qa-engineer.md 2>/dev/null || echo "FEHLT: qa-engineer.md"
 ls .claude/red-proto/templates/bug-report.md 2>/dev/null || echo "FEHLT: bug-report.md (Bug-Template)"
 ls .claude/red-proto/CONVENTIONS.md 2>/dev/null || echo "FEHLT: CONVENTIONS.md"
-ls design-system/INDEX.md 2>/dev/null || echo "FEHLT: design-system/"
+ls design-system/README.md 2>/dev/null || echo "FEHLT: design-system/README.md"
 ```
 
 Wenn eine Datei als FEHLT gemeldet wird:

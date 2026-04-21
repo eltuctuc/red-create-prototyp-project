@@ -67,19 +67,24 @@ DS_FILES=$(find design-system -type f -name "*.md" ! -name "README.md" 2>/dev/nu
 echo "DS: $DS_FILES Dateien mit Inhalt"
 ```
 
-**Wenn das Design-System befüllt ist** (`DS_FILES > 0`): Lies die Dateien grob durch (rekursiv, egal welche Ordnerstruktur). Die dort dokumentierten Tokens (Farben, Typo, Spacing, Shadows, was auch immer vorhanden) beeinflussen die Stack-Wahl, weil nicht jeder Stack sie gleich gut aufnimmt. Berücksichtige das in Phase 2 und 3.
+Das Ergebnis dieser Phase steuert in Phase 3 eine **Entweder-Oder-Entscheidung**:
 
-**Wenn es leer ist**: Weise den User darauf hin, dass ein Design-System später schwieriger zu integrieren ist. Ausführen lässt sich das Setup trotzdem – der User hat dann die Wahl, jetzt zurückzugehen und das DS anzulegen oder später mit einem technischen Transport zu leben, der nicht optimal passt.
+- **DS befüllt (`DS_FILES > 0`)** → Stack wird **ohne gestylte UI-Library** empfohlen (kein shadcn/ui, MUI, Chakra, Vuetify etc.). Der Frontend-Agent baut eigene Komponenten passend zum Stack, orientiert sich am DS. Headless-Primitives (Radix Primitives, React Aria) ohne Styling bleiben erlaubt – sie stehen nicht im Konflikt zum DS.
+- **DS leer (`DS_FILES == 0`)** → Gestylte UI-Library darf empfohlen werden. Der Frontend-Agent nutzt dann ausschließlich die Library, das DS wird ignoriert.
+
+**Wenn das Design-System befüllt ist**: Lies die Dateien grob durch (rekursiv, egal welche Ordnerstruktur). Die dort dokumentierten Tokens (Farben, Typo, Spacing, Shadows, was auch immer vorhanden) beeinflussen die Stack-Wahl, weil nicht jeder Stack sie gleich gut aufnimmt. Berücksichtige das in Phase 2 und 3.
+
+**Wenn es leer ist**: Weise den User darauf hin, dass er sich damit für den Library-Weg entscheidet – eigenes DS wird dann nicht mehr genutzt, selbst wenn später Dateien ergänzt werden. Ausführen lässt sich das Setup trotzdem – der User hat die Wahl.
 
 ```typescript
 AskUserQuestion({
   questions: [
     {
-      question: "Das Design-System ist noch leer. Willst du jetzt eines anlegen, bevor wir den Tech-Stack festlegen?",
-      header: "Design-System vor Stack?",
+      question: "Das Design-System ist noch leer. Willst du jetzt eines anlegen, oder mit einer UI-Library arbeiten?",
+      header: "DS oder UI-Library?",
       options: [
-        { label: "Pause – ich lege das DS erst an", description: "design-system/ befüllen (Struktur nach Wahl, siehe design-system/README.md), dann /red-proto:dev-setup erneut aufrufen" },
-        { label: "Weiter ohne DS", description: "Stack ohne DS-Kontext wählen – Tokens werden später generisch transportiert" }
+        { label: "Pause – ich lege das DS erst an", description: "design-system/ befüllen (Struktur nach Wahl, siehe design-system/README.md), dann /red-proto:dev-setup erneut aufrufen. Frontend baut später eigene Komponenten nach DS." },
+        { label: "Weiter mit UI-Library", description: "Stack wird mit passender gestylter UI-Library empfohlen (z.B. shadcn/ui). DS bleibt leer und wird ignoriert." }
       ],
       multiSelect: false
     }
@@ -115,6 +120,34 @@ Zeige dem User kurz was du gefunden hast (1–2 Sätze), bevor du die Empfehlung
 ## Phase 3: Tech-Stack empfehlen
 
 Leite aus PRD-Signalen und Recherche eine **konkrete Empfehlung** ab. Präsentiere sie im Chat – noch nicht installieren.
+
+### Entweder-Oder: Design-System oder UI-Library
+
+Nutze das Ergebnis aus Phase 1c als Leitplanke:
+
+- **DS befüllt** → empfiehl **keine gestylte UI-Library**. Der Frontend-Agent wird eigene Komponenten bauen, die zum Stack passen und das DS umsetzen.
+- **DS leer** → empfiehl bei Bedarf eine passende **gestylte UI-Library** (shadcn/ui für Next.js/Vite, MUI für React-Enterprise, Chakra für schnelle Prototypen, Vuetify für Vue, …). Sie wird später die einzige Style-Quelle sein.
+
+**Edge-Case – Stack bringt Library-Empfehlung nahe, obwohl DS befüllt ist:**
+Wenn du in Phase 2 / 3 merkst, dass der optimale Stack typischerweise mit einer gestylten Library einhergeht (z.B. „Next.js + shadcn/ui" ist Standard-Antwort für schnelle Prototypen), aber das DS ist befüllt – dann **frage den User aktiv**, bevor du empfiehlst:
+
+```typescript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Dein DS ist befüllt, aber der empfohlene Stack nutzt typisch eine UI-Library (z.B. shadcn/ui). Beides zusammen führt zu Konflikten. Was möchtest du?",
+      header: "DS oder UI-Library?",
+      options: [
+        { label: "DS nutzen – Frontend baut eigene Komponenten", description: "Keine UI-Library. Der Frontend-Agent implementiert Buttons, Inputs etc. selbst, orientiert sich am DS. Eigener Code, aber pixel-genaue DS-Umsetzung." },
+        { label: "UI-Library nutzen – DS wird ignoriert", description: "Library (z.B. shadcn/ui) gewinnt. DS-Dateien bleiben unberührt, werden aber nicht gelesen. Schneller zu bauen, aber Library-Look statt eigenem." }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
+Die Antwort bestimmt Phase 8: `UI-Library: shadcn/ui` (oder Name der gewählten Library) vs. `UI-Library: keine`.
 
 ### Empfehlungs-Logik (Referenz)
 
@@ -163,6 +196,7 @@ Zeige dem User die Empfehlung in dieser Form (in einfacher Sprache, kein Tech-Ja
 **Frontend:** [Framework] – [Ein-Satz-Erklärung warum, für Nicht-Techniker]
 **Backend:** [Framework/Sprache] – [Erklärung] – oder: "Kein separates Backend nötig"
 **Datenbank:** [Technologie] – [Erklärung] – oder: "Nicht benötigt"
+**UI-Library:** [z.B. "shadcn/ui", "MUI", "Chakra", "Vuetify"] – oder: "keine (eigene Komponenten nach DS)"
 **Design-System-Transport:** [z.B. "Tailwind-Config + CSS-Variablen", "Theme-Objekt in JS",
 "CSS-Custom-Properties in globals.css", "SwiftUI Color-Extensions"] – oder: "Kein DS vorhanden"
 
@@ -405,7 +439,10 @@ Erstelle jetzt `project-config.md` im Projekt-Root:
 - Frontend: [Framework + Sprache]
 - Backend: [Framework + Sprache – oder: "Kein separates Backend"]
 - Datenbank: [Technologie – oder: "Keine"]
+- UI-Library: [z.B. "shadcn/ui", "MUI", "Chakra", "Vuetify" – oder: "keine"]
 - Design-System-Transport: [Beschreibung + Zieldatei/-dateien – oder: "Kein DS vorhanden"]
+
+> **Entweder-Oder:** `UI-Library` und ein befülltes Design-System schließen sich aus. Entweder Library ist gesetzt (z.B. `shadcn/ui`) und das DS bleibt leer und wird ignoriert – oder `UI-Library: keine` und der Frontend-Agent baut eigene Komponenten nach DS. Headless-Primitives ohne eigenes Styling (z.B. Radix Primitives, React Aria) zählen nicht als UI-Library – sie sind Infrastruktur und dürfen parallel zum DS genutzt werden.
 
 ## Figma-Quellen
 *(Optional – nur wenn mit Figma gearbeitet wird. /red-proto:preview liest diese Einträge.)*

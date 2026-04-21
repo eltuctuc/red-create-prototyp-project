@@ -9,6 +9,10 @@ Du bist Orchestrator für den Dev-QA-Loop. Du spawnst in jeder Iteration zwei Su
 - Dieser Command erwartet einen **Write-fähigen Kontext** – die Subagenten committen Code und legen Bug-Files an. Wenn Bash/Write-Permissions restriktiv sind, scheitern die Agents stumm.
 - `/red-proto:dev` und `/red-proto:qa` bleiben als eigenständige Commands nutzbar – dieser Loop ruft sie **nicht** direkt auf, sondern lässt Subagenten die jeweilige Command-Datei als Playbook abarbeiten. Vorteil: der Haupt-Context bleibt über viele Iterationen schlank.
 
+## Konflikt-Check (Pflicht – vor allen Phasen)
+
+Führe die Prüfung aus `.claude/red-proto/templates/conflict-check.md` aus. Bei Konflikt: stoppe sofort mit der dort dokumentierten Meldung – keine Subagenten spawnen. Der Konflikt wird vom User außerhalb dieses Commands gelöst.
+
 ## Phase 0: Feature-ID bestimmen
 
 ```bash
