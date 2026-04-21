@@ -59,6 +59,12 @@ Bei Dateipfaden: Dateien vollständig lesen. Extrahiere:
 
 ## Phase 2: Personas
 
+Ordner bei Bedarf anlegen (idempotent):
+
+```bash
+mkdir -p test-setup
+```
+
 **Wenn bestehende Personas vorhanden sind** (im eingelesenen Material oder bereits in `test-setup/personas.md`): direkt übernehmen, ggf. auf den Prototyp-Kontext zuschneiden. Nicht neu erfinden.
 
 **Wenn keine Personas vorhanden sind:** Proto-Personas aus dem Material ableiten. Proto-Personas sind bewusst leichtgewichtig – sie dienen nur dazu, ein klares Test-Subjekt vor Augen zu haben, nicht als vollwertiges Research-Artefakt.

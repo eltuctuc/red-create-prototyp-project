@@ -23,6 +23,7 @@ Eine Sammlung von Claude Code Commands, die eine vollständige Produktentwicklun
 /red-proto:preview      → Abnahme-Screens aus Spec, vor Dev begutachten
 /red-proto:dev          → Implementierung (Frontend + Backend parallel, falls nötig)
 /red-proto:qa           → Tests + Accessibility + Security + Copy-Drift + Bug-Reports
+/red-proto:dev-qa-loop  → Automatischer dev→qa-Loop bis Bugs unter Fix-Schwelle (alternativ zu manuellem Wechsel)
 ```
 
 Jeder Command ist eigenständig – du kannst über `/red-proto:workflow` jederzeit wiedereinsteigen, er sagt dir wo du stehst. Commands bauen aufeinander auf: jeder liest den Output des vorherigen und ergänzt die gemeinsamen Artefakte.
@@ -46,9 +47,15 @@ Jeder Command ist eigenständig – du kannst über `/red-proto:workflow` jederz
 
 **QA-Dev-Loop pro Feature** *(mindestens einmal):*
 
-10. `/red-proto:dev` – Implementierung in der aktuellen Session, schreibt `context/FEAT-x-dev-handoff.md`
-11. `/red-proto:qa` – **in neuer Session** – Tests + Bug-Reports
-12. Bugs über Schwelle? → zurück zu 10. Keine Bugs → Feature fertig.
+Zwei Wege – manuell oder automatisch:
+
+- **Manuell:**
+  10. `/red-proto:dev` – Implementierung, schreibt `context/FEAT-x-dev-handoff.md`
+  11. `/red-proto:qa` – **in neuer Session** – Tests + Bug-Reports
+  12. Bugs über Schwelle? → zurück zu 10. Keine Bugs → Feature fertig.
+
+- **Automatisch** (empfohlen für längere Loops):
+  10. `/red-proto:dev-qa-loop FEAT-X` – orchestriert die Iterationen selbst. In jeder Runde spawnt der Command zwei Subagenten (einen für dev, einen für qa), sammelt die Bugs, berechnet ein Risk-Level und iteriert, bis keine Bugs mehr über der Fix-Schwelle offen sind. Bei zwei aufeinanderfolgenden HIGH-Risk-Runden bietet er einen Exit an. Log liegt unter `context/FEAT-X-loop.log`.
 
 **Wiedereinstieg:** `/red-proto:workflow` funktioniert an jedem Punkt und zeigt dir, wo du im Ablauf stehst.
 
@@ -99,7 +106,9 @@ flowchart TD
     WF -.-> loop
 ```
 
-> **Session-Trennung im QA-Dev-Loop:** `/red-proto:dev` und `/red-proto:qa` laufen bewusst in getrennten Sessions. `/red-proto:dev` schreibt am Ende ein Handoff-File in `context/`, das `/red-proto:qa` in der neuen Session einliest. Das verhindert Kontext-Akkumulation und hält den Token-Verbrauch niedrig.
+> **Kontext-Trennung im QA-Dev-Loop:** Beide Wege verhindern Kontext-Akkumulation, aber mit unterschiedlichen Mitteln:
+> - **Manuell:** `/red-proto:dev` und `/red-proto:qa` in **getrennten Sessions**. Dev schreibt `context/FEAT-x-dev-handoff.md`, qa liest es in der neuen Session ein.
+> - **Automatisch:** `/red-proto:dev-qa-loop` läuft in **einer Session**, spawnt aber pro Iteration einen Dev- und einen QA-**Subagent** mit isoliertem Kontext. Nur die kompakten Rückgabe-Zeilen landen im Haupt-Kontext, nicht die komplette Arbeit.
 
 ---
 
@@ -119,6 +128,13 @@ Optional:
 - **[`gh` CLI](https://cli.github.com/)** – nur wenn `/red-proto:dev-setup` ein GitHub-Repo anlegen soll.
 - **Figma-MCP-Server** – nur wenn `/red-proto:preview` Screens direkt aus Figma ziehen soll. Ohne MCP lädst du PNGs im Chat hoch oder legst sie manuell ab.
 - **Stack-Laufzeit** – Python, Go, Swift etc. werden erst nach der Stack-Wahl in `/red-proto:dev-setup` relevant, nicht vorher.
+
+### Empfohlenes Claude-Modell
+
+- **Für die Installation (`/red-proto:create`) reicht Haiku.** Der Command macht nur mechanisches Kopieren und JSON-Schreiben – dafür brauchst du kein grosses Modell.
+- **Für die eigentliche Arbeit mit dem Framework mindestens Opus 4.5.** Die kritisch-denkenden Rollen – Sparring über dein PRD, Requirements-Schärfung, Architektur-Entscheidungen, UX-Abwägungen, QA-Urteile – leben von der Tiefe eines starken Modells. Mit Haiku sparst du Tokens, bekommst aber oberflächliche Ergebnisse, die den ganzen Framework-Aufwand wieder entwerten. Opus 4.5 oder neuer ist teurer, aber die Tokens, die du für ein halbgares Sparring-PRD oder einen flachen Architektur-Entwurf verbrennst, sind am Ende höher.
+
+Modell-Wechsel in Claude Code: `/model` oder in `~/.claude/settings.json` das Feld `"model"`.
 
 ---
 
@@ -166,7 +182,17 @@ Dann in Claude Code:
 /red-proto:create
 ```
 
-`/red-proto:create` legt dieselben Ordner (`test-setup/`, `features/`, `flows/`, `bugs/`, `docs/`, `context/`, `design-system/`) an, die bei lokaler Installation sofort entstehen.
+`/red-proto:create` richtet denselben Zustand her, den du bei lokaler Installation bekommst: `.claude/` mit Commands und Agents plus `design-system/`. Alle weiteren Ordner (`test-setup/`, `features/`, `flows/`, `bugs/`, `context/`, `docs/`, dein Projektverzeichnis) legen die jeweiligen Commands bei Bedarf selbst an.
+
+#### Was dich während `/red-proto:create` erwartet
+
+Claude Code wird dich zweimal um Bestätigung bitten. Beides ist **normales Verhalten**, keine Fehlermeldung – Claude Code fragt grundsätzlich einmal nach, bevor es in ein neues Verzeichnis schreibt oder eine Permissions-Datei anlegt:
+
+1. **Verzeichnis anlegen** – Claude Code fragt, ob es in `.claude/commands/red-proto` schreiben darf. Wähle „Yes, and always allow access to commands/ from this project" und du hast für die Session Ruhe.
+
+2. **`.claude/settings.json` erstellen** – legt projektlokale Terminal-Permissions fest, damit du nicht bei jedem Bash-/Git-/Node-Befehl erneut zustimmen musst. Der genaue Inhalt wird dir vor dem Zustimmen gezeigt.
+
+Beide Aktionen wirken **ausschließlich projektlokal**. Deine globale `~/.claude/settings.json` bleibt unangetastet.
 
 ---
 
@@ -185,29 +211,28 @@ Nach dem Setup hat dein Projekt folgende Struktur:
 ```
 ./
   .claude/
-    commands/          ← Alle Pipeline-Commands (red-proto:sparring, red-proto:dev, ...)
-    agents/            ← Sub-Agents (frontend-developer, ux-reviewer, ...)
-  design-system/       ← Optional: Tokens/Komponenten/Patterns als Markdown
-    tokens/            ← Farben, Typografie, Spacing, Shadows, Motion
-    components/        ← Button, Input, Card, ...
-    patterns/          ← Navigation, Formulare, Feedback, Datendarstellung
-    screens/           ← Referenz-Screens (Mockups globaler Patterns)
-  features/
-    STATUS.md          ← Zentraler Status-Index aller Features
-    FEAT-1-name.md     ← Feature-Spec (erstellt von /red-proto:requirements,
-                         akkumulativ ergänzt von ux, architect, dev, qa)
-    FEAT-1-name/
-      screens/         ← Optional: Abnahme-Screens (von /red-proto:preview)
-        S-10-*.png
-        index.md       ← Metadaten der Abnahme-Screens
-  flows/               ← Screen-Inventar + verbindliche Transition-Tabellen
-  test-setup/          ← Personas + Test-Hypothesen für Prototyp-Tests
-  bugs/                ← Bug-Reports (werden nicht gelöscht, sondern zu -fixed.md)
-  context/             ← Session-Handoffs (dev → qa Übergaben)
-  docs/                ← Produktfähigkeiten + Release-Historie
-  prd.md               ← Product Requirements Document (erstellt von /red-proto:sparring)
-  project-config.md    ← Tech-Stack, Pfade, Versionierung
+    commands/               ← Alle Pipeline-Commands
+    agents/                 ← Sub-Agents (frontend-developer, ux-reviewer, ...)
+  design-system/
+    README.md               ← Erklärt Struktur-Empfehlungen (frei wählbar)
+    [dein Content]          ← Tokens, Komponenten, Patterns – Struktur nach Wahl
+  [prd.md]                  ← /red-proto:sparring
+  [test-setup/]             ← /red-proto:test-setup
+    personas.md
+    hypotheses.md
+  [features/]               ← /red-proto:requirements, ux, architect, dev, qa
+    STATUS.md
+    [FEAT-X-name.md]        ← Akkumulative Feature-Spec
+    [FEAT-X-name/screens/]  ← /red-proto:preview (optional, Abnahme-Screens)
+  [flows/]                  ← /red-proto:flows
+  [bugs/]                   ← /red-proto:qa (Bug-Reports, -fixed.md nach Fix)
+  [context/]                ← /red-proto:dev, /red-proto:dev-qa-loop
+  [docs/]                   ← /red-proto:qa (produktfähigkeiten, releases)
+  [projektverzeichnis/]     ← /red-proto:dev-setup (Name bei Scaffold gewählt)
+  [project-config.md]       ← /red-proto:dev-setup
 ```
+
+> `[eckige Klammern]` bedeutet: wird erst vom genannten Command angelegt, sobald er das erste Mal läuft. Name oder innere Struktur kann sich je nach User-Wahl unterscheiden. Beim Start nach der Installation ist nur `.claude/` und `design-system/` sichtbar – alles andere wächst mit dem Projekt.
 
 Details zu allen File-Formaten: [ARTIFACT_SCHEMA.md](./ARTIFACT_SCHEMA.md)
 

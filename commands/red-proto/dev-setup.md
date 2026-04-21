@@ -62,12 +62,12 @@ Die Platform-Entscheidung fließt direkt in die Tech-Stack-Empfehlung in Phase 3
 ## Phase 1c: Design-System prüfen
 
 ```bash
-DS_TOKENS=$(ls design-system/tokens/*.md 2>/dev/null | wc -l | xargs)
-DS_COMPONENTS=$(ls design-system/components/*.md 2>/dev/null | wc -l | xargs)
-echo "DS-Tokens: $DS_TOKENS Dateien | DS-Komponenten: $DS_COMPONENTS Dateien"
+# Zähle alle *.md außer README.md rekursiv – strukturagnostisch.
+DS_FILES=$(find design-system -type f -name "*.md" ! -name "README.md" 2>/dev/null | wc -l | xargs)
+echo "DS: $DS_FILES Dateien mit Inhalt"
 ```
 
-**Wenn das Design-System befüllt ist** (Tokens und/oder Komponenten vorhanden): Lies `design-system/tokens/*.md` grob durch. Die dort dokumentierten Tokens (Farben, Typo, Spacing, Shadows) beeinflussen die Stack-Wahl, weil nicht jeder Stack sie gleich gut aufnimmt. Berücksichtige das in Phase 2 und 3.
+**Wenn das Design-System befüllt ist** (`DS_FILES > 0`): Lies die Dateien grob durch (rekursiv, egal welche Ordnerstruktur). Die dort dokumentierten Tokens (Farben, Typo, Spacing, Shadows, was auch immer vorhanden) beeinflussen die Stack-Wahl, weil nicht jeder Stack sie gleich gut aufnimmt. Berücksichtige das in Phase 2 und 3.
 
 **Wenn es leer ist**: Weise den User darauf hin, dass ein Design-System später schwieriger zu integrieren ist. Ausführen lässt sich das Setup trotzdem – der User hat dann die Wahl, jetzt zurückzugehen und das DS anzulegen oder später mit einem technischen Transport zu leben, der nicht optimal passt.
 
@@ -78,7 +78,7 @@ AskUserQuestion({
       question: "Das Design-System ist noch leer. Willst du jetzt eines anlegen, bevor wir den Tech-Stack festlegen?",
       header: "Design-System vor Stack?",
       options: [
-        { label: "Pause – ich lege das DS erst an", description: "design-system/tokens/ befüllen (Farben, Typo, Spacing), dann /red-proto:dev-setup erneut aufrufen" },
+        { label: "Pause – ich lege das DS erst an", description: "design-system/ befüllen (Struktur nach Wahl, siehe design-system/README.md), dann /red-proto:dev-setup erneut aufrufen" },
         { label: "Weiter ohne DS", description: "Stack ohne DS-Kontext wählen – Tokens werden später generisch transportiert" }
       ],
       multiSelect: false
@@ -275,9 +275,11 @@ Führe die Befehle für `[gewähltes Framework]` aus. Danach zurück zu Phase 5b
 
 ## Phase 5b: Design-System-Tokens in Projekt transportieren
 
-Nur ausführen wenn `design-system/tokens/` befüllt ist.
+Nur ausführen wenn das Design-System überhaupt Inhalt hat (`DS_FILES > 0` aus Phase 1c).
 
-Lies die Token-Dateien (`design-system/tokens/colors.md`, `typography.md`, `spacing.md`, `shadows.md`) und transformiere sie in das für den gewählten Stack passende Format. Der konkrete Transport wurde in Phase 3 als Teil der Empfehlung entschieden – jetzt wird er ausgeführt:
+Lies **alle** `*.md`-Dateien rekursiv aus `design-system/` (außer `README.md`) und extrahiere die dort dokumentierten Tokens (Farben, Typografie, Spacing, Shadows, Motion, …). Die konkrete Ordnerstruktur ist egal – Tokens können in `design-system/tokens/colors.md` stehen, oder direkt in `design-system/colors.md`, oder verteilt auf mehrere Dateien mit Mischinhalten. Erkenne Tokens nach ihrem Inhalt, nicht nach ihrem Pfad.
+
+Transformiere die gefundenen Tokens in das für den gewählten Stack passende Format. Der konkrete Transport wurde in Phase 3 als Teil der Empfehlung entschieden – jetzt wird er ausgeführt:
 
 - **Next.js / Vite + React mit Tailwind:** Tokens in `[codedir]/tailwind.config.js` (theme.extend.colors, fontFamily, spacing, boxShadow) + CSS-Variablen in `[codedir]/src/app/globals.css` (oder vergleichbar)
 - **Nuxt / Vue mit Tailwind:** wie oben, Pfade entsprechend Vue-Struktur
@@ -287,9 +289,9 @@ Lies die Token-Dateien (`design-system/tokens/colors.md`, `typography.md`, `spac
 - **Sonstige Stacks:** Tokens als `design-tokens.json` im Code-Verzeichnis + Kommentar, dass der Transport manuell zu ergänzen ist
 
 **Verifikation:**
-- Alle Token-Werte aus `design-system/tokens/` sind im Ziel-Format angekommen
+- Alle Token-Werte aus `design-system/` sind im Ziel-Format angekommen
 - Zeige dem User die erzeugten Dateien und eine kurze Zusammenfassung: "Farb-Tokens [N], Typo [N], Spacing [N], Shadows [N] transportiert nach [Dateipfade]"
-- Die Ground Truth bleibt `design-system/tokens/` – der Transport ist generiert. Änderungen am DS müssen hier erneut laufen (Hinweis im Commit).
+- Die Ground Truth bleibt `design-system/` – der Transport ist generiert. Änderungen am DS müssen hier erneut laufen (Hinweis im Commit).
 
 ---
 

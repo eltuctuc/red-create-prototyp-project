@@ -5,6 +5,39 @@ Neueste Version zuerst – ältere Versionen weiter unten.
 
 ---
 
+## [Unreleased]
+
+### Neue Features
+
+- **`/red-proto:dev-qa-loop` als offizieller Command:** Der Dev-QA-Loop, bisher ein lokales Claude-Code-Skill unter `~/.claude/skills/`, ist jetzt ein regulärer Slash-Command im Framework. Ruf ihn mit einer Feature-ID auf – er spawnt pro Iteration einen Dev-Subagent (arbeitet `dev.md` autonom ab) und einen QA-Subagent (arbeitet `qa.md` autonom ab), sammelt die Bugs, berechnet ein Risk-Level und iteriert, bis keine Bugs mehr über der Fix-Schwelle offen sind. Der Haupt-Context bleibt schlank, weil die eigentliche Arbeit in den Subagenten passiert.
+- **Persistenter Loop-Log:** `context/FEAT-X-loop.log` hält Fix-Schwelle und Iterations-Historie fest. Bei Session-Abbruch oder erneutem Aufruf setzt der Loop genau dort an, wo er aufgehört hat.
+- **Fix-Schwelle mit Kontext:** In der ersten Iteration fragt der Loop einmalig nach der Schwelle – Default ist `Critical + High` für Prototypen, und wenn in einem anderen Feature schon mal ein Wert gewählt wurde, wird er als zusätzliche Option angeboten. Einmal gesetzt, nie wieder gefragt.
+- **Risk-Berechnung als priorisierte Regelliste:** Bugs zählen, neue Bugs, wiederkehrende Bugs – alles fließt in ein Risiko-Level, das die oberste matchende Regel bestimmt. Keine Ambiguität mehr, 2× HIGH in Folge löst ein Exit-Angebot aus.
+- **Strikter Bug-Regex:** Bugs werden per `^BUG-FEAT[N]-` zugeordnet – FEAT-1 matcht nicht mehr versehentlich FEAT-10, FEAT-11 etc.
+
+### Fixes
+
+- **`/red-proto:create` schreibt nicht mehr in die globale `~/.claude/settings.json`:** Beim Smoke-Test hatten sich die Wildcard-Permissions (`Bash(*)`, `Read(*)`, …) in die globalen User-Settings verirrt statt ins projektlokale `.claude/settings.json`. Ursache: die Anleitung ließ offen, welche Datei gemeint ist, und triggerte einen Bash-Script-Umweg statt einer sauberen Schreiboperation. Jetzt: Hard-Guards im Command, die `~/.claude/` ausdrücklich tabu machen, und explizite Anweisung, die nativen Datei-Tools zu nutzen. Entschuldigung an alle, deren globale Settings dadurch ungewollt Wildcard-Einträge bekommen haben – einmal öffnen und manuell entfernen.
+- **Trailing-Slash-Bug beim Design-System-Copy:** `cp -rn .../design-system/ ./` hat durch macOS-`cp`-Semantik den **Inhalt** statt den Ordner ins Projekt-Root kopiert. Ergebnis: `components/`, `patterns/`, `screens/`, `tokens/` lagen als lose Ordner neben deinem Code. Gefixt durch explizites Ziel `./design-system/`. Beim Update-Pfad zusätzlich kritisch, weil er ohne `-n` eine existierende Projekt-README hätte überschreiben können.
+
+### Verbesserungen
+
+- **Installations-Transparenz in der README:** Neuer Abschnitt „Was dich während `/red-proto:create` erwartet" erklärt die zwei Berechtigungs-Prompts, die Claude Code per Design zeigt (Verzeichnis anlegen, settings.json erstellen). Beide sind erwartet, nicht gefährlich, und wirken ausschließlich projektlokal.
+- **Lazy Ordner-Anlage:** `test-setup/`, `features/`, `flows/`, `bugs/`, `context/`, `docs/` und das Projektverzeichnis werden nicht mehr vorab vom Installer/Create angelegt. Jeder Command legt seinen eigenen Output-Ordner idempotent per `mkdir -p` an, wenn er ihn das erste Mal braucht. Beim Projektstart sind nur `.claude/` und `design-system/` sichtbar – weniger leere Ordner, weniger Kognitions-Last für den Nutzer.
+- **Design-System-Struktur ist frei wählbar:** `/red-proto:dev-setup` Phase 1c prüft jetzt strukturagnostisch (`find design-system -name "*.md"`), Phase 5b liest alle `*.md` rekursiv. Egal ob Tokens in `tokens/colors.md` oder direkt als `colors.md` auf Root-Ebene liegen – beides wird erkannt und transportiert.
+- **`design-system/README.md` neu geschrieben:** Erklärt jetzt explizit, dass die Struktur frei wählbar ist, zeigt drei Beispiel-Strukturen (klassisch nach Art, flach, nach Feature/Domäne) und beschreibt, was die Agents mit dem Inhalt tun. Nicht prescriptive mehr.
+- **Struktur-Bäume in README und ARTIFACT_SCHEMA** nutzen jetzt `[eckige Klammern]` als Notation für lazy angelegte Ordner und dynamische Namen. Analog zu React-Dynamic-Routes. Legende direkt unter dem Baum.
+- **„Autonomer Modus" als Konvention:** Die Regeln, wie ein Subagent eine andere Command-Datei als Playbook abarbeitet (AskUserQuestion-Gates überspringen, Hard-Guards beibehalten, am Ende committen, kompaktes Rückgabeformat), stehen jetzt in `docs/CONVENTIONS.md` als eigene Sektion. Subagent-Prompts können darauf verweisen, statt die Regeln jedes Mal auszubuchstabieren.
+- **`context/` im Artefakt-Schema dokumentiert:** War vorher gar nicht aufgeführt, obwohl `/red-proto:dev` schon länger `FEAT-X-dev-handoff.md` dort ablegt. Jetzt steht der Ordner inklusive des neuen `FEAT-X-loop.log` im Schema.
+- **`/red-proto:sparring` kennt den Auto-Loop:** Die Pipeline-Übersicht am Ende des Sparring-Commands zeigt jetzt beide Wege (manuell dev→qa vs. automatisch dev-qa-loop).
+- **README Kontext-Trennung klarer formuliert:** Der alte Hinweis sagte pauschal „getrennte Sessions". Jetzt unterscheiden wir: manueller Pfad = getrennte Sessions, Auto-Loop = Subagents mit isoliertem Kontext innerhalb einer Session.
+
+### Hinweise
+
+- Der alte Skill in `~/.claude/skills/red-proto-dev-qa-loop/` war ein lokaler Prototyp beim Framework-Autor. Mit diesem Release wird er durch den offiziellen Command ersetzt. Wer ihn noch hat, kann ihn lokal löschen.
+
+---
+
 ## v0.19.4 — 20. April 2026
 
 README-Korrekturen nach einem zweiten Durchgang. Ein paar Aussagen waren schlicht falsch – raus damit.

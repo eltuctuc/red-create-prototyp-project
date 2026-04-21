@@ -140,8 +140,9 @@ PRD gespeichert. Die empfohlene Reihenfolge:
   DANN PRO FEATURE (Build-Loop bis QA grün):
   → /red-proto:architect
   → /red-proto:preview       (optional) Abnahme-Screens begutachten bevor gebaut wird
-  → /red-proto:dev → /red-proto:qa
-     └── Bugs? → /red-proto:dev → /red-proto:qa (wiederholen)
+  → Zwei Wege für den Dev-QA-Zyklus:
+     manuell: /red-proto:dev → neue Session → /red-proto:qa → bei Bugs zurück
+     automatisch: /red-proto:dev-qa-loop FEAT-X (iteriert bis Bugs unter Fix-Schwelle)
 
 Nach einer Pause: /red-proto:workflow zeigt dir exakt wo du stehst.
 ```

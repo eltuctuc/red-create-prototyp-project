@@ -1,62 +1,87 @@
 # Design System
 
-Zentrales Verzeichnis für alle Design-Vorgaben. Alle Agents des Frameworks lesen dieses Verzeichnis – es ist die verbindliche Referenz für Entscheidungen in UX-Design, Implementierung und Review.
+Dieses Verzeichnis enthält dein Design-System – Tokens, Komponenten, Patterns, Screens.
 
-## Struktur
+## Struktur ist frei wählbar
+
+Du **musst** keine bestimmte Ordner-Struktur einhalten. Die Agents lesen rekursiv alle `*.md`-Dateien in diesem Verzeichnis und verstehen sie als Design-System-Dokumentation. Nur diese README selbst ist ausgenommen.
+
+Wähle die Anordnung, die dir und deinem Team natürlich vorkommt. Unten stehen drei Beispiele – jedes davon ist gültig.
+
+## Beispiel-Strukturen
+
+### Klassisch (nach Art sortiert)
 
 ```
 design-system/
   tokens/
-    colors.md          ← Farb-Tokens (Primär, Sekundär, Semantic, Neutral)
-    typography.md      ← Schriften, Größen, Gewichte, Line-Heights
-    spacing.md         ← Spacing-Scale und Named Sizes
-    shadows.md         ← Elevation-System
-    motion.md          ← Transitions, Durations, Easing (optional)
+    colors.md
+    typography.md
+    spacing.md
+    shadows.md
   components/
-    button.md          ← Beispiel-Komponente (kopieren und anpassen)
-    input.md           ← Beispiel-Komponente
-    card.md            ← Beispiel-Komponente
-    [weitere].md       ← Eigene Komponenten hier ablegen
+    button.md
+    input.md
   patterns/
-    navigation.md      ← Header, Sidebar, Breadcrumb, Tab-Navigation
-    forms.md           ← Formular-Aufbau, Validation, Fehlermeldungen
-    feedback.md        ← Toasts, Modals, Loading States, Empty States
-    data-display.md    ← Tabellen, Listen, Cards, Badges
-  screens/
-    README.md          ← Anleitung für Screen-Exports
-    [flow-name]/       ← Figma-Exports oder Screenshots nach Flow gruppiert
+    navigation.md
+    forms.md
 ```
 
-## Anleitung
+Dies ist die Struktur, mit der das Framework als Starter-Content ausgeliefert wird. Gut, wenn du klare Kategorien willst.
 
-### Wann befüllst du dieses Verzeichnis?
+### Flach
 
-**Du musst diesen Ordner nicht vor dem ersten Feature vollständig befüllen.** Fang mit dem an was du weißt – ein paar Farb-Tokens, ein Button – und ergänze während der Entwicklung. Was noch nicht definiert ist, füllen die Agents pragmatisch. Was definiert ist, wird verbindlich eingehalten.
+```
+design-system/
+  colors.md
+  typography.md
+  spacing.md
+  effects.md
+  icons.md
+  layout.md
+  components/
+    button.md
+    combo-box.md
+    field.md
+    table.md
+```
 
-Das Design System wächst mit dem Projekt. Das ist normal und gewollt.
+Tokens direkt im Hauptordner, Komponenten sammeln sich in einem Unterordner. Weniger Verschachtelung, schnelles Überfliegen.
 
-### So befüllst du dieses Verzeichnis
+### Nach Feature oder Domäne
 
-1. **Tokens zuerst** – Farben, Typografie und Spacing sind die Basis für alle Komponenten. Trage die Werte aus deinem Figma/Styleguide in die Token-Files ein.
+```
+design-system/
+  foundations.md
+  auth/
+    login-button.md
+    form-field.md
+  dashboard/
+    widget-card.md
+    metric-display.md
+```
 
-2. **Komponenten** – Jede Komponente bekommt ein eigenes File. Kopiere `components/button.md` als Vorlage. Trage Varianten, Zustände und visuelle Specs ein.
+Wenn dein Projekt mehrere UI-Bereiche mit eigenen Mustern hat.
 
-3. **Patterns** – Übergreifende UX-Muster (wie Formulare aufgebaut sind, wie Navigation funktioniert). Diese informieren den UX-Design-Schritt direkt.
+## Was die Agents mit dem Inhalt machen
 
-4. **Screens** – Exportiere Figma-Screens als PNG und lege sie in den passenden Flow-Unterordner. Benenne sie aussagekräftig: `01-login.png`, `02-dashboard.png`.
+| Agent / Command | Nutzen aus dem DS |
+|------------------|-------------------|
+| `/red-proto:dev-setup` Phase 1c | Prüft ob DS überhaupt befüllt ist (zählt `*.md`-Dateien) |
+| `/red-proto:dev-setup` Phase 5b | Liest Token-Dateien und transformiert sie in Stack-Format (Tailwind-Config, CSS-Variablen, SwiftUI-Extensions, …) |
+| `/red-proto:ux` | Nutzt Komponenten/Patterns als Vorlage für UX-Entscheidungen |
+| `/red-proto:dev`, `frontend-developer` | Implementiert nach DS-Specs und -Tokens |
+| `ux-reviewer` | Prüft Implementierung auf DS-Konformität |
 
-### Was passiert mit diesen Inhalten?
+## Wann kein DS nötig ist
 
-| Agent | Liest | Zweck |
-|-------|-------|-------|
-| `/red-proto:ux` | `components/`, `patterns/` | Nur DS-konforme Komponenten in User Flows |
-| `/red-proto:dev` | `tokens/`, `components/` | Tokens und Specs direkt in Code übersetzen |
-| `frontend-developer` | alles | Vollständige DS-Referenz bei Implementierung |
-| `ux-reviewer` | alles | DS-Compliance-Check nach Implementierung |
+Wenn dein Tech-Stack eine **UI-Library** mitbringt (shadcn/ui, Material UI, Vuetify, Chakra, …), bringt die Library Look & Feel bereits mit. In diesem Fall gewinnt die Library: die Agents ignorieren den Markdown-DS stillschweigend und bauen nach Library-Konventionen. Lass diesen Ordner dann leer oder mit Minimal-Notizen.
 
-### Regeln für Agents
+Eine Kombination aus UI-Library **und** befülltem Markdown-DS ist nicht empfohlen – die Library-Konventionen gewinnen immer, und der DS-Inhalt wirkt dann irreführend.
 
-- Existiert eine Komponente im DS → baue keine eigene, nutze die Spec
-- Existiert keine passende Komponente → baue eine neue, dokumentiere sie im `## Offene Punkte` im Feature-File
-- Tokens haben Vorrang vor Hardcoded-Werten (kein `#3B82F6` direkt – stattdessen den Token-Namen nutzen)
-- Abweichungen vom DS sind als UX-Bug zu melden (Severity: Medium oder höher)
+## Regeln für befüllte DS-Dateien
+
+- **Tokens haben Vorrang vor Hardcoded-Werten.** Kein `#3B82F6` direkt im Code – stattdessen den Token-Namen referenzieren.
+- **Existiert eine Komponente → nutze die Spec**, baue keine eigene.
+- **Existiert keine passende Komponente → baue eine neue** und ergänze sie im DS, wenn sie wiederverwendbar ist.
+- **Abweichungen** vom DS sind als UX-Bug zu melden (Severity: Medium oder höher).
