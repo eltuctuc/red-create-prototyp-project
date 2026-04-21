@@ -1,23 +1,26 @@
 ---
 name: Preview
-description: Optionales Abnahme-Gate – erzeugt Screens aus der fertigen Feature-Spec, damit der User das erwartete Ergebnis vor der Umsetzung begutachten und korrigieren kann
+description: Optionales Abnahme-Gate – erzeugt Screens in Figma aus der fertigen Feature-Spec, damit der User sie vor der Umsetzung begutachten und abnicken kann
 ---
 
 > Lies `.claude/red-proto/CONVENTIONS.md` für die verbindlichen Draft/Approval/Resume-Regeln.
 
-Du bist der Abnahme-Pass vor Dev. Deine Aufgabe: aus der fertig befüllten Feature-Spec (Requirements + UX + Architect) **konkrete Screens erzeugen**, die der User sich anschaut und entweder abnickt oder korrigieren lässt – **bevor** gebaut wird.
+Du bist der Abnahme-Pass vor Dev. Deine Aufgabe: aus der fertig befüllten Feature-Spec (Requirements + UX + Architect) **konkrete Abnahme-Screens in Figma erzeugen**, die der User sich dort anschaut und entweder abnickt oder korrigieren lässt – **bevor** gebaut wird.
 
 **Wichtig:**
 - Dieser Command ist **optional**. Features ohne Abnahme-Screens laufen genauso durch die Pipeline.
-- Es gibt **kein visuelles QA**. Die Abnahme ist menschlich – du legst die Screens nur sauber ab, der User begutachtet sie selbst.
-- Screens sind **ab Abnahme Ground Truth** für `/red-proto:dev`. Dev baut gegen sie, nicht mehr nur gegen die Spec.
+- Screens werden **in Figma erzeugt**, nicht lokal abgelegt. Der User nimmt sie in Figma ab.
+- **Keine PNG/Base64-Ablage im Repo.** Abbilder sind zu groß für die lokale Speicherung und führen zu Timeout- und Ressourcen-Problemen. Das Repo speichert ausschließlich Metadaten + Figma-Frame-URLs.
+- Screens sind **ab Abnahme Ground Truth** für `/red-proto:dev`. Dev baut gegen sie (anhand der Figma-Links), nicht mehr nur gegen die Spec.
+
+## Konflikt-Check (Pflicht – vor allen Phasen)
+
+Führe die Prüfung aus `.claude/red-proto/templates/conflict-check.md` aus. Bei Konflikt: stoppe sofort mit der dort dokumentierten Meldung. Der Konflikt wird vom User außerhalb dieses Commands gelöst – kein Dialog hier.
 
 ## Phase 0: Voraussetzungen prüfen
 
 ```bash
-# Welches Feature?
-# Aus Argument oder aus zuletzt bearbeitetem Feature ableiten.
-
+# Welches Feature? – aus Argument oder aus zuletzt bearbeitetem Feature ableiten.
 FEAT_FILE=$(ls features/FEAT-[X]-*.md 2>/dev/null | head -1)
 if [ -z "$FEAT_FILE" ]; then
   echo "FEHLER: Keine Feature-Spec für FEAT-[X] gefunden."
@@ -26,35 +29,57 @@ fi
 
 cat "$FEAT_FILE"
 
-# Prüfen: Spec muss Requirements, UX und Architect bereits befüllt haben
+# Spec-Vollständigkeit prüfen
 if ! grep -q "## 2. UX" "$FEAT_FILE" || ! grep -q "## 3. Technisches Design" "$FEAT_FILE"; then
   echo "HINWEIS: Feature-Spec ist noch nicht vollständig. /red-proto:preview macht vor allem Sinn, wenn UX und Architect befüllt sind."
 fi
-
-# Design-System laden
-cat design-system/INDEX.md 2>/dev/null
-
-# Figma-Quelle aus project-config.md?
-FIGMA_URL=$(grep -A3 "^## Figma-Quellen" project-config.md 2>/dev/null | grep "File-URL:" | cut -d':' -f2- | xargs)
-FIGMA_KEY=$(grep -A3 "^## Figma-Quellen" project-config.md 2>/dev/null | grep "File-Key:" | cut -d':' -f2- | xargs)
-echo "Figma: URL=$FIGMA_URL | Key=$FIGMA_KEY"
 ```
 
-Fasse im Chat kurz zusammen was du über das Feature gelesen hast (1–2 Sätze), damit der User sicher ist, dass du das richtige Feature im Kopf hast.
+**Figma-MCP-Check (Pflicht):**
 
-## Phase 1: Quelle wählen
+Dieser Command schreibt in Figma. Wenn der Figma-MCP-Server nicht verbunden ist, scheitern die Write-Calls. Prüfe die Verfügbarkeit, bevor du weitermachst:
+
+- Versuche einen harmlosen Read: `mcp__figma__whoami`
+- Fehler oder „tool not found" → **stoppen** und dem User sagen: „Figma-MCP-Server nicht erreichbar. Entweder MCP installieren/verbinden oder `/red-proto:preview` überspringen – das Feature läuft auch ohne Abnahme-Gate durch die Pipeline."
+
+Fasse im Chat kurz zusammen, was du über das Feature gelesen hast (1–2 Sätze), damit der User sicher ist, dass du das richtige Feature im Kopf hast.
+
+## Phase 1: Screen-Plan aus Spec ableiten
+
+Bevor du in Figma schreibst, leite aus der Spec ab **welche Screens gebraucht werden**. Quellen:
+
+- **UX-Abschnitt** (`## 2. UX`): welche Komponenten, welche Zustände (Initial, Leer, Gefüllt, Fehler, Loading, Erfolg)
+- **Acceptance Criteria**: jeder AC braucht mindestens einen Screen, der ihn visualisiert
+- **Flow-Schritte** aus `flows/product-flows.md` (falls vorhanden): jede relevante Transition
+
+Präsentiere den Plan dem User im Chat:
+
+```
+Screen-Plan für FEAT-[X] [Name]:
+
+  S-10  Initial (leerer Zustand)
+  S-11  Ausgefüllt (typische Eingabe)
+  S-12  Fehler (Validierung schlägt fehl)
+  S-13  Erfolg (Confirmation)
+
+Erzeuge ich diese 4 Screens in Figma, oder willst du etwas ergänzen/streichen?
+```
+
+Warte auf Bestätigung, bevor du Phase 2 startest. Änderungswünsche aufnehmen.
+
+## Phase 2: Ziel-Page in Figma erfragen
+
+Frage den User nach einem **Figma-Page-Link** (nicht Frame-Link). In diese Page schreibt Claude die erzeugten Screens.
 
 ```typescript
 AskUserQuestion({
   questions: [
     {
-      question: "Woher sollen die Abnahme-Screens kommen?",
-      header: "Screen-Quelle",
+      question: "In welche Figma-Page soll ich die Abnahme-Screens schreiben? Gib mir einen Page-Link aus deiner Figma-Datei (Rechtsklick auf die Page → 'Copy link to page').",
+      header: "Figma-Ziel",
       options: [
-        { label: "Figma – ich gebe dir Node-Links", description: "Du rufst sie per MCP ab und legst sie als PNG in features/FEAT-X/screens/ ab" },
-        { label: "Figma – hol sie aus der in project-config.md hinterlegten File", description: "Nur wenn File-Key konfiguriert ist – du findest relevante Frames selbst" },
-        { label: "Ich lade PNGs im Chat hoch", description: "Du legst sie unverändert in features/FEAT-X/screens/ ab und befüllst die index.md" },
-        { label: "Manuell ablegen", description: "Ich lege die PNGs selbst im Ordner ab – du befüllst nur die index.md nach meinen Angaben" }
+        { label: "Ich gebe dir den Link im Chat", description: "Claude parst fileKey + pageId und erzeugt dort die Screens" },
+        { label: "Abbrechen – ich habe noch keine Page angelegt", description: "Lege in Figma eine neue Page an (z.B. 'Preview FEAT-X'), dann /red-proto:preview erneut starten" }
       ],
       multiSelect: false
     }
@@ -62,117 +87,85 @@ AskUserQuestion({
 })
 ```
 
-## Phase 2: Screens beschaffen und ablegen
+Aus dem Link extrahieren:
+- `fileKey` – zwischen `figma.com/design/` und dem nächsten `/`
+- `pageId` – aus `node-id=<id>` (die Page-ID steht dort bei einem Page-Link). `-` durch `:` ersetzen.
 
-Lege den Zielordner an:
+Validiere mit `mcp__figma__get_metadata(fileKey)` dass die Page existiert und welchen Namen sie trägt. Zeige dem User zur Sicherheit: „Ich schreibe in Page **[Name]** der Datei **[Dateiname]**. Korrekt?"
 
-```bash
-FEAT_NAME=$(basename "$FEAT_FILE" .md)   # z.B. FEAT-1-login
-mkdir -p "features/$FEAT_NAME/screens"
-```
+## Phase 3: Screens in Figma erzeugen
 
-### Option A: Figma – Node-Links vom User
+Für jeden Screen aus dem Plan (Phase 1):
 
-Der User liefert einen oder mehrere Figma-URLs. Pro Link:
+1. **Beschreibung formulieren.** Aus Spec-Kontext + Zustand + ggf. DS- oder Library-Referenzen einen klaren Prompt bauen, den der Figma-Generator umsetzen kann. Beispiel: „Login-Screen mit E-Mail-Feld, Passwort-Feld, primärem 'Anmelden'-Button, klein darunter 'Passwort vergessen'-Link. Clean, Sans-Serif, viel Weißraum."
 
-1. `fileKey` und `nodeId` aus der URL extrahieren (Format: `figma.com/design/{fileKey}/.../node-id={nodeId}`). Beachte: `-` in `nodeId` → `:` umwandeln.
-2. `mcp__figma__get_design_context(fileKey, nodeId)` aufrufen – liefert Screenshot-URL, Struktur und Code-Referenz.
-3. Screenshot als PNG herunterladen und in `features/$FEAT_NAME/screens/` ablegen. Datei-Name: `S-[NN]-[kurzbezeichnung].png`, fortlaufend nummeriert pro Feature.
-4. Zustand und Flow-Schritt aus dem Figma-Frame-Namen oder dem Kontext ableiten.
+2. **Design-Quelle beachten** (aus `project-config.md`):
+   - **DS-Modus** (`UI-Library: keine`) → Tokens aus `design-system/` in den Prompt einweben (Farben, Typo, Spacing, Komponenten-Patterns).
+   - **Library-Modus** (`UI-Library: shadcn/ui` o.ä.) → Library-Aesthetic im Prompt referenzieren („shadcn/ui-Stil, Tailwind-Farben").
 
-### Option B: Figma – File-Key aus project-config.md
+3. **Aufruf:** `mcp__figma__generate_figma_design(prompt, fileKey, pageId)` — oder falls das Tool eine andere Signatur hat, das entsprechende Äquivalent. Bei Bedarf iterativ via `mcp__figma__use_figma` für präzisere Kontrolle.
 
-Wenn ein File-Key konfiguriert ist und der User keine expliziten Links liefert:
+4. **Rückgabe des Tools:** eine Frame-URL (oder Node-ID). Diese speichern für Phase 4.
 
-1. `mcp__figma__get_metadata(fileKey)` – gibt Seiten-Struktur zurück
-2. Zeige dem User im Chat eine Liste der gefundenen Top-Level-Frames, die potentiell zu diesem Feature gehören. Frage:
+Wenn ein einzelner Generate-Call scheitert: fahre mit den anderen Screens fort und merke den Fehler. Am Ende dem User eine Liste zeigen, welche Screens erzeugt wurden und welche nicht.
 
-```typescript
-AskUserQuestion({
-  questions: [
-    {
-      question: "Welche dieser Frames sind die Abnahme-Screens für FEAT-[X]?",
-      header: "Frame-Auswahl",
-      options: [
-        // dynamisch: für jeden Kandidaten-Frame einen Eintrag
-      ],
-      multiSelect: true
-    }
-  ]
-})
-```
+## Phase 4: index.md schreiben (nur Metadaten, keine Bilder)
 
-3. Pro ausgewähltem Frame wie in Option A vorgehen.
-
-### Option C: PNG-Upload im Chat
-
-Der User lädt Bilder direkt im Chat hoch. Pro Bild:
-
-1. Bild mit `Read`-Tool verarbeiten – beschreibe im Chat kurz was du siehst (Sicherheit: richtiger Screen?)
-2. Datei in `features/$FEAT_NAME/screens/S-[NN]-[kurzbezeichnung].png` ablegen
-3. Zustand und Flow-Schritt erfragen, falls nicht aus dem Bild offensichtlich
-
-### Option D: Manuell abgelegt
-
-Der User hat die PNGs selbst abgelegt:
-
-```bash
-ls "features/$FEAT_NAME/screens/"*.png 2>/dev/null
-```
-
-Zu jeder Datei Zustand und Flow-Schritt erfragen.
-
-## Phase 3: index.md schreiben
-
-Nach ARTIFACT_SCHEMA Format. Datei unter `features/$FEAT_NAME/screens/index.md` anlegen:
+Lege `features/FEAT-[X]-name/screens/index.md` an – **nur diese eine Datei, kein `screens/`-Ordner mit PNGs**:
 
 ```markdown
 ---
 status: draft
 feature: FEAT-[X]
-source: figma | upload | manual
+figma_file: <fileKey>
+figma_page: <pageId>
+figma_page_url: https://www.figma.com/design/<fileKey>/...?node-id=<pageId>
 ---
 
-# Screens – FEAT-[X]
+# Abnahme-Screens – FEAT-[X]
 
-Quelle: [Figma-File-URL oder "PNG-Upload" oder "manuell abgelegt"]
+**Figma-Page:** [Name der Page]([page-url])
 
-| Screen-ID | Datei | Zustand | Flow-Schritt | Figma-Node | Status |
-|-----------|-------|---------|--------------|------------|--------|
-| S-10 | S-10-empty.png | Initial | Einstieg | 123:456 | review |
-| S-11 | S-11-filled.png | Ausgefüllt | Nach Eingabe | 123:457 | review |
+| Screen-ID | Zustand | Flow-Schritt | Figma-Frame | Status |
+|-----------|---------|--------------|-------------|--------|
+| S-10 | Initial | Einstieg | [Frame-Link](https://www.figma.com/design/.../?node-id=<frameId>) | review |
+| S-11 | Ausgefüllt | Nach Eingabe | [Frame-Link](...) | review |
+| S-12 | Fehler | Validierung | [Frame-Link](...) | review |
+| S-13 | Erfolg | Confirmation | [Frame-Link](...) | review |
 ```
 
-Alle Screens landen mit Status `review` – die Abnahme kommt in Phase 4.
+Alle Screens landen mit Status `review`. Die Abnahme kommt in Phase 6.
 
-## Phase 4: Widerspruchs-Check gegen Spec
+**Wichtig:** Keine `*.png`-Dateien ablegen. Auch keine Base64-Strings in der `index.md`. Abbilder bleiben in Figma – das Repo speichert nur die Links.
 
-Vor der User-Abnahme: prüfe die erzeugten Screens auf offensichtliche Widersprüche zur Feature-Spec.
+## Phase 5: Widerspruchs-Check gegen Spec
 
-Lies die Spec und die index.md. Achte auf:
-- **Acceptance Criteria vs. Screens:** Werden alle AC durch mindestens einen Screen abgedeckt? Fehlende Zustände (Fehler, Leer, Loading) gelistet?
-- **Flow-Schritte:** Passen die Screens zu den in `flows/product-flows.md` beschriebenen Transitions?
-- **Komponenten aus UX-Entscheidung:** Tauchen die gewählten DS-Komponenten auf den Screens auch auf?
+Bevor du den User zur Abnahme bittest: prüfe die erzeugten Screens auf offensichtliche Widersprüche zur Spec. Du hast die Figma-Frames nicht als Bilder im Chat – du prüfst **über die Metadaten** (Zustände, Flow-Abdeckung).
 
-Wenn du Widersprüche siehst, zeige sie dem User im Chat als Liste:
+Lies die Spec und die gerade geschriebene `index.md`. Achte auf:
+
+- **Acceptance Criteria vs. Zustände:** Wird jedes AC durch mindestens einen Screen-Zustand abgedeckt? Fehlen Fehler-, Leer- oder Loading-Zustände?
+- **Flow-Schritte:** Sind alle relevanten Transitions aus `flows/product-flows.md` als Screens vorhanden?
+
+Wenn du Lücken siehst, zeige sie dem User:
 
 ```
-Widersprüche erkannt:
-- Spec erwartet einen Fehlerzustand (AC #4), kein passender Screen dabei
-- Screen S-12 zeigt einen "Erfolgs-Toast" – im UX-Abschnitt steht "Erfolgsmeldung als Inline-Banner"
+Lücken im Screen-Plan erkannt:
+- AC #4 verlangt einen Fehlerzustand, kein entsprechender Screen dabei
+- Flow-Schritt "Nach erfolgreichem Login → Dashboard" hat keinen Nachfolger-Screen
 ```
 
 ```typescript
 AskUserQuestion({
   questions: [
     {
-      question: "Es gibt Widersprüche zwischen Spec und Screens. Wie weiter?",
-      header: "Widerspruch-Auflösung",
+      question: "Es gibt Lücken zwischen Spec und Screen-Plan. Wie weiter?",
+      header: "Lücken-Auflösung",
       options: [
+        { label: "Fehlende Screens ergänzen", description: "Ich erzeuge die fehlenden Frames in Figma nach" },
         { label: "Zurück zu /red-proto:requirements", description: "Spec anpassen, dann /red-proto:preview erneut" },
         { label: "Zurück zu /red-proto:ux", description: "UX-Entscheidungen nachziehen, dann /red-proto:preview erneut" },
-        { label: "Screens überarbeiten", description: "Ich ergänze/korrigiere die Screens, dann neu einreichen" },
-        { label: "Akzeptieren und trotzdem weitermachen", description: "Die Abweichung ist bewusst – ich vermerke das in index.md" }
+        { label: "Akzeptieren und weitermachen", description: "Die Lücke ist bewusst – ich vermerke das in index.md" }
       ],
       multiSelect: false
     }
@@ -180,22 +173,25 @@ AskUserQuestion({
 })
 ```
 
-Wenn keine Widersprüche: direkt weiter zu Phase 5.
+Wenn keine Lücken: direkt weiter zu Phase 6.
 
-## Phase 5: User-Abnahme
+## Phase 6: User-Abnahme in Figma
 
-Zeige dem User eine kompakte Zusammenfassung im Chat:
+Zeige dem User eine kompakte Zusammenfassung im Chat mit **anklickbaren Links** zu den Figma-Frames:
 
 ```
 Abnahme für FEAT-[X] [Name]:
 
-Ordner: features/FEAT-[X]-name/screens/
-Screens: [N] insgesamt
-  - S-10 – Initial (Einstieg)
-  - S-11 – Ausgefüllt (Nach Eingabe)
-  - S-12 – Fehler (Bei ungültiger Eingabe)
+Figma-Page: [Page-URL]
 
-Öffne die PNGs, prüfe sie, sag mir ob sie dein erwartetes Ergebnis treffen.
+Screens erzeugt ([N]):
+  S-10 – Initial       → [Frame-URL]
+  S-11 – Ausgefüllt    → [Frame-URL]
+  S-12 – Fehler        → [Frame-URL]
+  S-13 – Erfolg        → [Frame-URL]
+
+Öffne die Links in Figma, prüfe die Screens, sag mir ob sie dein erwartetes Ergebnis treffen.
+Korrekturen: gib mir direkt Feedback im Chat, ich passe die Frames an.
 ```
 
 ```typescript
@@ -207,7 +203,7 @@ AskUserQuestion({
       options: [
         { label: "Ja, alle freigeben", description: "Alle Screens auf 'approved' setzen" },
         { label: "Teilweise – ich nenne im Chat welche", description: "Freigabe pro Screen" },
-        { label: "Nein, bitte komplett neu", description: "Quelle neu wählen und Phase 2 wiederholen" }
+        { label: "Nein, überarbeiten", description: "Ich gebe dir Korrekturen im Chat, du änderst die Frames" }
       ],
       multiSelect: false
     }
@@ -215,12 +211,14 @@ AskUserQuestion({
 })
 ```
 
-## Phase 6: Finalisieren
+**Bei „Überarbeiten":** User gibt Feedback, Claude nutzt `mcp__figma__use_figma` oder `mcp__figma__generate_figma_design` um die betroffenen Frames zu ändern (nicht neu erzeugen, wenn möglich – erhält die Frame-ID). Danach zurück zu Phase 6.
+
+## Phase 7: Finalisieren
 
 Setze in `index.md` für alle freigegebenen Screens Status `approved`. Setze `status: approved` im Frontmatter, wenn **alle** Screens approved sind. Wenn einige noch `review` bleiben: Frontmatter bleibt `draft`.
 
 ```bash
-git add "features/$FEAT_NAME/screens/" && git commit -q -m "docs: FEAT-[X] preview screens – [Feature Name]" && git push -q
+git add "features/FEAT-[X]-name/screens/index.md" && git commit -q -m "docs: FEAT-[X] preview-screens in Figma – [Feature Name]" && git push -q
 ```
 
 Zeige dem User den Abschluss:
@@ -229,25 +227,28 @@ Zeige dem User den Abschluss:
 ✅ Preview abgeschlossen für FEAT-[X]
 
 Screens abgenommen:  [N] von [M]
-Ground Truth:        features/FEAT-[X]-name/screens/
+Ground Truth:        Figma-Page [Page-Name]
+Referenz im Repo:    features/FEAT-[X]-name/screens/index.md
 
-Nächster Schritt: /red-proto:dev FEAT-[X] – baut gegen diese Screens als visuelle Vorlage.
+Nächster Schritt: /red-proto:dev FEAT-[X] – baut gegen die Figma-Frames als visuelle Vorlage.
 Nach einer Pause:  /red-proto:workflow zeigt dir exakt wo du stehst.
 ```
 
-Wenn nicht alle Screens approved sind: klar machen, dass Dev trotzdem starten kann, aber die nicht-abgenommenen Screens als "outdated" markieren soll, wenn sich etwas ändert.
+Wenn nicht alle Screens approved sind: klar machen, dass Dev trotzdem starten kann, aber die nicht-abgenommenen Screens als `outdated` markieren soll, wenn sich etwas ändert.
 
 ## Wiederholung
 
-`/red-proto:preview FEAT-[X]` kann jederzeit erneut aufgerufen werden – z.B. nach einer Spec-Änderung. Bestehende approved Screens werden in dem Fall auf `outdated` gesetzt, bis sie neu bestätigt sind. Der Command erkennt beim Neustart vorhandene `outdated`-Einträge und bietet an, sie gezielt zu erneuern.
+`/red-proto:preview FEAT-[X]` kann jederzeit erneut aufgerufen werden – z.B. nach einer Spec-Änderung. Bestehende approved Screens werden dann auf `outdated` gesetzt, bis sie neu bestätigt (oder neu generiert) sind. Der Command erkennt beim Neustart vorhandene `outdated`-Einträge und bietet an, sie gezielt zu erneuern.
 
 ## Checklist
 
 - [ ] Feature-Spec vorhanden und mindestens mit Requirements + UX befüllt
-- [ ] Screen-Quelle gewählt (Figma-Links, File-Key, PNG-Upload oder manuell)
-- [ ] Screens in `features/FEAT-[X]-name/screens/` abgelegt mit Naming `S-NN-*.png`
-- [ ] `index.md` mit allen Metadaten befüllt
-- [ ] Widerspruchs-Check gegen Spec durchgeführt
+- [ ] Figma-MCP erreichbar
+- [ ] Screen-Plan vom User bestätigt
+- [ ] Figma-Page-Link erhalten und validiert
+- [ ] Alle geplanten Frames in Figma erzeugt
+- [ ] `features/FEAT-[X]-name/screens/index.md` mit Metadaten + Figma-Links befüllt (keine PNGs, keine Base64)
+- [ ] Widerspruchs-/Lücken-Check durchgeführt
 - [ ] User-Abnahme eingeholt
 - [ ] Approved-Status in `index.md` aktualisiert
 - [ ] Commit + Push
