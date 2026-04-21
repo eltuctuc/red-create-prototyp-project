@@ -129,6 +129,13 @@ Optional:
 - **Figma-MCP-Server** – nur wenn `/red-proto:preview` Screens direkt aus Figma ziehen soll. Ohne MCP lädst du PNGs im Chat hoch oder legst sie manuell ab.
 - **Stack-Laufzeit** – Python, Go, Swift etc. werden erst nach der Stack-Wahl in `/red-proto:dev-setup` relevant, nicht vorher.
 
+### Empfohlenes Claude-Modell
+
+- **Für die Installation (`/red-proto:create`) reicht Haiku.** Der Command macht nur mechanisches Kopieren und JSON-Schreiben – dafür brauchst du kein grosses Modell.
+- **Für die eigentliche Arbeit mit dem Framework mindestens Opus 4.5.** Die kritisch-denkenden Rollen – Sparring über dein PRD, Requirements-Schärfung, Architektur-Entscheidungen, UX-Abwägungen, QA-Urteile – leben von der Tiefe eines starken Modells. Mit Haiku sparst du Tokens, bekommst aber oberflächliche Ergebnisse, die den ganzen Framework-Aufwand wieder entwerten. Opus 4.5 oder neuer ist teurer, aber die Tokens, die du für ein halbgares Sparring-PRD oder einen flachen Architektur-Entwurf verbrennst, sind am Ende höher.
+
+Modell-Wechsel in Claude Code: `/model` oder in `~/.claude/settings.json` das Feld `"model"`.
+
 ---
 
 ## Installation
