@@ -110,6 +110,8 @@ Workflow: Modus erkennen → passende Quelle laden → geplante Bausteine identi
 
 Wenn der User **bereits Wireframes, Low-Fidelity- oder High-Fidelity-Screens** hat, bereichern sie die UX-Entscheidungen deutlich. Sie sind aber **kein Muss** – der UX-Agent trifft Entscheidungen auch ohne.
 
+**Wichtig:** Diese Phase ist **read-only**. Du holst dir Vorlagen als Entscheidungsgrundlage, du erzeugst hier nichts. Abnahme-Screens generiert später `/red-proto:preview`.
+
 ```typescript
 AskUserQuestion({
   questions: [
@@ -117,8 +119,8 @@ AskUserQuestion({
       question: "Hast du für dieses Feature bereits visuelle Vorgaben (Wireframes, Low-Fi, Hi-Fi)? Sie helfen mir, deine Vorstellung zu treffen.",
       header: "Design-Vorgaben?",
       options: [
-        { label: "Ja, Figma-Node-Links", description: "Ich gebe dir ein oder mehrere Figma-Links im Chat" },
-        { label: "Ja, als Bilder im Chat", description: "Ich lade PNG/JPG direkt hier hoch" },
+        { label: "Ja, Figma-Node-Links", description: "Ich gebe dir Links zu existierenden Figma-Frames im Chat" },
+        { label: "Ja, als Bilder im Ordner", description: "Ich lege PNG/JPG in features/FEAT-X-name/input/ ab – Claude pausiert bis zum Resume" },
         { label: "Nein, leite du die UX-Entscheidungen ab", description: "Du arbeitest aus Spec + PRD + Design-Quelle (DS oder UI-Library) + Test-Setup" }
       ],
       multiSelect: false
@@ -127,16 +129,47 @@ AskUserQuestion({
 })
 ```
 
-**Bei "Figma-Node-Links":** User liefert Links. Pro Link:
-- `mcp__figma__get_design_context(fileKey, nodeId)` aufrufen
-- Screenshot und Struktur als Referenz nutzen
-- Kein Download in `features/` hier – Phase 2b ist nur Input für die Entscheidung. Die Abnahme-Screens kommen später über `/red-proto:preview`
+### Option A: Figma-Node-Links
 
-**Bei "Bilder im Chat":** Der User hängt Bilder direkt an. Du liest sie als Kontext.
+Der User liefert einen oder mehrere Figma-URLs zu **bestehenden** Frames. Pro Link:
 
-**Bei "Nein":** Weiter ohne visuelle Vorgaben. Kein Nachteil – nur Output wird weniger präzise auf die konkrete Vision zugeschnitten.
+1. `fileKey` und `nodeId` aus der URL extrahieren (Format: `figma.com/design/{fileKey}/.../?node-id={nodeId}`). `-` in `nodeId` → `:` umwandeln.
+2. `mcp__figma__get_design_context(fileKey, nodeId)` aufrufen – liefert Screenshot, Struktur und ggf. Code-Referenz.
+3. Nutze das als Referenz für deine UX-Entscheidungen. **Keine lokale Ablage**, kein Download.
 
-Protokolliere im Chat kurz welche Quelle genutzt wird, damit der User nachvollziehen kann worauf deine UX-Entscheidungen fußen.
+### Option B: Bilder im Ordner (Stop + Resume)
+
+Der User legt Vorlagen als Dateien ab. Claude pausiert, damit der User Zeit hat.
+
+```bash
+FEAT_SLUG=$(basename "$FEAT_FILE" .md)       # z.B. FEAT-1-login
+mkdir -p "features/$FEAT_SLUG/input"
+ls "features/$FEAT_SLUG/input/" 2>/dev/null
+```
+
+**Wenn der Ordner leer ist:** Stoppe mit dieser Meldung:
+
+```
+📁  Input-Ordner angelegt: features/[FEAT-X-name]/input/
+
+    Leg dort deine Wireframes/Screens als PNG oder JPG ab (beliebig viele).
+    Wenn fertig, ruf /red-proto:ux erneut für dieses Feature auf –
+    ich erkenne den Zustand automatisch und lese die Bilder dann ein.
+
+    Alternativ: /red-proto:workflow zeigt dir, wo du stehst.
+```
+
+Nicht weitermachen. Nicht raten. User muss aktiv werden.
+
+**Wenn der Ordner Bilder enthält:** Lies jede Datei per Read-Tool ein und nutze sie als Referenz. Erwähne im Chat kurz, was du siehst (Absicherung: richtige Vorlagen?). Die Dateien bleiben im Ordner, werden nicht verschoben oder umbenannt.
+
+### Option C: Nein, leite ab
+
+Weiter ohne visuelle Vorgaben. Kein Nachteil – nur Output wird weniger präzise auf die konkrete Vision zugeschnitten.
+
+---
+
+Protokolliere im Chat kurz welche Quelle genutzt wird, damit der User nachvollziehen kann, worauf deine UX-Entscheidungen fußen.
 
 ## Phase 3: Autonome UX-Analyse
 
