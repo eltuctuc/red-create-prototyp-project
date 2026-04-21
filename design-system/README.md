@@ -67,17 +67,24 @@ Wenn dein Projekt mehrere UI-Bereiche mit eigenen Mustern hat.
 
 | Agent / Command | Nutzen aus dem DS |
 |------------------|-------------------|
-| `/red-proto:dev-setup` Phase 1c | Prüft ob DS überhaupt befüllt ist (zählt `*.md`-Dateien) |
-| `/red-proto:dev-setup` Phase 5b | Liest Token-Dateien und transformiert sie in Stack-Format (Tailwind-Config, CSS-Variablen, SwiftUI-Extensions, …) |
-| `/red-proto:ux` | Nutzt Komponenten/Patterns als Vorlage für UX-Entscheidungen |
-| `/red-proto:dev`, `frontend-developer` | Implementiert nach DS-Specs und -Tokens |
-| `ux-reviewer` | Prüft Implementierung auf DS-Konformität |
+| `/red-proto:dev-setup` Phase 1c | Prüft ob DS befüllt ist – entscheidet DS-Modus vs. Library-Modus |
+| `/red-proto:dev-setup` Phase 5b | Im DS-Modus: liest Token-Dateien rekursiv und transformiert sie in Stack-Format (Tailwind-Config, CSS-Variablen, SwiftUI-Extensions, …). Im Library-Modus übersprungen. |
+| `/red-proto:ux` | Im DS-Modus: nutzt Komponenten/Patterns als Vorlage. Im Library-Modus: nutzt Library-Konventionen statt DS. |
+| `/red-proto:dev`, `frontend-developer` | Im DS-Modus: baut eigene Komponenten nach DS-Specs. Im Library-Modus: nutzt nur Library, liest das DS nicht. |
+| `ux-reviewer` | Im DS-Modus: prüft Implementierung auf DS-Konformität. Im Library-Modus: prüft gegen Library-Konventionen. |
+| `/red-proto:workflow` | Meldet Konflikt wenn DS-Inhalt und `UI-Library: [Name]` gleichzeitig gesetzt sind. |
 
 ## Wann kein DS nötig ist
 
-Wenn dein Tech-Stack eine **UI-Library** mitbringt (shadcn/ui, Material UI, Vuetify, Chakra, …), bringt die Library Look & Feel bereits mit. In diesem Fall gewinnt die Library: die Agents ignorieren den Markdown-DS stillschweigend und bauen nach Library-Konventionen. Lass diesen Ordner dann leer oder mit Minimal-Notizen.
+Das Framework fährt einen **Entweder-Oder-Modus** zwischen DS und UI-Library. Entschieden wird in `/red-proto:dev-setup`, das Ergebnis steht dann in `project-config.md` als `UI-Library: [Name]` oder `UI-Library: keine`.
 
-Eine Kombination aus UI-Library **und** befülltem Markdown-DS ist nicht empfohlen – die Library-Konventionen gewinnen immer, und der DS-Inhalt wirkt dann irreführend.
+**Wenn du mit einer gestylten UI-Library arbeiten willst** (shadcn/ui, Material UI, Vuetify, Chakra, …): lass dieses Verzeichnis leer (nur diese README). Die Library bringt Look & Feel mit, der Frontend-Agent nutzt ausschließlich Library-Komponenten, das DS wird nicht gelesen.
+
+**Wenn du ein eigenes DS willst:** befülle dieses Verzeichnis. Der Stack wird dann **ohne** gestylte UI-Library empfohlen (shadcn/ui & Co. entfallen). Der Frontend-Agent baut eigene Komponenten passend zum DS.
+
+Beides zusammen ist **nicht** erlaubt. Wenn das Framework einen Konflikt erkennt (`UI-Library: shadcn/ui` gesetzt UND DS-Dateien vorhanden), meldet es einen Widerspruch und fragt nach, statt zu raten.
+
+Ausnahme: **Headless-Primitives** ohne eigenes Styling (Radix Primitives, React Aria, Headless UI) zählen nicht als UI-Library – sie sind Infrastruktur für Keyboard und Accessibility und dürfen parallel zum DS genutzt werden.
 
 ## Regeln für befüllte DS-Dateien
 
